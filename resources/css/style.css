@@ -1,0 +1,14 @@
+.form-control{
+    border-radius: 0px !important;
+}
+.form-control:focus{
+    border: 0px !important;
+}
+.btn{
+    border-radius: 5px !important;
+}
+.active-link{
+    border-bottom: solid 2px black;
+}
+
+
