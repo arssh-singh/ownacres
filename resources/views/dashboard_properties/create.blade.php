@@ -5,17 +5,8 @@
     <p class="step-desc" id="descp">Step 1: Adding Title and description</p>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
-                <hr>
-            </div>
-            <div class="col-3">
-                <hr>
-            </div>
-            <div class="col-3">
-                <hr>
-            </div>
-            <div class="col-3">
-                <hr>
+            <div class="col-12 line p-0 bg-light" >
+                <hr class="progress-bar p-0 m-0" id="progress-bar" style="width: 25%; border: solid 5px black;">
             </div>
         </div>
     </div>
@@ -68,7 +59,7 @@
         <div class="step d-none" id="step-4">
             <h4>Media & Finish</h4>
             
-            <input type="file" name="image" class="form-control mb-2">
+            <input type="file" name="image" class="form-control mb-2" accept="image/png, image/jpeg">
             
             <select name="is_furnished" class="form-control mb-3">
                 <option value="1">Furnished</option>
@@ -86,6 +77,9 @@
     function nextStep(step) {
         document.querySelectorAll('.step').forEach(el => el.classList.add('d-none'));
         document.getElementById('step-' + step).classList.remove('d-none');
+        
+        let line_w = (step/4)*100;
+        document.getElementById('progress-bar').style.width = line_w + "%";
     }
 
     function prevStep(step) {

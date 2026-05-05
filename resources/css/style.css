@@ -1,3 +1,13 @@
+
+body {
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+  /* font-weight: <weight>; */
+  font-style: normal;
+}
+/* body{
+    font-family: sans-serif;
+} */
 .form-control{
     border-radius: 0px !important;
 }

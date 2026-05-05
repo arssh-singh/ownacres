@@ -7,12 +7,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
-Route::get('/marketplace', function () {
-    return view('marketplace');
-})->name('marketplace');
+Route::get('/', [PropertyController:: class, 'index'])->name('home');
+Route::get('/marketplace', [PropertyController:: class, 'marketplace'])->name('marketplace');
 
 // user auth system
 Route::get('/register', [UserController:: class, 'showRegister'])->name('register');
@@ -23,17 +19,14 @@ Route::post('/login', [UserController::class, 'login']);
 
 
 Route::get('/dashboard', function () {
-    $properties = Property::where('user_id', Auth::id())
-        ->latest()
-        ->get();
-    return view('dashboard', compact('properties'));
+    return view('dashboard');
 })->name('dashboard')->middleware('auth');
 
 Route::get('/dashboard/properties', function () {
     $properties = Property::where('user_id', Auth::id())
         ->latest()
         ->get();
-    return view('properties.show_props', compact('properties'));
+    return view('dashboard_properties.show_props', compact('properties'));
 })->name('dashboard.properties')->middleware('auth');
 
 Route::post('/logout', function () {
@@ -46,11 +39,12 @@ Route::post('/logout', function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/properties/create', function () {
-        return view('properties.create');
+        return view('dashboard_properties.create');
     })->name('create-prop');
-
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
-    Route::delete('/properties/{id}', [PropertyController::class, 'destroy']);
+    Route::get('/properties/{prop_id}/edit', [PropertyController::class, 'get_prop'])->name('properties.edit');
+    Route::put('/properties/{prop_id}', [PropertyController::class, 'update'])->name('properties.update');
+
 });
 
 // Route::get('/properties', [PropertyController::class, 'index']);

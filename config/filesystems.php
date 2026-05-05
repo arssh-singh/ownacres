@@ -59,6 +59,13 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        'prop_images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/prop_images'),
+            'url' => env('APP_URL').'/storage/prop_images',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
     ],
 
