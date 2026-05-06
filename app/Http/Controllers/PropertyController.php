@@ -19,6 +19,11 @@ class PropertyController extends Controller
         $properties = Property::latest()->get();
         return view('marketplace', compact('properties'));
     }
+    public function prop_details($prop_id)
+    {
+        $property = Property::findOrFail($prop_id);
+        return view('prop_details', compact('property'));
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -53,7 +58,7 @@ class PropertyController extends Controller
 
         Property::create($validated);
 
-        return redirect(route('dashboard'))->with('success', 'Property added!');
+        return redirect(route('dashboard.properties'))->with('success', 'Property added!');
     }
     public function get_prop($prop_id){
         $property = Property::where('user_id', auth()->id())->findOrFail($prop_id);
@@ -77,7 +82,7 @@ class PropertyController extends Controller
             if($prop->image){
                 Storage::disk('public')->delete($prop->image);
             }
-            $validated['image'] = $request->file('image')->store('prop_images', 'public'); // ✅ merge into $validated
+            $validated['image'] = $request->file('image')->store('prop_images', 'public'); //merge into $validated
         }
 
         $prop->update($validated);
@@ -90,6 +95,6 @@ class PropertyController extends Controller
             Storage::disk('public')->delete($prop->image);
         }
         $prop->delete();
-        return redirect(route('dashboard.'));
+        return redirect(route('dashboard.properties'));
     }
 }

@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section("content")
-    @include("components.properties", ['properties' => $properties])
+    @include("components.show_properties", ['properties' => $properties])
 @endsection

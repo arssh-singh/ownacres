@@ -34,16 +34,15 @@ Route::post('/logout', function () {
     return redirect(route('home'));
 })->name('logout');
 
+Route::get('/properties/{prop_id}/prop_details', [PropertyController::class, 'prop_details'])->name('properties.prop_details');
 
 // properties
 Route::middleware('auth')->group(function () {
-
-    Route::get('/properties/create', function () {
-        return view('dashboard_properties.create');
-    })->name('create-prop');
+    Route::get('/properties/create', function () { return view('dashboard_properties.create');})->name('create-prop');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
     Route::get('/properties/{prop_id}/edit', [PropertyController::class, 'get_prop'])->name('properties.edit');
     Route::put('/properties/{prop_id}', [PropertyController::class, 'update'])->name('properties.update');
+    Route::delete('/properties/{prop_id}/delete', [PropertyController::class, 'delete'])->name('properties.delete');
 
 });
 

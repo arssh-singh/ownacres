@@ -27,13 +27,19 @@
                             style="width:80px; height:60px; object-fit:cover;" class="rounded">
                     </td>
                     <td>{{ $property->title }}</td>
-                    <td>${{ number_format($property->price, 2) }}</td>
+                    <td>₹{{ number_format($property->price, 2) }}</td>
                     <td>{{ $property->location }}</td>
                     <td>{{ $property->bedrooms }}</td>
                     <td>{{ $property->bathrooms }}</td>
                     <td>{{ $property->area }}</td>                    
                     <td><a href="{{route("properties.edit", $property->id)}}">Edit</a></td>
-                    <td><a>Delete</a></td>
+                    <td>
+                        <form action="{{ route('properties.delete', $property->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
