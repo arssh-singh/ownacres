@@ -12,7 +12,9 @@ Route::get('/marketplace', [PropertyController:: class, 'marketplace'])->name('m
 
 // user auth system
 Route::get('/register', [UserController:: class, 'showRegister'])->name('register');
-Route::post('/register', [UserController::class, 'store']);
+Route::post('/register', [UserController::class, 'sendOTP'])->name('register.sendOTP');
+Route::get('/verifyOTP', [UserController::class, 'verifyOTPForm'])->name('register.verifyOTP.form');
+Route::post('/verifyOTP', [UserController::class, 'verifyOTP'])->name('register.verifyOTP');
 
 Route::get('/login', [UserController:: class, 'showLogin'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
@@ -45,6 +47,3 @@ Route::middleware('auth')->group(function () {
     Route::delete('/properties/{prop_id}/delete', [PropertyController::class, 'delete'])->name('properties.delete');
 
 });
-
-// Route::get('/properties', [PropertyController::class, 'index']);
-// Route::get('/properties/{id}', [PropertyController::class, 'show']);
