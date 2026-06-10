@@ -1,10 +1,10 @@
-@extends("layouts.app")
-@section("content")
+@extends('layouts.app')
+@section('content')
 <div class="container mt-5 mb-5">
     <div class="col-md-5 mx-auto">
         <div class="card p-4 border-0 bg-light">
 
-            <h3 class="mb-3 text-center">Create Account</h3>
+            <h3 class="mb-3 text-center">Reset Password</h3>
 
             <!-- ERROR DISPLAY -->
             @if ($errors->any())
@@ -15,21 +15,10 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('forgotpass.changepass') }}">
                 @csrf
-
                 <div class="mb-3">
-                    <label>Name</label>
-                    <input class="form-control" type="text" name="name" value="{{ old('name') }}">
-                </div>
-
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input class="form-control" type="email" name="email" value="{{ old('email') }}">
-                </div>
-
-                <div class="mb-3">
-                    <label>Password</label>
+                    <label>New Password</label>
                     <input class="form-control" type="password" name="password" >
                 </div>
 
@@ -38,13 +27,8 @@
                     <input class="form-control" type="password" name="password_confirmation">
                 </div>
 
-                <button class="btn btn-primary w-100">Register</button>
+                <button class="btn btn-primary w-100">Confirm</button>
             </form>
-
-            <div class="text-center mt-3">
-                <a href="/login">Already have an account?</a>
-            </div>
-
         </div>
     </div>
 </div>

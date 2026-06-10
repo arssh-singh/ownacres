@@ -92,7 +92,7 @@
             @auth
                 <button class="btn btn-primary w-100 py-3">Send Inquiry</button>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary w-100 py-3">Sign in to Send Inquiry</a>
+                <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}" class="btn btn-primary w-100 py-3">Sign in to Send Inquiry</a>
             @endauth
         </div>
     </div>

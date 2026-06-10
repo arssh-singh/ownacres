@@ -32,7 +32,7 @@
             </form>
 
             <div class="text-center mt-3">
-                <a href="/login">Already have an account?</a>
+                <a href="{{ route('forgotpass.form') }}">Forgot Password?</a>
             </div>
 
         </div>

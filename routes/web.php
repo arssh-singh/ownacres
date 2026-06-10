@@ -16,6 +16,17 @@ Route::post('/register', [UserController::class, 'sendOTP'])->name('register.sen
 Route::get('/verifyOTP', [UserController::class, 'verifyOTPForm'])->name('register.verifyOTP.form');
 Route::post('/verifyOTP', [UserController::class, 'verifyOTP'])->name('register.verifyOTP');
 
+Route::get('/forgot-password/form', [UserController::class, 'forgot_password_form'])->name('forgotpass.form');
+Route::post('/forgot-password/sendOTP', [UserController::class, 'forgot_password_sendOTP'])->name('forgotpass.sendOTP');
+
+Route::get('/forgot-password/verifyOTP/form', [UserController::class, 'forgot_password_verifyOTP_form'])->name('forgotpass.verifyOTP.form');
+Route::post('/forgot-password/verifyOTP', [UserController::class, 'verifyForgotPassOTP'])->name('forgotpass.verifyOTP');
+
+Route::get('/forgot-password/new-password-form', [UserController::class, 'forgotpassnewpassform'])->name('forgotpass.newpass.form');
+Route::post('/forgot-password/change-password', [UserController::class, 'forgotpasschangepass'])->name('forgotpass.changepass');
+
+
+
 Route::get('/login', [UserController:: class, 'showLogin'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 
