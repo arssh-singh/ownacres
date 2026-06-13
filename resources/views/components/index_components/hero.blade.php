@@ -1,45 +1,56 @@
-<div class="container-fluid px-lg-5" style="background-image: url('https://images.pexels.com/photos/36928649/pexels-photo-36928649.jpeg'); background-size: cover; background-position: center;">
-    <div class="row align-items-center" style="height: 90vh;">
-        <div class="col-lg-12">
-            <h1 class="display-4 fw-bold text-center text-white" style="text-shadow: -2px 6px 20px #000000">Finding the art in your next home.</h1>
-            <p class="lead text-center text-white" style="text-shadow: -1px 2px 13px black;">Curated architectural masterpieces and premium residences for those who value absolute clarity and sophisticated living.</p>
-            <div class="container mt-5">
-                <div class="p-3 bg-white rounded shadow-sm">
-                    <div class="row align-items-center g-2">
+<div class="container-fluid px-lg-5 position-relative"
+    style="
+    background-image: linear-gradient(180deg, #0094fd89, #000d38ee),
+    url('{{ asset('storage/images/house.jpg') }}');
+    background-size: cover;
+    background-position: 0% 30%;
+">
 
-                        <!-- Location -->
-                        <div class="col-md-3 p-2">
-                            <label class="text-muted small fw-bold">LOCATION</label>
-                            <input type="text" class="form-control border-0 shadow-none p-0" placeholder="Search City, ZIP">
-                        </div>
+    <div class="row align-items-center" style="height:45vh;">
+        <div class="col-12">
+            <h1 class="display-1 fw-bold text-center text-white m-0"
+                style="text-shadow:0 1px 20px #00000087;">
+                BUILD YOUR FUTURE
+            </h1>
 
-                        <!-- Property Type -->
-                        <div class="col-md-3 p-2 border-start ">
-                            <label class="text-muted small fw-bold">PROPERTY TYPE</label>
-                            <select class="form-select border-0 shadow-none p-0">
-                                <option>Modern Villa</option>
-                                <option>Apartment</option>
-                                <option>House</option>
-                            </select>
-                        </div>
+            <p class="lead text-center fs-3 fw-bold mb-0"
+                style="color:#ffffffc9;">
+                Start with us. Make One Property at a time.
+            </p>
+        </div>
+    </div>
 
-                        <!-- Price Range -->
-                        <div class="col-md-3 p-2 border-start">
-                            <label class="text-muted small fw-bold">PRICE RANGE</label>
-                            <select class="form-select border-0 shadow-none p-0">
-                                <option>$1M - $10M+</option>
-                                <option>Under $500K</option>
-                                <option>$500K - $1M</option>
-                            </select>
-                        </div>
+</div>
 
-                        <!-- Button -->
-                        <div class="col-md-3 p-2">
-                            <button class="btn w-100 py-3 text-white fw-semibold" style="background-color:#3b5bbb;">
-                                Explore
-                            </button>
-                        </div>
+<!-- Search Box -->
+<div class="container position-relative">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="bg-white rounded-pill shadow p-4"
+                style="margin-top:-70px; z-index:10; position:relative;">
+                <div class="row g-3">
+                    <div class="col-lg-4">
+                        <input type="text"
+                            class="form-control rounded-pill py-3 px-4"
+                            placeholder="Location">
+                    </div>
 
+                    <div class="col-lg-4">
+                        <input type="text"
+                            class="form-control rounded-pill py-3 px-4"
+                            placeholder="Property Type">
+                    </div>
+
+                    <div class="col-lg-2">
+                        <input type="text"
+                            class="form-control rounded-pill py-3 px-4"
+                            placeholder="Price">
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary rounded-pill py-3 w-100">
+                            Search
+                        </button>
                     </div>
                 </div>
             </div>

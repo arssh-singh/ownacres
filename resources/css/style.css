@@ -1,24 +1,63 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Josefin Sans", sans-serif;
   font-optical-sizing: auto;
   /* font-weight: <weight>; */
   font-style: normal;
+  background: #F4F4F4;
 }
 /* body{
     font-family: sans-serif;
 } */
 .form-control{
-    border-radius: 0px !important;
+    border: solid 1px rgb(135, 135, 135);
 }
 .form-control:focus{
     border: 0px !important;
 }
-.btn{
-    border-radius: 5px !important;
-}
 .active-link{
-    border-bottom: solid 2px black;
+}
+.nav-link, .navbar-brand{
+    padding-bottom: 0px !important;
+    font-weight: 900;
+}
+.form-btn{
+    background-color: rgb(0, 30, 120);
+    border: none;
+}
+.loc-btn-active{
+    background-color: #002479;
+    color: white;
+}
+@view-transition {
+    navigation: auto;
 }
 
+::view-transition-old(root) {
+    animation: slide-out .4s ease forwards;
+}
 
+::view-transition-new(root) {
+    animation: slide-in .4s ease forwards;
+}
+::view-transition-group(poster) {
+    animation-duration: 1s;
+}
+@keyframes slide-out {
+    to {
+        transform: translateX(-30%);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

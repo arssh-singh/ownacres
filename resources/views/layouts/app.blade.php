@@ -31,7 +31,7 @@
 
                     <!-- Brand -->
                     <div class="col-lg-4">
-                        <h5 class="fw-bold">LUXE ARCHIVE</h5>
+                        <h5 class="fw-bold">OWNACRES</h5>
                         <p class="text-muted mt-3">
                             Redefining the premium real estate journey through absolute clarity and design-led curation.
                         </p>

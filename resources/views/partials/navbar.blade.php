@@ -1,4 +1,30 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<style>
+    .bar{
+        transition: all .7s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: scaleX(1);
+
+    }
+    .bar-down{
+        background-color: white !important;
+        margin-left: 45px !important;
+        margin-right: 45px !important;
+        margin-top: 25px !important;
+
+        border-radius: 50px;
+
+        transform: scaleX(0.96);
+
+        transition:
+            margin .7s cubic-bezier(0.22,1,0.36,1),
+            transform .7s cubic-bezier(0.22,1,0.36,1),
+            border-radius .7s cubic-bezier(0.22,1,0.36,1);
+    }
+</style>
+@if(request()->routeIs('home'))
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1" id="bar" style="background-color: #ffffff1f; backdrop-filter: blur(20px); border: solid 1px #ffffff4a">
+@else
+<nav class="navbar navbar-expand-lg navbar-light fixed-top p-1" id="bar" style="background-color: #ffff">
+@endif
     <div class="container-fluid py-2 px-lg-5">
         <a class="navbar-brand fw-bold" href="{{ route('home') }}">OWNACRES</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,16 +47,16 @@
         </ul>
         <div class="d-flex">
             @guest
-                <a href="{{ route('login') }}" class="btn btn-light me-2">Login</a>
-                <a href="{{ route('register') }}" class="btn btn-dark">Sign Up</a>
+                <a href="{{ route('login') }}" class="btn me-2 {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-log">Login</a>
+                <a href="{{ route('register') }}" class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-sign">Sign Up</a>
             @endguest
 
             @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-success me-2">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn me-2">Dashboard</a>
 
                 <form method="POST" action="{{ route('logout')}}" style="display:inline;">
                     @csrf
-                    <button class="btn btn-danger">Logout</button>
+                    <button class="btn ">Logout</button>
                 </form>
             @endauth
 
@@ -38,3 +64,47 @@
         
     </div>
 </nav>
+<script>
+    const bar = document.getElementById('bar');
+    const btnlog = document.getElementById('btn-log');
+    const btnsign = document.getElementById('btn-sign');
+    window.addEventListener('scroll', function () {
+
+        if (window.scrollY > 100) {
+
+            bar.classList.remove('navbar-dark');
+            bar.classList.add('bar-down', 'navbar-light', 'shadow-lg');
+
+            @if (request()->routeIs('home'))
+
+                btnlog.classList.remove('text-light');
+                btnlog.classList.add('text-dark');
+                btnsign.classList.remove('text-light');
+                btnsign.classList.add('text-dark');
+            
+            @endif
+
+        } else {
+
+            bar.classList.remove('bar-down', 'shadow-lg');
+
+            @if(request()->routeIs('home'))
+
+                bar.classList.add('bar', 'navbar-dark');
+                bar.classList.remove('navbar-light');
+
+                btnlog.classList.remove('text-dark');
+                btnlog.classList.add('text-light');
+                btnsign.classList.remove('text-dark');
+                btnsign.classList.add('text-light');
+
+            @else
+
+                bar.classList.add('bar');
+                bar.classList.remove('navbar-dark');
+                bar.classList.add('navbar-light');
+
+            @endif
+        }
+    });
+</script>

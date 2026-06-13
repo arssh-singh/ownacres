@@ -18,7 +18,9 @@
 <header>
     @include('partials.navbar')
 </header>
+<div class="mt-5">
 
+</div>
 <div class="d-flex">
 
     <!-- ✅ SIDEBAR (LEFT) -->
