@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="container mt-5 mb-5">
+<div class="container mt-5 mb-5 pt-5">
     <div class="col-md-5 mx-auto">
         <div class="card p-4 border-0 bg-light">
 
@@ -15,7 +15,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register.verifyOTP') }}">
+            <form method="POST" action="{{ route('register.verifyOtp') }}">
                 @csrf
                 <div class="mb-3">
                     <label>Enter OTP</label>

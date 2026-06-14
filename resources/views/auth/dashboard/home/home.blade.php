@@ -85,7 +85,7 @@ $profileViews = $profileViews ?? 0;
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Saved Properties</h5>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="small text-decoration-none">View All</a>
+                    <a href="{{ route('dashboard.savedProperties') ?? '#' }}" class="small text-decoration-none">View All</a>
                 </div>
 
                 @forelse ($savedProperties ?? [] as $property)

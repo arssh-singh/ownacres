@@ -10,18 +10,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
-    public function putinregister(Request $request){
-        // printing request data
-        return redirect()->route('register', [
-            'name'  => $request->name,
-            'email' => $request->email,
-        ]);
-    }
-    // 👉 Show register page
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
     public function showLogin(Request $request){
         if ($request->has('redirect')) {
             session(['url.intended' => $request->redirect]);
@@ -43,7 +31,7 @@ class UserController extends Controller
             'email' => 'Invalid credentials'
             ])->onlyInput('email');
     }
-    public function sendOTP(Request $request){
+    public function sendOtp(Request $request){
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -73,12 +61,12 @@ class UserController extends Controller
                 ->subject('Your OTP Code');
         });
 
-        return redirect(route('register.verifyOTP.form'));
+        return redirect(route('register.verifyOtp.form'));
     }
-    public function verifyOTPForm(){
+    public function verifyOtpForm(){
         return view("auth.verifyOTP");
     }
-    public function verifyOTP(Request $request){
+    public function verifyOtp(Request $request){
         $otp = $request->input('otp');
         $correctotp = session('otp');
         if($otp!=$correctotp){

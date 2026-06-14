@@ -15,7 +15,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register.sendOtp') }}">
                 @csrf
 
                 <div class="mb-3">

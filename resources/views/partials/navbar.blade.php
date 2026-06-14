@@ -48,7 +48,7 @@
         <div class="d-flex">
             @guest
                 <a href="{{ route('login') }}" class="btn me-2 {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-log">Login</a>
-                <a href="{{ route('register') }}" class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-sign">Sign Up</a>
+                <a href="{{ route('register.form') }}" class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-sign">Sign Up</a>
             @endguest
 
             @auth
