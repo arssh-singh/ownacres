@@ -1,6 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@200..800&display=swap');
+
 body {
-  font-family: "Josefin Sans", sans-serif;
+    font-family: 'Manrope', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Marcellus', serif;
+}
+body {
   font-optical-sizing: auto;
   /* font-weight: <weight>; */
   font-style: normal;
@@ -19,7 +26,9 @@ body {
 }
 .nav-link, .navbar-brand{
     padding-bottom: 0px !important;
-    font-weight: 900;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
 }
 .form-btn{
     background-color: rgb(0, 30, 120);

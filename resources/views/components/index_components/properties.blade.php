@@ -5,7 +5,7 @@
         object-fit:cover;
     }
 </style>
-<div class="container-fluid mt-5">
+<!-- <div class="container-fluid mt-5">
     <div class="d-flex">
         <div class="rounded-pill" style="border: solid 1px white;">
             <button class="btn fs-6 px-5 py-3 rounded-pill loc-btn-active">Buy in Ludhiana</button>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <hr style="width: 65%;"/>
-</div>
+</div> -->
 
 @php $properties = $properties ?? collect(); @endphp
 <section class="mt-4">
@@ -34,7 +34,7 @@
                          alt="Property" style="view-transition-name: poster">
 
                     <div class="card-body px-0">
-                        <h3 class="h2 mb-2" id="price">₹{{ number_format($property->price, 2) }}</h3>
+                        <p class="fs-4 mb-2" id="price">₹{{ number_format($property->price, 2) }}</p>
 
                         <p class="text-secondary mb-2">
                             {{ $property->title }}

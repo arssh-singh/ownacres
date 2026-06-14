@@ -1,8 +1,8 @@
 @extends("layouts.app")
 @section("content")
-<div class="container mt-5 mb-5">
+<div class="container mt-5 pt-5 mb-5">
     <div class="col-md-5 mx-auto">
-        <div class="card p-4 border-0 bg-light">
+        <div class="card p-4 border-0 bg-white">
 
             <h3 class="mb-3 text-center">Create Account</h3>
 
@@ -20,17 +20,17 @@
 
                 <div class="mb-3">
                     <label>Name</label>
-                    <input class="form-control" type="text" name="name" value="{{ old('name') }}">
+                    <input class="form-control" type="text" name="name" value="{{ old('name', request('name')) }}" placeholder="John Doe">
                 </div>
 
                 <div class="mb-3">
                     <label>Email</label>
-                    <input class="form-control" type="email" name="email" value="{{ old('email') }}">
+                    <input class="form-control" type="email" name="email" value="{{ old('email', request('email')) }}" placeholder="example@email.com">
                 </div>
 
                 <div class="mb-3">
                     <label>Password</label>
-                    <input class="form-control" type="password" name="password" >
+                    <input class="form-control" type="password" name="password" placeholder="********">
                 </div>
 
                 <div class="mb-3">

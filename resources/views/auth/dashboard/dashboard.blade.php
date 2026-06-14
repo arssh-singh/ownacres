@@ -97,7 +97,7 @@ $profileViews = $profileViews ?? 0;
                         </div>
                         <div class="text-end">
                             <p class="fw-bold text-primary mb-0">₹{{ number_format($property->price, 2) }}</p>
-                            <a href="{{ route('properties.show', $property->id) }}" class="small text-decoration-none">View</a>
+                            <a href="{{ route('properties.prop_details', $property->id) }}" class="small text-decoration-none">View</a>
                         </div>
                     </div>
                 @empty
@@ -140,7 +140,7 @@ $profileViews = $profileViews ?? 0;
 
             <!-- Profile Card -->
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 text-center">
-                <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
+                <img src="{{ auth()->user()->profile_image_url }}"
                      class="rounded-circle mx-auto mb-3 object-fit-cover" style="width:80px; height:80px;" alt="">
                 <h6 class="fw-bold mb-0">{{ auth()->user()->name }}</h6>
                 <p class="text-muted small mb-3">{{ auth()->user()->email }}</p>
@@ -153,7 +153,7 @@ $profileViews = $profileViews ?? 0;
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <h6 class="fw-bold mb-3">Quick Actions</h6>
                 <div class="d-flex flex-column gap-2">
-                    <a href="{{ route('dashboard') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
+                    <a href="{{ route('create-prop') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-plus-circle text-primary"></i> Add New Listing
                     </a>
                     <a href="{{ route('dashboard') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">

@@ -58,11 +58,11 @@ class PropertyController extends Controller
 
         Property::create($validated);
 
-        return redirect(route('dashboard.properties'))->with('success', 'Property added!');
+        return redirect(route('auth.dashboard.show_properties'))->with('success', 'Property added!');
     }
     public function get_prop($prop_id){
         $property = Property::where('user_id', auth()->id())->findOrFail($prop_id);
-        return view('dashboard_properties.edit', compact('property'));
+        return view('auth.dashboard.properties.edit', compact('property'));
     }
     public function update(Request $request, $prop_id){
         $validated = $request->validate([
@@ -96,5 +96,37 @@ class PropertyController extends Controller
         }
         $prop->delete();
         return redirect(route('dashboard.properties'));
+    }
+    public function marketplace_search(Request $request){
+        $query = Property::query();
+
+        if($request->filled('location')){
+            $query->where('location', 'like', '%' . $request->location . '%');
+        }
+        if($request->filled('property_type') && $request->property_type != 'All Types'){
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->property_type . '%')
+                ->orWhere('description', 'like', '%' . $request->property_type . '%');
+            });
+        }
+        if($request->filled('price_range') && $request->price_range != 'Any Price'){
+            if($request->price_range == 'Under 50 Lac'){
+                $query->where('price', '<', 5000000);
+            } elseif($request->price_range == '50 Lac - 1 Crore'){
+                $query->whereBetween('price', [5000000, 10000000]);
+            } elseif($request->price_range == '1 Crore - 2 Crore'){
+                $query->whereBetween('price', [10000000, 20000000]);
+            } elseif($request->price_range == 'Over 2 Crore'){
+                $query->where('price', '>', 20000000);
+            }
+        }
+        if($request->filled('bedrooms') && $request->bedrooms != 'Any'){
+            $bedrooms = (int) filter_var($request->bedrooms, FILTER_SANITIZE_NUMBER_INT);
+            $query->where('bedrooms', '>=', $bedrooms);
+        }
+        
+        $properties = $query->latest()->get();
+
+        return view('marketplace', compact('properties'));
     }
 }

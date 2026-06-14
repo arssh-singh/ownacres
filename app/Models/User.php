@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'profile_image'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,5 +28,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+        /**
+     * Get the URL to the user's profile image, or a default avatar.
+     */
+    public function getProfileImageUrlAttribute(): string
+    {
+        return $this->profile_image
+            ? asset('storage/' . $this->profile_image)
+            : asset('images/house.jpg'); // Default avatar image
+    }
+    public function savedProperties()
+    {
+        return $this->belongsToMany(Property::class, 'saved_properties')
+                    ->withTimestamps();
     }
 }

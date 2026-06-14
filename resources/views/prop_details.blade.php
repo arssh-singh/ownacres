@@ -207,6 +207,13 @@
                 </p>
 
                 @auth
+                    <form action="{{ route('properties.save', $property->id) }}" method="POST">
+                        @csrf
+                        <button class="btn btn-outline-primary w-100 py-3 fw-semibold mb-2">
+                            <i class="bi bi-bookmark me-2"></i>
+                            {{ auth()->user()->savedProperties->contains($property->id) ? 'Saved' : 'Save' }}
+                        </button>
+                    </form>
                     <button class="btn btn-primary w-100 py-3 fw-semibold mb-2">
                         <i class="bi bi-send-fill me-2"></i> Send Inquiry
                     </button>

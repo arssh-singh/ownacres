@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
+    public function putinregister(Request $request){
+        // printing request data
+        return redirect()->route('register', [
+            'name'  => $request->name,
+            'email' => $request->email,
+        ]);
+    }
     // 👉 Show register page
     public function showRegister()
     {
@@ -157,5 +164,30 @@ class UserController extends Controller
         return redirect()->route('login')
         ->with('success', 'Password changed successfully.');
 
+    }
+
+    public function updateProfileImage(Request $request)
+    {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $user = auth()->user();
+
+        // Delete old image if it exists
+        if ($user->profile_image) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+
+        // Store new image
+        $path = $request->file('profile_image')->storeAs(
+            'profile_images/' . $user->id,
+            'avatar.' . $request->file('profile_image')->extension(),
+            'public'
+        );
+
+        $user->update(['profile_image' => $path]);
+
+        return back()->with('success', 'Profile picture updated successfully.');
     }
 }

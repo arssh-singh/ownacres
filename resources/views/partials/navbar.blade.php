@@ -21,9 +21,9 @@
     }
 </style>
 @if(request()->routeIs('home'))
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1" id="bar" style="background-color: #ffffff1f; backdrop-filter: blur(20px); border: solid 1px #ffffff4a">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1" id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
 @else
-<nav class="navbar navbar-expand-lg navbar-light fixed-top p-1" id="bar" style="background-color: #ffff">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top p-1" id="bar" style="background-color: #ffff" style="view-transition-name: navbar;">
 @endif
     <div class="container-fluid py-2 px-lg-5">
         <a class="navbar-brand fw-bold" href="{{ route('home') }}">OWNACRES</a>
