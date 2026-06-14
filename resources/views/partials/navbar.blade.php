@@ -52,11 +52,11 @@
             @endguest
 
             @auth
-                <a href="{{ route('dashboard') }}" class="btn me-2">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn me-2 {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-dash">Dashboard</a>
 
                 <form method="POST" action="{{ route('logout')}}" style="display:inline;">
                     @csrf
-                    <button class="btn ">Logout</button>
+                    <button class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-logout">Logout</button>
                 </form>
             @endauth
 
@@ -65,46 +65,43 @@
     </div>
 </nav>
 <script>
-    const bar = document.getElementById('bar');
-    const btnlog = document.getElementById('btn-log');
-    const btnsign = document.getElementById('btn-sign');
-    window.addEventListener('scroll', function () {
+const bar = document.getElementById('bar');
+const btnlog = document.getElementById('btn-log');
+const btnsign = document.getElementById('btn-sign');
+const btndash = document.getElementById('btn-dash');
+const btnlogout = document.getElementById('btn-logout');
 
-        if (window.scrollY > 100) {
+window.addEventListener('scroll', function () {
 
+    if (window.scrollY > 100) {
+
+        bar.classList.remove('navbar-dark');
+        bar.classList.add('bar-down', 'navbar-light', 'shadow-lg');
+
+        @if (request()->routeIs('home'))
+            if(btnlog) { btnlog.classList.remove('text-light'); btnlog.classList.add('text-dark'); }
+            if(btnsign) { btnsign.classList.remove('text-light'); btnsign.classList.add('text-dark'); }
+            if(btndash) { btndash.classList.remove('text-light'); btndash.classList.add('text-dark'); }
+            if(btnlogout) { btnlogout.classList.remove('text-light'); btnlogout.classList.add('text-dark'); }
+        @endif
+
+    } else {
+
+        bar.classList.remove('bar-down', 'shadow-lg');
+
+        @if(request()->routeIs('home'))
+            bar.classList.add('bar', 'navbar-dark');
+            bar.classList.remove('navbar-light');
+
+            if(btnlog) { btnlog.classList.remove('text-dark'); btnlog.classList.add('text-light'); }
+            if(btnsign) { btnsign.classList.remove('text-dark'); btnsign.classList.add('text-light'); }
+            if(btndash) { btndash.classList.remove('text-dark'); btndash.classList.add('text-light'); }
+            if(btnlogout) { btnlogout.classList.remove('text-dark'); btnlogout.classList.add('text-light'); }
+        @else
+            bar.classList.add('bar');
             bar.classList.remove('navbar-dark');
-            bar.classList.add('bar-down', 'navbar-light', 'shadow-lg');
-
-            @if (request()->routeIs('home'))
-
-                btnlog.classList.remove('text-light');
-                btnlog.classList.add('text-dark');
-                btnsign.classList.remove('text-light');
-                btnsign.classList.add('text-dark');
-            
-            @endif
-
-        } else {
-
-            bar.classList.remove('bar-down', 'shadow-lg');
-
-            @if(request()->routeIs('home'))
-
-                bar.classList.add('bar', 'navbar-dark');
-                bar.classList.remove('navbar-light');
-
-                btnlog.classList.remove('text-dark');
-                btnlog.classList.add('text-light');
-                btnsign.classList.remove('text-dark');
-                btnsign.classList.add('text-light');
-
-            @else
-
-                bar.classList.add('bar');
-                bar.classList.remove('navbar-dark');
-                bar.classList.add('navbar-light');
-
-            @endif
-        }
-    });
+            bar.classList.add('navbar-light');
+        @endif
+    }
+});
 </script>
