@@ -27,13 +27,19 @@
         </li>
         <li class="nav-item {{ request()->routeIs('dashboard') ? 'bg-dark rounded' : '' }}">
             <a class="nav-link {{ request()->routeIs('dashboard') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard') }}">
-                <i class="bi bi-columns me-2 fs-5"></i> Dashboard
+                <i class="bi bi-columns me-2 fs-5"></i> Home
             </a>
         </li>
 
         <li class="nav-item {{ request()->routeIs('dashboard.properties') ? 'bg-dark rounded' : '' }}">
             <a class="nav-link {{ request()->routeIs('dashboard.properties') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard.properties') }}">
                 <i class="bi bi-houses me-2 fs-5"></i>  Properties
+            </a>
+        </li>
+        
+        <li class="nav-item {{ request()->routeIs('dashboard.savedProperties') ? 'bg-dark rounded' : '' }}">
+            <a class="nav-link {{ request()->routeIs('dashboard.savedProperties') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard.savedProperties') }}">
+                <i class="bi bi-save me-2 fs-5"></i>  Saved Properties
             </a>
         </li>
 

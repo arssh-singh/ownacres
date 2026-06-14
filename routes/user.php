@@ -1,0 +1,43 @@
+<?php
+    use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\UserController;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
+
+    // creating new user routes
+    Route::prefix('auth')->group(function () {
+        // this newuser route looks confusing but when any user enters their detial in home page's new user panel, this routes takes those detail and put in the sign up form
+        Route::get('/newuser', function (Request $request) {
+                                    return redirect()->route('register.form', [
+                                        'name'  => $request->name,
+                                        'email' => $request->email,
+                                    ]);
+                                })->name('newuser');
+
+        Route::view('/register/form', 'auth.register')->name('register.form');
+        Route::post('/register/send-otp', [UserController::class, 'sendOtp'])->name('register.sendOtp');
+        Route::get('/register/verify-otp-form', [UserController::class, 'verifyOtpForm'])->name('register.verifyOtp.form');
+        Route::post('/register/verify-otp', [UserController::class, 'verifyOtp'])->name('register.verifyOtp');
+
+        // forgot password routes
+        Route::get('/forgot-password/form', [UserController::class, 'forgot_password_form'])->name('forgotpass.form');
+        Route::post('/forgot-password/send-OTP', [UserController::class, 'forgot_password_sendOTP'])->name('forgotpass.sendOTP');
+
+        Route::get('/forgot-password/verify-OTP/form', [UserController::class, 'forgot_password_verifyOTP_form'])->name('forgotpass.verifyOTP.form');
+        Route::post('/forgot-password/verify-OTP', [UserController::class, 'verifyForgotPassOTP'])->name('forgotpass.verifyOTP');
+
+        Route::get('/forgot-password/new-password-form', [UserController::class, 'forgotpassnewpassform'])->name('forgotpass.newpass.form');
+        Route::post('/forgot-password/change-password', [UserController::class, 'forgotpasschangepass'])->name('forgotpass.changepass');
+
+        // user login when account is created
+        Route::get('/login', [UserController:: class, 'showLogin'])->name('login');
+        Route::post('/login', [UserController::class, 'login']);
+
+        Route::post('/logout', function () {
+            Auth::logout();
+            return redirect(route('home'));
+        })->name('logout');
+    });
+    
+
+
