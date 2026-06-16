@@ -1,4 +1,4 @@
-<div class="position-sticky d-flex flex-column gap-3" style="top: 140px;">
+<div class="position-sticky d-flex flex-column gap-3 " style="top: 140px;">
 
   {{-- Sign up card --}}
     <form action="{{ route('newuser') }}" method="GET">
@@ -8,7 +8,7 @@
 
             <div class="mb-3">
             <label class="form-label small fw-semibold text-uppercase" style="letter-spacing:.06em">Full name</label>
-            <input type="text" class="form-control rounded-3 bg-light border-0" name="name" placeholder="Good Sir Name">
+            <input type="text" class="form-control rounded-3 bg-light border-0" name="name" placeholder="Name">
             </div>
             <div class="mb-3">
             <label class="form-label small fw-semibold text-uppercase" style="letter-spacing:.06em">Email</label>

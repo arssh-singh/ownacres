@@ -214,9 +214,19 @@
                             {{ auth()->user()->savedProperties->contains($property->id) ? 'Saved' : 'Save' }}
                         </button>
                     </form>
-                    <button class="btn btn-primary w-100 py-3 fw-semibold mb-2">
-                        <i class="bi bi-send-fill me-2"></i> Send Inquiry
-                    </button>
+                    <form action="{{ route('properties.inquiry.store', $property) }}" method="POST">
+                        @csrf
+
+                        <textarea
+                            name="message"
+                            class="form-control mb-3"
+                            rows="4"
+                            placeholder="I'm interested in this property..."></textarea>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold mb-2">
+                            <i class="bi bi-send-fill me-2"></i> Send Inquiry
+                        </button>
+                    </form>
                     <button class="btn btn-outline-primary w-100 py-3 fw-semibold">
                         <i class="bi bi-telephone-fill me-2"></i> Request a Call Back
                     </button>

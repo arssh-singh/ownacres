@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\UserController;
 use App\Models\Property;
+use App\Models\Inquiry;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,12 +24,22 @@ Route::middleware('auth')->group(function () {
             ->latest()
             ->get();
         return view('auth.dashboard.properties.show_props', compact('properties'));
-    })->name('dashboard.properties')->middleware('auth');
+    })->name('dashboard.properties');
     // dashbaord saved properties
     Route::get('/dashboard/saved_properties', function () {
         $properties = auth()->user()->savedProperties()->latest()->get();
 
         return view('auth.dashboard.saved_properties.saved_properties', compact('properties'));
     })->name('dashboard.savedProperties');
+    // dashboard messages
+    Route::get('/dashboard/messages', function () {
+
+        $inquiries = Inquiry::where('receiver_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('auth.dashboard.messages.messages', compact('inquiries'));
+
+    })->name('dashboard.messages');
 });
 

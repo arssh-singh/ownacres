@@ -1,4 +1,53 @@
+<style>
+    .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 1rem;
+    list-style: none;
+    margin: 0;
+}
 
+.sidebar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #6b7280;
+    transition: background 0.15s, color 0.15s;
+    text-decoration: none;
+}
+
+.sidebar-nav .nav-link:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #111;
+}
+
+.sidebar-nav .nav-link.active {
+    background: #111;
+    color: #fff;
+    font-weight: 500;
+}
+
+.nav-divider {
+    border: none;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin: 0 0 8px;
+}
+
+.nav-link--cta {
+    border: 1px solid rgba(0,0,0,0.15);
+    justify-content: center;
+    font-weight: 500;
+    color: #111 !important;
+}
+
+.nav-link--cta:hover {
+    background: rgba(0,0,0,0.05) !important;
+}
+</style>
 <!-- Sidebar -->
 <div class="col-2 bg-light sidebar d-lg-block d-none" id="sidebar" style="view-transition-name: sidebar;">
     <div class="mb-2 p-4 pb-2">
@@ -19,33 +68,33 @@
         </div>
     </div>
 
-    <ul class="nav flex-column p-4 pt-0" style="gap: 10px;">
-        <li class="nav-item {{ request()->routeIs('dashboard.profile') ? 'bg-dark rounded' : '' }}">
-            <a class="nav-link {{ request()->routeIs('dashboard.profile') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard.profile') }}">
-                <i class="bi bi-person me-2 fs-5"></i>  Profile
-            </a>
-        </li>
-        <li class="nav-item {{ request()->routeIs('dashboard') ? 'bg-dark rounded' : '' }}">
-            <a class="nav-link {{ request()->routeIs('dashboard') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard') }}">
-                <i class="bi bi-columns me-2 fs-5"></i> Home
-            </a>
-        </li>
+    <ul class="sidebar-nav">
+        @php
+            $links = [
+                ['route' => 'dashboard',              'icon' => 'bi-columns',  'label' => 'Home'],
+                ['route' => 'dashboard.profile',       'icon' => 'bi-person',   'label' => 'Profile'],
+                ['route' => 'dashboard.messages',       'icon' => 'bi-chat',   'label' => 'Messages'],
+                ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
+                ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties'],
+            ];
+        @endphp
 
-        <li class="nav-item {{ request()->routeIs('dashboard.properties') ? 'bg-dark rounded' : '' }}">
-            <a class="nav-link {{ request()->routeIs('dashboard.properties') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard.properties') }}">
-                <i class="bi bi-houses me-2 fs-5"></i>  Properties
-            </a>
-        </li>
-        
-        <li class="nav-item {{ request()->routeIs('dashboard.savedProperties') ? 'bg-dark rounded' : '' }}">
-            <a class="nav-link {{ request()->routeIs('dashboard.savedProperties') ? 'text-light' : 'text-dark' }}" href="{{ route('dashboard.savedProperties') }}">
-                <i class="bi bi-save me-2 fs-5"></i>  Saved Properties
-            </a>
-        </li>
+        @foreach ($links as $link)
+            @php $active = request()->routeIs($link['route']); @endphp
+            <li class="nav-item">
+                <a href="{{ route($link['route']) }}"
+                class="nav-link {{ $active ? 'active' : '' }}"
+                @if ($active) aria-current="page" @endif>
+                    <i class="bi {{ $link['icon'] }}" aria-hidden="true"></i>
+                    {{ $link['label'] }}
+                </a>
+            </li>
+        @endforeach
 
-        <li class="nav-item mt-5">
-            <a class="btn btn-primary w-100 shadow py-2" href="{{ route('create-prop') }}">
-                + List New Property
+        <li class="nav-item mt-auto pt-3">
+            <hr class="nav-divider">
+            <a href="{{ route('create-prop') }}" class="nav-link nav-link--cta">
+                <i class="bi bi-plus" aria-hidden="true"></i> List New Property
             </a>
         </li>
     </ul>

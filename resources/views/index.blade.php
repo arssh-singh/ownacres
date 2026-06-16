@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     @include('components.index_components.hero')
-    <div class="container-fluid px-lg-5 px-sm-0">
+    <div class="container-fluid px-lg-5 px-sm-0 mb-5">
         <div class="row">
             <!-- LEFT SIDE -->
             <div class="col-lg-8">
@@ -22,7 +22,7 @@
                             ['bi-currency-rupee',   '#FAECE7', '#993C1D', 'Best market prices',  'We negotiate on your behalf and match you to properties that fit your budget and goals.',    'No',   'Hidden fees'],
                         ] as [$icon, $iconBg, $iconColor, $title, $desc, $stat, $statLabel])
                         <div class="col-lg-3 col-sm-6">
-                            <div class="border rounded-4 p-4 h-100">
+                            <div class="border rounded-4 p-4 h-100 bg-white">
 
                             <div class="rounded-3 d-inline-flex align-items-center justify-content-center mb-4"
                                 style="width:44px; height:44px; background:{{ $iconBg }}">
@@ -50,6 +50,7 @@
             </div>
         </div>
     </div>
+    @include('components.index_components.dealers')
 
     <!-- @nclude('components.show_properties', ['properties' => $properties]) -->
     <!-- @nclude('components.index_components.philosophy')

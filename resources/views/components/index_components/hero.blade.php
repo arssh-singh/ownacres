@@ -1,46 +1,51 @@
 <!-- linear-gradient(180deg, #0094fd89, #000d38ee), -->
-<div class="container-fluid px-lg-5 px-md-5 px-xl-5 px-sm-0 py-5 position-relative"
-    style="
-    background-image: 
-    linear-gradient(280deg, #ffffff00, #000000cc), url('{{ asset('storage/images/banner.png') }}');
-    background-size: cover;
-    background-position: 0% 35%;
-">
+{{-- linear-gradient(295deg, #5967ff, #0014ff) --}}
+<style>
+    .hero-banner{
+        background-image: 
+        linear-gradient(280deg, #ffffff00, #000000cc),
+        linear-gradient(295deg, #00118969, #0015ff),
+        url('{{ asset('storage/images/banner.png') }}');
+        background-size: cover;
+        background-position: 0% 35%;
+    }
+</style>
+<div class="container-fluid px-lg-5 px-md-5 px-xl-5 px-sm-0 py-5 position-relative hero-banner">
 
     <div class="row" style="height:55vh;">
         <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12 mt-lg-5 mt-sm-0 ">
-            <p style="color: white">DISCOVER. CHOOSE. OWN</p>
-            <hr style="width: 5%; color:white"/>
-            <h1 class="display-3 fw-bold text-white m-0"
+            <p style="color: white" class="fade-anim">DISCOVER. CHOOSE. OWN</p>
+            <hr style="width: 5%; color:white" class="fade-anim"/>
+            <h1 class="display-3 fw-bold text-white m-0 fade-anim"
                 style="text-shadow:0 1px 20px #00000087;">
                 Find a place you'll<br/> <span style="color: royalblue !important;">love</span> to live
             </h1>
 
-            <p class="lead fs-6 mb-0"
-                style="color:#ffffffc9; ">
+            <p class="lead fs-6 mb-0 fade-anim"
+                style="color:#ffffffc9; " >
                 Explore hand-picked properties in the most desirable locations.<br/>
                 Your dream home is just a few clicks away.
             </p>
             <!-- action buttons -->
             <div class="mt-4">
                 <a href="#"
-                    class="btn btn-primary rounded-pill py-3 px-5 me-3">
+                    class="btn btn-primary rounded-pill py-3 px-5 me-3 fade-anim">
                     Get Started
                 </a>
                 <a href="#"
-                    class="btn btn-outline-light rounded-pill py-3 px-5">
+                    class="btn btn-outline-light rounded-pill py-3 px-5 fade-anim">
                     Learn More
                 </a>
             </div>
         </div>
-        <div class="col-xl-6 col-lg-4 col-md-4 d-none d-lg-flex d-md-flex align-items-center justify-content-end">
-            <div class="p-4 rounded-4" style="
+        <div class="col-xl-6 col-lg-4 col-md-4 d-none d-lg-flex d-md-flex align-items-center justify-content-end fade-anim">
+            <div class="p-4 rounded-4 h-auto" style="
                 background: rgba(255,255,255,0.12);
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
                 border: 1px solid rgba(255,255,255,0.25);
                 width: 100%;
-                max-width: 300px;
+                max-width: 400px;
                 color: #fff;
             ">
                 <p class="text-uppercase mb-1" style="font-size:11px; letter-spacing:.08em; color:rgba(255,255,255,.6)">
@@ -87,16 +92,16 @@
 </div>
 
 <!-- Search Box -->
-<div class="container p-0 position-relative" style="margin-top: -50px; z-index: 10;">
+<div class="container p-0 position-relative fade-anim" style="margin-top: -50px; z-index: 10;">
     <div class="row justify-content-center">
         <div class="col-lg-11">
 
             <!-- Search Card -->
-            <div class="bg-white shadow-sm rounded-5 p-4 mx-3 mx-md-0">
+            <div class="bg-white shadow-sm rounded-5 p-4 mx-3 mx-md-0 fade-anim">
                 <form action="{{ route('marketplace.properties.search') }}" method="GET">
                     <div class="row g-3 align-items-center">
                         <!-- Location -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
                             <label class="form-label fw-semibold small mb-1 d-block">Location</label>
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-geo-alt text-muted me-2"></i>
@@ -106,7 +111,7 @@
                         </div>
 
                         <!-- Property Type -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
                             <label class="form-label fw-semibold small mb-1 d-block">Property Type</label>
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-house text-muted me-2"></i>
@@ -121,7 +126,7 @@
                         </div>
 
                         <!-- Price Range -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
                             <label class="form-label fw-semibold small mb-1 d-block">Price Range</label>
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-tag text-muted me-2"></i>
@@ -136,7 +141,7 @@
                         </div>
 
                         <!-- Beds & Baths -->
-                        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12">
+                        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 fade-anim">
                             <label class="form-label fw-semibold small mb-1 d-block">Beds &amp; Baths</label>
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-door-closed text-muted me-2"></i>
@@ -152,7 +157,7 @@
 
                         <!-- Search Button -->
                         <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12">
-                            <button class="btn btn-dark rounded-3 w-100 py-2 fw-semibold mt-4">
+                            <button class="btn btn-dark rounded-3 w-100 py-2 fw-semibold mt-4 fade-anim">
                                 <i class="bi bi-search me-1"></i>
                             </button>
                         </div>
@@ -162,3 +167,20 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+gsap.from('.fade-anim', {
+    opacity: 0,
+    y: 60,
+    filter: "blur(1000px)",
+    scale: 2,
+    duration: 1.4,
+    ease: "back.out(1.7)",
+    stagger: 0.15
+});
+});
+</script>
+@endpush

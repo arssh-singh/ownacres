@@ -1,11 +1,14 @@
 <style>
+    .bar-transparent{
+        backdrop-filter: blur(10px);
+        border-bottom: solid .1px #ffffff5d;
+    }
     .bar{
         transition: all .7s cubic-bezier(0.22, 1, 0.36, 1);
         transform: scaleX(1);
-
     }
     .bar-down{
-        background-color: white !important;
+        background-color: #ffffff85 !important;
         margin-left: 45px !important;
         margin-right: 45px !important;
         margin-top: 25px !important;
@@ -21,42 +24,42 @@
     }
 </style>
 @if(request()->routeIs('home'))
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1" id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1 " id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
 @else
 <nav class="navbar navbar-expand-lg navbar-light fixed-top p-1" id="bar" style="background-color: #ffff" style="view-transition-name: navbar;">
 @endif
     <div class="container-fluid py-2 px-lg-5">
-        <a class="navbar-brand fw-bold" href="{{ route('home') }}">OWNACRES</a>
+        <a class="navbar-brand fw-bold fade-anim" href="{{ route('home') }}">OWNACRES</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item {{ request()->routeIs("home") ? 'active-link' : '' }}" >
-                <a class="nav-link" aria-current="page" href="{{ route('home') }}">Home</a>
+                <a class="nav-link fade-anim" aria-current="page" href="{{ route('home') }}">Home</a>
             </li>
             <li class="nav-item {{ request()->routeIs("marketplace") ? 'active-link' : '' }}">
-                <a class="nav-link" aria-current="page" href="{{ route('marketplace')}}">Marketplace</a>
+                <a class="nav-link fade-anim" aria-current="page" href="{{ route('marketplace')}}">Marketplace</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Blogs</a>
+                <a class="nav-link fade-anim" aria-current="page" href="#">Blogs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link fade-anim" href="#">About Us</a>
             </li>
         </ul>
         <div class="d-flex">
             @guest
-                <a href="{{ route('login') }}" class="btn me-2 {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-log">Login</a>
-                <a href="{{ route('register.form') }}" class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-sign">Sign Up</a>
+                <a href="{{ route('login') }}" class="btn me-2 fade-anim {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-log">Login</a>
+                <a href="{{ route('register.form') }}" class="btn fade-anim {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-sign">Sign Up</a>
             @endguest
 
             @auth
-                <a href="{{ route('dashboard') }}" class="btn me-2 {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-dash">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn me-2 fade-anim {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-dash">Dashboard</a>
 
                 <form method="POST" action="{{ route('logout')}}" style="display:inline;">
                     @csrf
-                    <button class="btn {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-logout">Logout</button>
+                    <button class="btn fade-anim {{ request()->routeIs('home') ? 'text-light' : 'text-dark' }}" id="btn-logout">Logout</button>
                 </form>
             @endauth
 
@@ -73,7 +76,7 @@ const btnlogout = document.getElementById('btn-logout');
 
 window.addEventListener('scroll', function () {
 
-    if (window.scrollY > 100) {
+    if (window.scrollY > 500) {
 
         bar.classList.remove('navbar-dark');
         bar.classList.add('bar-down', 'navbar-light', 'shadow-lg');
@@ -85,9 +88,13 @@ window.addEventListener('scroll', function () {
             if(btnlogout) { btnlogout.classList.remove('text-light'); btnlogout.classList.add('text-dark'); }
         @endif
 
-    } else {
+    }
+    if (window.scrollY > 0){
+        bar.classList.add('bar-transparent');
+    }   
+    else {
 
-        bar.classList.remove('bar-down', 'shadow-lg');
+        bar.classList.remove('bar-transparent', 'bar-down', 'shadow-lg');
 
         @if(request()->routeIs('home'))
             bar.classList.add('bar', 'navbar-dark');
