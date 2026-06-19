@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Services\OtpService;
 class UserController extends Controller
 {
     public function showLogin(Request $request){
@@ -154,6 +155,57 @@ class UserController extends Controller
 
     }
 
+    public function sendEditProfileOtp(Request $request){
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255'
+        ]);
+
+        $otp = random_int(100000, 999999);
+
+        session([
+            'otp'=>$otp,
+            'name'=>$validated['name'],
+            'email'=>$validated['email']    
+        ]);
+
+        sleep(1);
+
+        try {            
+            OtpService::send($validated['email'], $otp);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP sent successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP'
+            ], 500);
+        }
+    }
+    public function editProfileOtpCheck(Request $request)
+    {
+        sleep(1);
+        if ($request->otp != session('otp')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP Incorrect'
+            ]);
+        }
+
+        auth()->user()->update([
+            'name' => session('name'),
+            'email' => session('email'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully'
+        ]);
+    }
     public function updateProfileImage(Request $request)
     {
         $request->validate([

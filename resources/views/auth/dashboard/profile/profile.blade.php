@@ -69,12 +69,14 @@
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="fw-bold mb-0">Personal Information</h6>
-                    <a href="#" class="small text-decoration-none fw-semibold" style="color: #4f46e5;">
-                        Edit <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
+                    <button
+                        class="btn btn-sm btn-primary"
+                        id="edit-profile-btn">
+                        Edit Profile
+                    </button>
                 </div>
 
-                <div class="row g-4">
+                <div class="row g-4" id="profile-view">
                     <div class="col-sm-6">
                         <small class="text-muted d-block mb-1">Full Name</small>
                         <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
@@ -92,6 +94,8 @@
                         <p class="fw-semibold mb-0">{{ auth()->user()->location ?? '—' }}</p>
                     </div>
                 </div>
+                @include('auth.dashboard.profile.editprofilemodal')
+                @include('auth.dashboard.profile.otpmodal')
             </div>
 
             <!-- Security -->
@@ -121,13 +125,6 @@
                     </div>
                     <a href="#" class="btn btn-sm btn-light border rounded-pill px-3">View</a>
                 </div>
-            </div>
-
-            <!-- Danger Zone -->
-            <div class="card border-0 shadow-sm rounded-4 p-4" style="border-left: 4px solid #ef4444 !important;">
-                <h6 class="fw-bold mb-2 text-danger">Danger Zone</h6>
-                <p class="text-muted small mb-3">Once you delete your account, there is no going back. Please be certain.</p>
-                <a href="#" class="btn btn-outline-danger rounded-3 px-4">Delete Account</a>
             </div>
         </div>
     </div>
@@ -173,3 +170,74 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    // ─── DOM References ───────────────────────────────────────────────────────────
+
+    const editProfileBtn   = document.getElementById('edit-profile-btn');
+    const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+    const profileForm      = document.getElementById('profileForm');
+    const saveBtn          = document.getElementById('saveBtn');
+    const btnSpinner       = document.getElementById('btnSpinner');
+
+    const otpForm          = document.getElementById('otpForm');
+    const verifyBtn        = document.getElementById('verifyBtn');
+    const verifySpinner    = document.getElementById('verifybtnSpinner');
+    const otpModal = new bootstrap.Modal(document.getElementById('otpModal'));
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+    function setLoading(btn, spinner, isLoading) {
+        btn.classList.toggle('d-none', isLoading);
+        spinner.classList.toggle('d-none', !isLoading);
+    }
+
+    async function postForm(url, formData) {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        });
+        return response.json();
+    }
+
+    // ─── Open Edit Profile Modal ──────────────────────────────────────────────────
+
+    editProfileBtn.addEventListener('click', () => editProfileModal.show());
+
+    // ─── Submit Profile Form (request OTP) ────────────────────────────────────────
+
+    profileForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        setLoading(saveBtn, btnSpinner, true);
+
+        const data = await postForm("{{ route('dashboard.editProfile') }}", new FormData(this));
+
+        if (data.success) {
+            editProfileModal.hide();
+            otpModal.show();
+        }
+
+        setLoading(saveBtn, btnSpinner, false);
+    });
+
+    // ─── Submit OTP Form ──────────────────────────────────────────────────────────
+
+    otpForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        setLoading(verifyBtn, verifySpinner, true);
+
+        const data = await postForm("{{ route('dashboard.editProfile.checkOtp') }}", new FormData(this));
+
+        if(data.success == false){
+            const message = document.getElementById('otpError')
+            message.classList.remove('d-none')
+        }
+        else{
+            otpModal.hide();
+        }
+
+        setLoading(verifyBtn, verifySpinner, false);
+    });
+</script>
+@endpush

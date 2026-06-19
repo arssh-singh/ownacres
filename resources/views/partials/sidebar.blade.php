@@ -49,7 +49,7 @@
 }
 </style>
 <!-- Sidebar -->
-<div class="col-2 bg-light sidebar d-lg-block d-none" id="sidebar" style="view-transition-name: sidebar;">
+<div class="bg-light sidebar h-100" id="sidebar" style="view-transition-name: sidebar;">
     <div class="mb-2 p-4 pb-2">
         <div class="container-fluid text-center p-2">
             
@@ -76,6 +76,7 @@
                 ['route' => 'dashboard.messages',       'icon' => 'bi-chat',   'label' => 'Messages'],
                 ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
                 ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties'],
+                ['route' => 'dashboard.empty','icon' => 'bi-box', 'label' => 'Empty'],
             ];
         @endphp
 

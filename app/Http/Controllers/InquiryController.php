@@ -24,4 +24,17 @@ class InquiryController extends Controller
 
         return back()->with('success', 'Inquiry sent successfully!');
     }
+    public function index($id = null)
+    {
+        $inquiries = Inquiry::with('sender')->get();
+
+        $selectedInquiry = $id
+            ? Inquiry::with('sender')->find($id)
+            : null;
+
+        return view('auth.dashboard.messages.messages', compact(
+            'inquiries',
+            'selectedInquiry'
+        ));
+    }
 }

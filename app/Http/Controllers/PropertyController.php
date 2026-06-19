@@ -11,12 +11,13 @@ class PropertyController extends Controller
 {
     public function index()
     {
-        $properties = Property::latest()->get();
+        $properties = Property::latest()->get()->take(6);
         return view('index', compact('properties'));
     }
+    
     public function marketplace()
     {
-        $properties = Property::latest()->get();
+        $properties = Property::latest()->paginate(12);
         return view('marketplace', compact('properties'));
     }
     public function prop_details($prop_id)
@@ -28,6 +29,7 @@ class PropertyController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'description' => 'required|string',
             'price' => 'required|numeric',
 
@@ -46,11 +48,6 @@ class PropertyController extends Controller
         // Attach logged-in user
         $validated['user_id'] = auth()->id();
 
-        // Getting image
-        $image = $request->file('image');
-        // Getting unique name for image
-        $filename = time() . "." . $image->getClientOriginalExtension();
-
         //Storing image in folder
         $path = $request->file('image')->store('prop_images', 'public');
         $validated['image'] = $path;
@@ -58,7 +55,7 @@ class PropertyController extends Controller
 
         Property::create($validated);
 
-        return redirect(route('auth.dashboard.show_properties'))->with('success', 'Property added!');
+        return redirect(route('dashboard.properties'))->with('success', 'Property added!');
     }
     public function get_prop($prop_id){
         $property = Property::where('user_id', auth()->id())->findOrFail($prop_id);
@@ -76,7 +73,7 @@ class PropertyController extends Controller
             'is_furnished' => 'nullable',
         ]);
 
-        $prop = Property::findOrFail($prop_id);
+        $prop = Property::where('user_id', auth()->id())->findOrFail($prop_id);
 
         if($request->hasFile('image')){
             if($prop->image){
@@ -90,7 +87,7 @@ class PropertyController extends Controller
         return redirect(route('dashboard.properties'))->with('success', 'Property updated!');
     }
     public function delete($prop_id){        
-        $prop = Property::findOrFail($prop_id);
+        $prop = Property::where('user_id', auth()->id())->findOrFail($prop_id);
         if($prop->image){
             Storage::disk('public')->delete($prop->image);
         }

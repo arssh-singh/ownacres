@@ -3,7 +3,7 @@
 <?php
 $savedCount = $savedCount ?? 0;
 $inquiriesCount = $inquiriesCount ?? 0;
-$listingsCount = $listingsCount ?? 0;
+$mylistedProperties = $mylistedProperties ?? 0;
 $profileViews = $profileViews ?? 0;
 ?>
 <div class="container-fluid px-lg-5 px-3 mt-5">
@@ -21,61 +21,58 @@ $profileViews = $profileViews ?? 0;
 
     <!-- Stat Cards -->
     <div class="row g-3 mb-4">
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
-                        <i class="bi bi-heart-fill text-primary fs-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-muted small mb-0">Saved Properties</p>
-                        <h4 class="fw-bold mb-0">{{ $savedCount ?? 0 }}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
-                        <i class="bi bi-send-fill text-success fs-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-muted small mb-0">Inquiries Sent</p>
-                        <h4 class="fw-bold mb-0">{{ $inquiriesCount ?? 0 }}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @php
+            $stats = [
+                [
+                    'title' => 'Saved Properties',
+                    'value' => $savedCount ?? 0,
+                    'icon' => 'bi-heart-fill',
+                    'bg' => 'bg-primary-subtle',
+                    'color' => 'text-primary',
+                ],
+                [
+                    'title' => 'Inquiries Sent',
+                    'value' => $inquiriesCount ?? 0,
+                    'icon' => 'bi-send-fill',
+                    'bg' => 'bg-success-subtle',
+                    'color' => 'text-success',
+                ],
+                [
+                    'title' => 'My Listings',
+                    'value' => $mylistedProperties ?? 0,
+                    'icon' => 'bi-house-fill',
+                    'bg' => 'bg-warning-subtle',
+                    'color' => 'text-warning',
+                ],
+                [
+                    'title' => 'Profile Views',
+                    'value' => $profileViews ?? 0,
+                    'icon' => 'bi-eye-fill',
+                    'bg' => 'bg-info-subtle',
+                    'color' => 'text-info',
+                ],
+            ];
+        @endphp
 
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-warning-subtle rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
-                        <i class="bi bi-house-fill text-warning fs-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-muted small mb-0">My Listings</p>
-                        <h4 class="fw-bold mb-0">{{ $listingsCount ?? 0 }}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @foreach($stats as $stat)
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="{{ $stat['bg'] }} rounded-circle d-flex align-items-center justify-content-center"
+                            style="width:48px; height:48px;">
+                            <i class="bi {{ $stat['icon'] }} {{ $stat['color'] }} fs-5"></i>
+                        </div>
 
-        <div class="col-md-3 col-6">
-            <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-info-subtle rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
-                        <i class="bi bi-eye-fill text-info fs-5"></i>
-                    </div>
-                    <div>
-                        <p class="text-muted small mb-0">Profile Views</p>
-                        <h4 class="fw-bold mb-0">{{ $profileViews ?? 0 }}</h4>
+                        <div>
+                            <p class="text-muted small mb-0">{{ $stat['title'] }}</p>
+                            <h4 class="fw-bold mb-0">{{ $stat['value'] }}</h4>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
+
     </div>
 
     <div class="row g-4">
@@ -85,7 +82,7 @@ $profileViews = $profileViews ?? 0;
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Saved Properties</h5>
-                    <a href="{{ route('dashboard.savedProperties') ?? '#' }}" class="small text-decoration-none">View All</a>
+                    <a href="{{ route('dashboard.savedProperties')}}" class="small text-decoration-none">View All</a>
                 </div>
 
                 @forelse ($savedProperties ?? [] as $property)
@@ -113,7 +110,7 @@ $profileViews = $profileViews ?? 0;
             <div class="card border-0 shadow-sm rounded-4 p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Recent Inquiries</h5>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="small text-decoration-none">View All</a>
+                    <a href="{{ route('dashboard.messages') ?? '#' }}" class="small text-decoration-none">View All</a>
                 </div>
 
                 @forelse ($recentInquiries ?? [] as $inquiry)
@@ -144,7 +141,7 @@ $profileViews = $profileViews ?? 0;
                      class="rounded-circle mx-auto mb-3 object-fit-cover" style="width:80px; height:80px;" alt="">
                 <h6 class="fw-bold mb-0">{{ auth()->user()->name }}</h6>
                 <p class="text-muted small mb-3">{{ auth()->user()->email }}</p>
-                <a href="{{ route('home') ?? '#' }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                <a href="{{ route('dashboard.profile') ?? '#' }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">
                     <i class="bi bi-pencil-square me-1"></i> Edit Profile
                 </a>
             </div>
@@ -156,41 +153,17 @@ $profileViews = $profileViews ?? 0;
                     <a href="{{ route('create-prop') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-plus-circle text-primary"></i> Add New Listing
                     </a>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
+                    <a href="{{ route('dashboard.savedProperties') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-heart text-danger"></i> Saved Properties
                     </a>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
+                    <a href="{{ route('dashboard.messages') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-chat-dots text-success"></i> My Inquiries
                     </a>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
+                    <a href="{{ route('dashboard.profile') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-gear text-secondary"></i> Account Settings
                     </a>
                 </div>
             </div>
-
-            <!-- My Listings -->
-            <div class="card border-0 shadow-sm rounded-4 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="fw-bold mb-0">My Listings</h6>
-                    <a href="{{ route('dashboard') ?? '#' }}" class="small text-decoration-none">+ Add</a>
-                </div>
-
-                @forelse ($myListings ?? [] as $listing)
-                    <div class="d-flex align-items-center gap-2 py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
-                        <img src="{{ asset('storage/' . $listing->image) }}" class="rounded-3 object-fit-cover" style="width:45px; height:45px;" alt="">
-                        <div class="flex-grow-1">
-                            <p class="small fw-semibold mb-0 text-truncate" style="max-width: 140px;">{{ $listing->title }}</p>
-                            <p class="text-muted small mb-0">₹{{ number_format($listing->price) }}</p>
-                        </div>
-                        <span class="badge bg-{{ $listing->status === 'active' ? 'success' : 'secondary' }}-subtle text-{{ $listing->status === 'active' ? 'success' : 'secondary' }}">
-                            {{ ucfirst($listing->status ?? 'active') }}
-                        </span>
-                    </div>
-                @empty
-                    <p class="text-muted small text-center py-3 mb-0">No listings yet.</p>
-                @endforelse
-            </div>
-
         </div>
     </div>
 

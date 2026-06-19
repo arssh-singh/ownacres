@@ -92,12 +92,12 @@
 </div>
 
 <!-- Search Box -->
-<div class="container p-0 position-relative fade-anim" style="margin-top: -50px; z-index: 10;">
+<div class="container position-relative fade-anim" style="margin-top: -50px; z-index: 10;">
     <div class="row justify-content-center">
         <div class="col-lg-11">
 
             <!-- Search Card -->
-            <div class="bg-white shadow-sm rounded-5 p-4 mx-3 mx-md-0 fade-anim">
+            <div class="bg-white shadow-sm rounded-5 p-4 fade-anim">
                 <form action="{{ route('marketplace.properties.search') }}" method="GET">
                     <div class="row g-3 align-items-center">
                         <!-- Location -->
