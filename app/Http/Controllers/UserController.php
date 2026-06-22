@@ -4,90 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Services\OtpService;
 class UserController extends Controller
 {
-    public function showLogin(Request $request){
-        if ($request->has('redirect')) {
-            session(['url.intended' => $request->redirect]);
-        }
-        return view('auth.login');
-    }
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email|',
-            'password' => 'required'
-        ]);
-        if (Auth:: attempt($credentials)){
-            $request->session()->regenerate();
-            return redirect()->intended('dashboard');
-        }
-        
-        return back()->withErrors([
-            'email' => 'Invalid credentials'
-            ])->onlyInput('email');
-    }
-    public function sendOtp(Request $request){
-        $validated = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed'
-        
-            ],
-            [
-                'name.required' => 'Please enter your name.',
-                'email.required' => 'Please enter your email address.',
-                'email.email' => 'Please enter a valid email address.',
-                'email.unique' => 'An account with this email already exists.',
-                'password.required' => 'Please enter a password.',
-                'password.min' => 'Your password must be at least 6 characters long.',
-                'password.confirmed' => 'The passwords do not match.'
-            ]
-        );
-
-        $otp = rand(100000, 999999);
-        
-        session([
-            'register_data' => $request->all(),
-            'otp'=>$otp,
-        ]);
-        
-        Mail::raw("Your OTP is: $otp", function ($message) use ($validated) {
-        $message->to($validated['email'])
-                ->subject('Your OTP Code');
-        });
-
-        return redirect(route('register.verifyOtp.form'));
-    }
-    public function verifyOtpForm(){
-        return view("auth.verifyOTP");
-    }
-    public function verifyOtp(Request $request){
-        $otp = $request->input('otp');
-        $correctotp = session('otp');
-        if($otp!=$correctotp){
-            return back()->withErrors([
-            'error' => 'OTP incorrect']);
-        }
-        $validated = session('register_data');
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
-
-        Auth::login($user);
-
-        session()->forget(['otp', 'register_data']);
-
-        return redirect()->intended('dashboard');
-    }
     public function forgot_password_form(){
         return view('auth.forgotpass.forgotpass');
     }
@@ -200,6 +122,7 @@ class UserController extends Controller
             'name' => session('name'),
             'email' => session('email'),
         ]);
+        session()->forget(['otp', 'name', 'email']);
 
         return response()->json([
             'success' => true,

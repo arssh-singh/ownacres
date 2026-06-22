@@ -73,7 +73,7 @@
             $links = [
                 ['route' => 'dashboard',              'icon' => 'bi-columns',  'label' => 'Home'],
                 ['route' => 'dashboard.profile',       'icon' => 'bi-person',   'label' => 'Profile'],
-                ['route' => 'dashboard.messages',       'icon' => 'bi-chat',   'label' => 'Messages'],
+                ['route' => 'dashboard.conversations',       'icon' => 'bi-chat',   'label' => 'Messages'],
                 ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
                 ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties'],
                 ['route' => 'dashboard.empty','icon' => 'bi-box', 'label' => 'Empty'],

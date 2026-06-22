@@ -5,6 +5,8 @@ use App\Models\Property;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -46,11 +48,33 @@ Route::middleware('auth')->group(function () {
     // dashboard messages
     Route::get('/dashboard/messages', function () {
 
-        $inquiries = Inquiry::where('receiver_id', auth()->id())->latest()->get();
-        $selectedInquiry = $inquiries->first(); // default selected
-        return view('auth.dashboard.messages.messages', compact('inquiries', 'selectedInquiry'));
+        $conversations = Inquiry::with('sender')
+                                                ->where('receiver_id', auth()->id())
+                                                ->latest()
+                                                ->get()
+                                                ->unique('sender_id');
+        $selectedConversation = $conversations->first();
+        $messages = Inquiry::where('sender_id', $selectedConversation->sender_id)
+                                                                                ->where('receiver_id', auth()->id())
+                                                                                ->latest()
+                                                                                ->get();
+        // $selectedInquiry = $inquiries->first(); // default selected
+        return view('auth.dashboard.messages.messages', compact(
+            'conversations',
+            'selectedConversation',
+            'messages'));
 
-    })->name('dashboard.messages');
+    })->name('dashboard.conversations');
+
+    Route::post('/dashboard/messages/chatting/', 
+    function (Request $request){
+        $messages = Inquiry::where('sender_id', $request->sender_id)
+        ->where('receiver_id', auth()->id())
+        ->latest()
+        ->get();
+        return response()->json(['html'=> view('auth.dashboard.messages.messagebox', compact('messages'))->render()]);
+    }
+    )->name('dashboard.messages');
 
     Route::get('/dashboard/messages/{inquiry?}', [InquiryController::class, 'index'])
     ->name('dashboard.messages.chat');

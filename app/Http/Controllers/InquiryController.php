@@ -26,7 +26,7 @@ class InquiryController extends Controller
     }
     public function index($id = null)
     {
-        $inquiries = Inquiry::with('sender')->get();
+        $inquiries = Inquiry::with('sender')->where('receiver_id', auth()->id())->latest()->get();
 
         $selectedInquiry = $id
             ? Inquiry::with('sender')->find($id)

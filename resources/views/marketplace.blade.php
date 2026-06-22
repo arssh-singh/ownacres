@@ -4,9 +4,37 @@
         <div class="row">
                 @include("sections.marketplace.filterbar")
             <div class="col-xl-9">
-                @include("sections.marketplace.show_properties", ['properties' => $properties])
+                <div id="propertiesContainer">
+                    @include("sections.marketplace.show_properties", ['properties' => $properties])
+                </div>
             </div>
         </div>
     </div>
 
 @endsection
+@push('scripts')
+<script>
+    // Search Logic
+    const searchForm = document.getElementById('searchForm')
+    searchForm.addEventListener('change', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const response = await fetch(
+            '{{ route('marketplace.properties.search') }}',
+            {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }
+        );
+
+        const properties = await response.json();
+        console.log(properties)
+        document.getElementById('propertiesContainer').innerHTML = properties.html;
+    });
+</script>
+@endpush

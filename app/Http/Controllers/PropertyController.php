@@ -11,7 +11,7 @@ class PropertyController extends Controller
 {
     public function index()
     {
-        $properties = Property::latest()->get()->take(6);
+        $properties = Property::latest()->take(6)->get();
         return view('index', compact('properties'));
     }
     
@@ -97,33 +97,19 @@ class PropertyController extends Controller
     public function marketplace_search(Request $request){
         $query = Property::query();
 
-        if($request->filled('location')){
-            $query->where('location', 'like', '%' . $request->location . '%');
+        if($request->filled('budget_min') && $request->filled('budget_max')){
+            $query->whereBetween('price', [
+                $request->budget_min,
+                $request->budget_max
+            ]);
         }
-        if($request->filled('property_type') && $request->property_type != 'All Types'){
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->property_type . '%')
-                ->orWhere('description', 'like', '%' . $request->property_type . '%');
-            });
-        }
-        if($request->filled('price_range') && $request->price_range != 'Any Price'){
-            if($request->price_range == 'Under 50 Lac'){
-                $query->where('price', '<', 5000000);
-            } elseif($request->price_range == '50 Lac - 1 Crore'){
-                $query->whereBetween('price', [5000000, 10000000]);
-            } elseif($request->price_range == '1 Crore - 2 Crore'){
-                $query->whereBetween('price', [10000000, 20000000]);
-            } elseif($request->price_range == 'Over 2 Crore'){
-                $query->where('price', '>', 20000000);
-            }
-        }
-        if($request->filled('bedrooms') && $request->bedrooms != 'Any'){
-            $bedrooms = (int) filter_var($request->bedrooms, FILTER_SANITIZE_NUMBER_INT);
-            $query->where('bedrooms', '>=', $bedrooms);
-        }
-        
-        $properties = $query->latest()->get();
-
-        return view('marketplace', compact('properties'));
+        $properties = $query->get();
+        return response()->json([
+            'budget' => $request->all(),
+            'html' => view(
+                'sections.marketplace.show_properties',
+                compact('properties')
+            )->render()
+        ]);
     }
 }

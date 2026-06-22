@@ -1,3 +1,4 @@
+
 @php $properties = $properties ?? collect(); @endphp
 <div class="container-fluid px-lg-5 ">
     <!-- Header -->
