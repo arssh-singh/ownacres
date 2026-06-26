@@ -1,36 +1,110 @@
-<style>
-.message-bubble{
-    max-width: 75%;
-    word-wrap: break-word;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-}
+@if(!$conversation)
 
-.sent-message{
-    background: #0d6efd;
-    color: #fff;
-    border-bottom-right-radius: 6px !important;
-}
-
-.received-message{
-    background: #f8f9fa;
-    color: #212529;
-    border: 1px solid #e9ecef;
-    border-bottom-left-radius: 6px !important;
-}
-</style>
-<div class="container-fluid p-3">
-    @foreach($messages as $msg)
-        <div class="d-flex mb-3 {{ $msg->sender_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }}">
-            <div
-                class="message-bubble px-3 py-2 rounded-4
-                {{ $msg->sender_id == auth()->id() ? 'sent-message' : 'received-message' }}">
-                
-                <div>{{ $msg->message }}</div>
-
-                <small class="d-block text-end mt-1 opacity-75">
-                    {{ $msg->created_at->format('h:i A') }}
-                </small>
-            </div>
-        </div>
-    @endforeach
+<div class="h-100 d-flex justify-content-center align-items-center">
+    <h4 class="text-muted">Select a conversation</h4>
 </div>
+
+@else
+
+<div class="d-flex flex-column h-100">
+
+    {{-- Header --}}
+    <div class="border-bottom p-3">
+
+        <div class="d-flex align-items-center">
+
+            <img
+                src="{{ asset('storage/'.$conversation->buyer->profile_image) }}"
+                class="rounded-circle me-3"
+                width="45"
+                height="45"
+                style="object-fit:cover"
+            >
+
+            <h5 class="mb-0">
+                {{ $conversation->buyer->name }}
+            </h5>
+
+        </div>
+
+    </div>
+
+
+    {{-- Messages --}}
+    <div
+        id="chat-messages"
+        class="flex-grow-1 overflow-auto p-3 bg-light"
+    >
+
+        @forelse($messages as $message)
+
+            @if($message->sender_id == auth()->id())
+
+                <div class="d-flex justify-content-end mb-3">
+
+                    <div class="bg-primary text-white rounded px-3 py-2">
+
+                        {{ $message->message }}
+
+                    </div>
+
+                </div>
+
+            @else
+
+                <div class="d-flex justify-content-start mb-3">
+
+                    <div class="bg-white border rounded px-3 py-2">
+
+                        {{ $message->message }}
+
+                    </div>
+
+                </div>
+
+            @endif
+
+        @empty
+
+            <div class="text-center text-muted mt-5">
+
+                No messages yet.
+
+            </div>
+
+        @endforelse
+
+    </div>
+
+
+    {{-- Input --}}
+    <div class="border-top p-3">
+
+        <form id="send-message-form">
+
+            <div class="input-group">
+
+                <input
+                    id="message-input"
+                    type="text"
+                    class="form-control"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                >
+                    Send
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@endif

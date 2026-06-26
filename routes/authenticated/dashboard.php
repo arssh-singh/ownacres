@@ -1,8 +1,7 @@
 <?php
-use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\UserController;
 use App\Models\Property;
-use App\Models\Inquiry;
+use App\Models\Chat\ChatConversation;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -12,10 +11,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $savedProperties = auth()->user()->savedProperties()->latest()->take(5)->get();
         $savedCount = auth()->user()->savedProperties()->count();
-        $inquiriesCount = Inquiry::where('receiver_id', auth()->id())->count();
+        $inquiriesCount = ChatConversation::where('seller_id', auth()->id())->count();
         $mylistedProperties = Property::where('user_id', auth()->id())->count();
         // recent inquiries
-        $recentInquiries = Inquiry::where('receiver_id', auth()->id())->latest()->take(5)->get();
+        $recentInquiries = ChatConversation::where('seller_id', auth()->id())->latest()->take(5)->get();
         return view('auth.dashboard.home.home', compact('savedProperties', 'savedCount', 'inquiriesCount', 'mylistedProperties', 'recentInquiries'));
     })->name('dashboard');
 
@@ -46,38 +45,7 @@ Route::middleware('auth')->group(function () {
         return view('auth.dashboard.saved_properties.saved_properties', compact('properties'));
     })->name('dashboard.savedProperties');
     // dashboard messages
-    Route::get('/dashboard/messages', function () {
-
-        $conversations = Inquiry::with('sender')
-                                                ->where('receiver_id', auth()->id())
-                                                ->latest()
-                                                ->get()
-                                                ->unique('sender_id');
-        $selectedConversation = $conversations->first();
-        $messages = Inquiry::where('sender_id', $selectedConversation->sender_id)
-                                                                                ->where('receiver_id', auth()->id())
-                                                                                ->latest()
-                                                                                ->get();
-        // $selectedInquiry = $inquiries->first(); // default selected
-        return view('auth.dashboard.messages.messages', compact(
-            'conversations',
-            'selectedConversation',
-            'messages'));
-
-    })->name('dashboard.conversations');
-
-    Route::post('/dashboard/messages/chatting/', 
-    function (Request $request){
-        $messages = Inquiry::where('sender_id', $request->sender_id)
-        ->where('receiver_id', auth()->id())
-        ->latest()
-        ->get();
-        return response()->json(['html'=> view('auth.dashboard.messages.messagebox', compact('messages'))->render()]);
-    }
-    )->name('dashboard.messages');
-
-    Route::get('/dashboard/messages/{inquiry?}', [InquiryController::class, 'index'])
-    ->name('dashboard.messages.chat');
+    require __DIR__.'/chat.php';
 
     Route::view('/dashboard/empty/', 'auth.dashboard.empty.empty')->name('dashboard.empty');
 });

@@ -73,7 +73,7 @@
             $links = [
                 ['route' => 'dashboard',              'icon' => 'bi-columns',  'label' => 'Home'],
                 ['route' => 'dashboard.profile',       'icon' => 'bi-person',   'label' => 'Profile'],
-                ['route' => 'dashboard.conversations',       'icon' => 'bi-chat',   'label' => 'Messages'],
+                ['route' => 'dashboard.chat',       'icon' => 'bi-chat',   'label' => 'Messages'],
                 ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
                 ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties'],
                 ['route' => 'dashboard.empty','icon' => 'bi-box', 'label' => 'Empty'],
@@ -94,7 +94,7 @@
 
         <li class="nav-item mt-auto pt-3">
             <hr class="nav-divider">
-            <a href="{{ route('create-prop') }}" class="nav-link nav-link--cta">
+            <a href="{{ route('properties.create') }}" class="nav-link nav-link--cta">
                 <i class="bi bi-plus" aria-hidden="true"></i> List New Property
             </a>
         </li>

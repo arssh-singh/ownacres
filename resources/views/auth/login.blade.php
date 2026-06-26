@@ -21,20 +21,28 @@
 
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input class="form-control py-2" type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com">
+                    <input class="form-control py-2 @error('email') is-invalid @enderror" 
+                        type="email" name="email" value="{{ old('email') }}" 
+                        autocomplete="email" placeholder="you@example.com">
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input class="form-control py-2" type="password" name="password" placeholder="••••••••">
+                    <input class="form-control py-2 @error('password') is-invalid @enderror" 
+                        type="password" name="password" 
+                        autocomplete="current-password" placeholder="••••••••">
+                </div>
+
+                <div class="mb-4 d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                        <label class="form-check-label small text-muted" for="remember">Remember me</label>
+                    </div>
+                    <a href="{{ route('forgotpass.form') }}" class="small text-decoration-none">Forgot Password?</a>
                 </div>
 
                 <button class="btn btn-primary w-100 py-2 fw-semibold">Login</button>
             </form>
-
-            <div class="text-center mt-3">
-                <a href="{{ route('forgotpass.form') }}" class="small text-decoration-none">Forgot Password?</a>
-            </div>
 
         </div>
     </div>

@@ -10,8 +10,9 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+    {{-- <link href="resources/css/style.css"> --}}
     @vite(['resources/css/style.css'])
+    @stack('styles')
 </head>
 
 <body>
@@ -80,7 +81,7 @@
             <div class="row gy-4">
 
                 <div class="col-lg-4">
-                    <h5 class="fw-bold">LUXE ARCHIVE</h5>
+                    <h5 class="fw-bold">OWNACRES</h5>
                     <p class="text-muted mt-3">
                         Redefining the premium real estate journey through clarity and design-led curation.
                     </p>

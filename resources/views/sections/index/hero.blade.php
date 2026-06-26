@@ -175,12 +175,13 @@ document.addEventListener('DOMContentLoaded', function () {
 gsap.from('.fade-anim', {
     opacity: 0,
     y: 60,
-    filter: "blur(1000px)",
-    scale: 2,
+    filter: "blur(10px)",
+    scale: .01,
     duration: 1.4,
-    ease: "back.out(1.7)",
+    ease: "back.out(1.2)",
     stagger: 0.15
 });
 });
 </script>
+
 @endpush

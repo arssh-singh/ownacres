@@ -214,7 +214,7 @@
                             {{ auth()->user()->savedProperties->contains($property->id) ? 'Saved' : 'Save' }}
                         </button>
                     </form>
-                    <form action="{{ route('properties.inquiry.store', $property) }}" method="POST">
+                    <form action="" method="POST">
                         @csrf
 
                         <textarea

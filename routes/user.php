@@ -13,6 +13,7 @@
 
         Route::view('/register/form', 'auth.register')->name('register.form');
         Route::post('/register/send-otp', [RegisterController::class, 'sendOtp'])->name('register.sendOtp');
+        Route::post('/register/resend-otp', [RegisterController::class, 'resendOtp'])->name('register.resendOtp');
         Route::get('/register/verify-otp-form', [RegisterController::class, 'verifyOtpForm'])->name('register.verifyOtp.form');
         Route::post('/register/verify-otp', [RegisterController::class, 'verifyOtp'])->name('register.verifyOtp');
 

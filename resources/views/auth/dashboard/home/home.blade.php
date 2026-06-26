@@ -150,7 +150,7 @@ $profileViews = $profileViews ?? 0;
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <h6 class="fw-bold mb-3">Quick Actions</h6>
                 <div class="d-flex flex-column gap-2">
-                    <a href="{{ route('create-prop') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
+                    <a href="{{ route('properties.create') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
                         <i class="bi bi-plus-circle text-primary"></i> Add New Listing
                     </a>
                     <a href="{{ route('dashboard.savedProperties') ?? '#' }}" class="btn btn-light text-start rounded-3 d-flex align-items-center gap-2">
