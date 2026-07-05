@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        $savedProperties = auth()->user()->savedProperties()->latest()->take(5)->get();
+        $savedProperties = auth()->user()->savedProperties()->with(['pricing', 'coverImage'])->latest()->take(5)->get();
         $savedCount = auth()->user()->savedProperties()->count();
         $inquiriesCount = ChatConversation::where('seller_id', auth()->id())->count();
         $mylistedProperties = Property::where('user_id', auth()->id())->count();
@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
     // dashbaord properties
     Route::get('/dashboard/properties', function () {
-        $properties = Property::where('user_id', Auth::id())
+        $properties = Property::where('user_id', Auth::id())->with(['pricing', 'coverImage'])
             ->latest()
             ->get();
         return view('auth.dashboard.properties.show_props', compact('properties'));

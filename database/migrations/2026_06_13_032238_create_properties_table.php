@@ -13,17 +13,22 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->text('description');
-            $table->decimal('price', 10, 2);
 
-            $table->string('location');
-            $table->boolean('is_furnished')->default(false);
-            $table->string('bedrooms')->nullable();
-            $table->string('bathrooms')->nullable();
-            $table->string('area')->nullable();
-            $table->string('image')->nullable();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->enum('status', [
+                'draft',
+                'pending',
+                'published',
+                'sold',
+                'rented',
+                'rejected',
+                'archived'
+            ])->default('draft');
+
+            $table->timestamp('uploaded_at')->nullable();
 
             $table->timestamps();
         });

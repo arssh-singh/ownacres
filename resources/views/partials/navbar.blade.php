@@ -67,6 +67,7 @@
         
     </div>
 </nav>
+@push('scripts')
 <script>
 const bar = document.getElementById('bar');
 const btnlog = document.getElementById('btn-log');
@@ -112,3 +113,4 @@ window.addEventListener('scroll', function () {
     }
 });
 </script>
+@endpush

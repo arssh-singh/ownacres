@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('content')
 
+@php
+    $title = $property->display_title;
+    $description = $property->display_description;
+    $coverImage = $property->cover_image_url;
+    $media = $property->media;
+    $price = $property->price;
+@endphp
 <!-- Breadcrumb + Actions -->
 <div class="container-fluid px-lg-5 px-3 pt-5 mt-5">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -8,7 +15,7 @@
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('marketplace') }}" class="text-decoration-none">Properties</a></li>
-                <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">{{ $property->title }}</li>
+                <li class="breadcrumb-item active text-truncate" style="max-width: 200px;">{{ $title }}</li>
             </ol>
         </nav>
 
@@ -31,10 +38,10 @@
         <div class="col-lg-8">
             <img 
                 id="mainImage"
-                src="{{ asset('storage/' . $property->image) }}"
+                src="{{ $coverImage }}"
                 class="w-100 h-100 rounded-4 object-fit-cover"
                 style="min-height: 400px; max-height: 620px; cursor: pointer; view-transition-name: poster"
-                alt="{{ $property->title }}"
+                alt="{{ $title }}"
                 data-bs-toggle="modal"
                 data-bs-target="#galleryModal"
             >
@@ -43,13 +50,13 @@
         <div class="col-lg-4">
             <div class="row g-3 h-100">
                 @php
-                    $thumbs = $property->images ?? collect();
+                    $thumbs = $property->media ?? collect();
                 @endphp
 
                 @forelse ($thumbs->take(2) as $i => $img)
                     <div class="col-12" style="height: 50%;">
                         <img 
-                            src="{{ asset('storage/' . $img->path) }}"
+                            src="{{ asset('storage/' . $img->file_path) }}"
                             class="w-100 h-100 rounded-4 object-fit-cover thumb-img"
                             style="min-height: 200px; cursor: pointer;"
                             alt=""
@@ -86,7 +93,7 @@
             <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 mb-2">
                 {{ $property->status ?? 'For Sale' }}
             </span>
-            <h1 class="fw-bold display-5 m-0">{{ $property->title }}</h1>
+            <h1 class="fw-bold display-5 m-0">{{ $title }}</h1>
             <p class="text-muted mt-2 mb-0">
                 <i class="bi bi-geo-alt-fill text-primary"></i> {{ $property->location }}
             </p>
@@ -94,7 +101,7 @@
 
         <div class="col-lg-4 text-lg-end">
             <h2 class="fw-bold display-6 text-primary mb-3">
-                ₹{{ number_format($property->price, 2) }}
+                ₹{{ number_format($price, 2) }}
             </h2>
             <div class="d-flex gap-3 justify-content-lg-end flex-wrap">
                 <span class="d-flex align-items-center gap-1 text-muted">
@@ -120,7 +127,7 @@
 
             <div class="bg-white rounded-4 p-4 p-lg-5 shadow-sm mb-4">
                 <h2 class="fw-bold mb-3">Property Details</h2>
-                <p class="text-muted lh-lg">{{ $property->description }}</p>
+                <p class="text-muted lh-lg">{{ $description }}</p>
 
                 <hr class="my-4">
 
@@ -214,9 +221,9 @@
                             {{ auth()->user()->savedProperties->contains($property->id) ? 'Saved' : 'Save' }}
                         </button>
                     </form>
-                    <form action="" method="POST">
+                    <form action="{{ route('dashboard.chat.start', $property->id) }}" method="POST">
                         @csrf
-
+                        @method('POST') 
                         <textarea
                             name="message"
                             class="form-control mb-3"
@@ -253,7 +260,7 @@
     <div class="d-flex justify-content-between align-items-center gap-3">
         <div>
             <p class="text-muted small mb-0">Price</p>
-            <p class="fw-bold mb-0">₹{{ number_format($property->price, 2) }}</p>
+            <p class="fw-bold mb-0">₹{{ number_format($price, 2) }}</p>
         </div>
         @auth
             <button class="btn btn-primary flex-grow-1 py-2 fw-semibold">
@@ -273,18 +280,18 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content bg-dark border-0">
             <div class="modal-header border-0">
-                <h5 class="text-white fw-bold">{{ $property->title }} — Gallery</h5>
+                <h5 class="text-white fw-bold">{{ $title }} — Gallery</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div id="galleryCarousel" class="carousel slide">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ asset('storage/' . $property->image) }}" class="d-block w-100 rounded-3 object-fit-contain" style="max-height: 70vh;" alt="">
+                            <img src="{{ $coverImage }}" class="d-block w-100 rounded-3 object-fit-contain" style="max-height: 70vh;" alt="">
                         </div>
                         @foreach ($thumbs as $img)
                             <div class="carousel-item">
-                                <img src="{{ asset('storage/' . $img->path) }}" class="d-block w-100 rounded-3 object-fit-contain" style="max-height: 70vh;" alt="">
+                                <img src="{{ asset('storage/' . $img->file_path) }}" class="d-block w-100 rounded-3 object-fit-contain" style="max-height: 70vh;" alt="">
                             </div>
                         @endforeach
                     </div>
@@ -305,7 +312,7 @@
     document.getElementById('shareBtn')?.addEventListener('click', async () => {
         if (navigator.share) {
             await navigator.share({
-                title: @json($property->title),
+                title: @json($title),
                 url: window.location.href
             });
         } else {

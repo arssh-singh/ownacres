@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\OtpService;
 class UserController extends Controller
 {
+    protected OtpService $otpService;
+
+    public function __construct(OtpService $otpService)
+    {
+        $this->otpService = $otpService;
+    }
     public function forgot_password_form(){
         return view('auth.forgotpass.forgotpass');
     }
@@ -19,17 +25,16 @@ class UserController extends Controller
                     ], [
                         'email.exists' => 'Email not available.'
                     ]);
-        $otp = random_int(100000, 999999);
+        $otp = $this->otpService->send($validated['email']);
 
         session([
             'otp'=>$otp,
             'email'=>$validated['email']    
         ]);
-
-        Mail::raw("Your Forgot Password OTP is $otp", function ($message) use ($validated) {
-        $message->to($validated['email'])
-                ->subject('Your OTP Code');
-        });
+        // Mail::raw("Your Forgot Password OTP is $otp", function ($message) use ($validated) {
+        // $message->to($validated['email'])
+        //         ->subject('Your OTP Code');
+        // });
 
         return redirect(route('forgotpass.verifyOTP.form'));
     }
@@ -83,19 +88,14 @@ class UserController extends Controller
             'email' => 'required|email|max:255'
         ]);
 
-        $otp = random_int(100000, 999999);
-
-        session([
-            'otp'=>$otp,
-            'name'=>$validated['name'],
-            'email'=>$validated['email']    
-        ]);
-
-        sleep(1);
-
-        try {            
-            OtpService::send($validated['email'], $otp);
-
+        try {
+            $otp = $this->otpService->send($validated['email']);
+            session([
+                'otp'=>$otp,
+                'name'=>$validated['name'],
+                'email'=>$validated['email']    
+            ]);
+            
             return response()->json([
                 'success' => true,
                 'message' => 'OTP sent successfully'

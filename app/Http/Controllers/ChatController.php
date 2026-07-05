@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat\ChatConversation;
 use App\Models\Chat\ChatMessage;
 use Illuminate\Http\Request;
+use App\Models\Property;
 
 class ChatController extends Controller
 {
@@ -13,7 +14,13 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $conversations = ChatConversation::with('buyer')->get();
+        $conversations = ChatConversation::with(['buyer', 'seller'])
+                            ->where(function ($query) {
+                                $query->where('buyer_id', auth()->id())
+                                    ->orWhere('seller_id', auth()->id());
+                            })
+                            ->latest()
+                            ->get();
 
         $selected = $conversations->first();
 
@@ -71,5 +78,32 @@ class ChatController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    /*
+        Starting a New Conversation
+    */
+    public function start(Request $request, $prop_id){
+        $property = Property::findOrFail($prop_id);
+
+        // Find existing conversation or create a new one
+        $conversation = ChatConversation::firstOrCreate(
+            [
+                'property_id' => $property->id,
+                'buyer_id'    => auth()->id(),
+                'seller_id'   => $property->user_id,
+            ]
+        );
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'max:5000'],
+        ]);
+        ChatMessage::create([
+            'chat_conversation_id' => $conversation->id,
+            'sender_id'            => auth()->id(),
+            'message'              => $validated['message'],
+            'is_read'              => false,
+        ]);
+
+        return redirect()->route('dashboard.chat');
     }
 }

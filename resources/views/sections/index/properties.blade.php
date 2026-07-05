@@ -15,7 +15,6 @@
     </div>
     <hr style="width: 65%;"/>
 </div> -->
-
 @php $properties = $properties ?? collect(); @endphp
 <section class="mt-4">
     <div class="container-fluid">
@@ -27,17 +26,22 @@
 
             <!-- Property 1 -->
             @foreach ($properties as $property)
+            @php
+                $coverImage = $property->cover_image_url;
+                $title = $property->display_title;
+                $price = $property->price;
+            @endphp
             <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="card border-0 bg-transparent"  onclick="window.location.href='{{ route('properties.prop_details', $property->id) }}'"">
-                    <img src="{{ asset('storage/' . $property->image) }}"
+                    <img src="{{ $coverImage }}"
                          class="card-img-top rounded-4 property-image"
                          alt="Property" style="view-transition-name: poster">
 
                     <div class="card-body px-0">
-                        <p class="fs-4 mb-2" id="price">₹{{ number_format($property->price, 2) }}</p>
+                        <p class="fs-4 mb-2" id="price">₹{{ number_format($price, 2) }}</p>
 
                         <p class="text-secondary mb-2">
-                            {{ $property->title }}
+                            {{ $title }}
                         </p>
 
                         <div class="d-flex justify-content-between small text-muted">

@@ -87,7 +87,7 @@ $profileViews = $profileViews ?? 0;
 
                 @forelse ($savedProperties ?? [] as $property)
                     <div class="d-flex align-items-center gap-3 py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
-                        <img src="{{ asset('storage/' . $property->image) }}" class="rounded-3 object-fit-cover" style="width:70px; height:70px;" alt="">
+                        <img src="{{ asset('storage/' . $property->coverImage?->file_path) }}" class="rounded-3 object-fit-cover" style="width:70px; height:70px;" alt="">
                         <div class="flex-grow-1">
                             <p class="fw-semibold mb-0">{{ $property->title }}</p>
                             <p class="text-muted small mb-0"><i class="bi bi-geo-alt"></i> {{ $property->location }}</p>

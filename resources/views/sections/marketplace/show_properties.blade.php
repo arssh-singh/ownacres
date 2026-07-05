@@ -18,14 +18,19 @@
             <div class="col-lg-3" onclick="window.location.href='{{ route('properties.prop_details', $property->id) }}'" style="cursor:pointer;">
                 <div class="card border-0 shadow-sm">
                     <div class="position-relative">
-                        <img src="{{asset('storage/' . $property->image)}}"
+                        <img src="{{asset('storage/' . $property->coverImage?->file_path)}}"
                             class="card-img-top hero-image" style="height:250px; object-fit:cover;" >
                         <span class="badge bg-light text-dark position-absolute top-0 start-0 m-3">FOR SALE</span>
                     </div>
                     <div class="card-body">
                         <h5 class="fw-bold ">₹{{ number_format($property->price, 2) }}</h5>
-                        <p class="text-muted">{{ $property->title }}</p>
-                        <p class="text-muted">{{ $property->address}}</p>
+                        <p class="fw-semibold text-dark mb-1">
+                            {{ \Illuminate\Support\Str::limit($property->display_title, 20, '...') }}
+                        </p>
+
+                        <p class="text-muted mb-0">
+                            {{ \Illuminate\Support\Str::limit($property->display_description, 15, '...') }}
+                        </p>
                         <div class="d-flex justify-content-between small text-muted">
                             <span>🛏️{{$property->bedrooms}}</span><span>🚻{{$property->bathrooms}}</span><span>7200 sqft</span>
                         </div>
@@ -33,5 +38,8 @@
                 </div>
             </div>
         @endforeach
+    </div>
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $properties->links() }}
     </div>
 </div>

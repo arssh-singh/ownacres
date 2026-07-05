@@ -5,7 +5,7 @@
         background-image: 
         linear-gradient(280deg, #ffffff00, #000000cc),
         linear-gradient(295deg, #00118969, #0015ff),
-        url('{{ asset('storage/images/banner.png') }}');
+        url('{{ asset('storage/images/hero/main.png') }}');
         background-size: cover;
         background-position: 0% 35%;
     }
@@ -41,8 +41,8 @@
         <div class="col-xl-6 col-lg-4 col-md-4 d-none d-lg-flex d-md-flex align-items-center justify-content-end fade-anim">
             <div class="p-4 rounded-4 h-auto" style="
                 background: rgba(255,255,255,0.12);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
+                backdrop-filter: blur(1px);
+                -webkit-backdrop-filter: blur(1px);
                 border: 1px solid rgba(255,255,255,0.25);
                 width: 100%;
                 max-width: 400px;
@@ -175,10 +175,10 @@ document.addEventListener('DOMContentLoaded', function () {
 gsap.from('.fade-anim', {
     opacity: 0,
     y: 60,
-    filter: "blur(10px)",
-    scale: .01,
-    duration: 1.4,
-    ease: "back.out(1.2)",
+    filter: "blur(20px)",
+    // scale: .01,
+    duration: 2,
+    ease: "back.out(1)",
     stagger: 0.15
 });
 });
