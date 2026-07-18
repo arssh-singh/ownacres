@@ -1,6 +1,8 @@
 <?php
     use Illuminate\Support\Facades\Route;
-    use App\Http\Controllers\UserController;
+    use App\Http\Controllers\User\UserController;
+    use App\Http\Controllers\auth\ForgotPasswordController;
+    use App\Http\Controllers\auth\VerifyOtpController;
     use App\Http\Controllers\auth\LoginController;
     use App\Http\Controllers\auth\RegisterController;
     use Illuminate\Http\Request;
@@ -18,11 +20,11 @@
         Route::post('/register/verify-otp', [RegisterController::class, 'verifyOtp'])->name('register.verifyOtp');
 
         // forgot password routes
-        Route::get('/forgot-password/form', [UserController::class, 'forgot_password_form'])->name('forgotpass.form');
-        Route::post('/forgot-password/send-OTP', [UserController::class, 'forgot_password_sendOTP'])->name('forgotpass.sendOTP');
+        Route::get('/forgot-password/form', [ForgotPasswordController::class, 'forgot_password_form'])->name('forgotpass.form');
+        Route::post('/forgot-password/send-OTP', [ForgotPasswordController::class, 'forgot_password_sendOTP'])->name('forgotpass.sendOTP');
 
-        Route::get('/forgot-password/verify-OTP/form', [UserController::class, 'forgot_password_verifyOTP_form'])->name('forgotpass.verifyOTP.form');
-        Route::post('/forgot-password/verify-OTP', [UserController::class, 'verifyForgotPassOTP'])->name('forgotpass.verifyOTP');
+        Route::get('/forgot-password/verify-OTP/form', [VerifyOtpController::class, 'forgot_password_verifyOTP_form'])->name('forgotpass.verifyOTP.form');
+        Route::post('/forgot-password/verify-OTP', [VerifyOtpController::class, 'verifyForgotPassOTP'])->name('forgotpass.verifyOTP');
 
         Route::get('/forgot-password/new-password-form', [UserController::class, 'forgotpassnewpassform'])->name('forgotpass.newpass.form');
         Route::post('/forgot-password/change-password', [UserController::class, 'forgotpasschangepass'])->name('forgotpass.changepass');

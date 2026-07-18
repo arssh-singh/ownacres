@@ -19,7 +19,7 @@
 @endphp
 
 <div class="card shadow-sm position-relative" 
-     style="cursor: pointer; max-width: 320px;" 
+     style="cursor: pointer;" 
      onclick="window.location='{{ $href }}'">
 
     <img src="{{ $image }}" class="card-img-top" alt="{{ $title }}" 

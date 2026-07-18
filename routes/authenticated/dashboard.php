@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\UserController;
 use App\Models\Property;
 use App\Models\Chat\ChatConversation;
 use Illuminate\Support\Facades\Route;

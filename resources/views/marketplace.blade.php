@@ -4,6 +4,7 @@
         <div class="row">
                 @include("sections.marketplace.filterbar")
             <div class="col-xl-9">
+
                 <div id="propertiesContainer">
                     @include("sections.marketplace.show_properties", ['properties' => $properties])
                 </div>
@@ -13,10 +14,14 @@
 
 @endsection
 @push('scripts')
+{{-- filters --}}
 <script>
     // Search Logic
+    const prop_container = document.getElementById('propertiesContainer')
+    // document.addEventListener("DOMContentLoaded", animateCards(prop_container));
+
     const searchForm = document.getElementById('searchForm')
-    searchForm.addEventListener('change', async function(e) {
+    searchForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const formData = new FormData(this);
@@ -33,8 +38,12 @@
         );
 
         const properties = await response.json();
-        console.log(properties)
+        console.log(properties.query);
+        // document.getElementById('propertiesContainer').innerHTML = `<pre>${JSON.stringify(properties.html, null, 2)}</pre>`;
         document.getElementById('propertiesContainer').innerHTML = properties.html;
+        
+        // animateCards(prop_container);
+
     });
 </script>
 @endpush

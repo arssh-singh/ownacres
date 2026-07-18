@@ -209,7 +209,7 @@ class PropertyController extends Controller
             'status' => 'required|in:draft,archived,published',
         ]);
 
-        Property::where('id', $property->id)->update([
+        $property->update([
             'status' => $request->status,
         ]);
 

@@ -7,9 +7,12 @@ use App\Models\Property\PropertyMedia;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Property\PropertyBasics;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 class Property extends Model
 {
     use HasFactory;
+    use Searchable;
+    
     // ✅ Allow mass assignment
     protected $fillable = [
         'id',
@@ -19,6 +22,26 @@ class Property extends Model
         'uploaded_at',
         'updated_at',
     ];
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'status' => $this->status,
+
+            'title' => $this->basics?->title,
+            'description' => $this->basics?->description,
+
+            'price' => $this->pricing?->price,
+            'listing_type' => $this->pricing?->listing_type,
+        ];
+    }
+    public function makeAllSearchableUsing($query)
+    {
+        return $query->with([
+            'basics',
+            'pricing',
+        ]);
+    }
 
     // ✅ Relationship
     public function user()
@@ -54,7 +77,10 @@ class Property extends Model
     {
         return $this->hasOne(PropertyPricing::class);
     }
-
+    public function listing_type()
+    {
+        return $this->hasOne(PropertyPricing::class)->where('listing_type', true);;
+    }
 
 
 

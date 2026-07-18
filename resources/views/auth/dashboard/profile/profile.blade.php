@@ -1,4 +1,9 @@
 @extends('layouts.user')
+@push('styles')
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+@endpush
 @section('content')
 <div class="container-fluid px-lg-5 px-3 mt-5 mb-5">
     <div class="mb-4">
@@ -129,48 +134,72 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="profileImageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">Update Profile Picture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <form action="{{ route('dashboard.profile.image.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body text-center">
-
-                    <img id="modalImagePreview"
-                         src="{{ auth()->user()->profile_image_url }}"
-                         alt="Preview"
-                         class="rounded-circle mb-3"
-                         style="width: 130px; height: 130px; object-fit: cover; border: 4px solid #f3f4f6;">
-
-                    <div class="mb-2">
-                        <label for="profile_image" class="btn btn-outline-dark rounded-pill px-4">
-                            <i class="bi bi-upload me-2"></i>Choose Image
-                        </label>
-                        <input type="file" name="profile_image" id="profile_image" accept="image/*" class="d-none">
-                    </div>
-
-                    <p class="text-muted small mb-0">JPG, PNG or WEBP. Max size 2MB.</p>
-
-                    @error('profile_image')
-                        <p class="text-danger small mt-2 mb-0">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light border rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-dark rounded-pill px-4">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<!-- Profile Image Modal -->
+@include('auth.dashboard.profile.profileimagemodal')
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+<script>
+    const profileImageInput = document.getElementById('profileImageInput');
+    const cropperImage = document.getElementById('cropperImage');
+    const cropImageButton = document.getElementById('cropImageButton');
+    let cropper;
+
+    profileImageInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                cropperImage.src = e.target.result;
+                cropperImage.style.display = 'block';
+                cropImageButton.style.display = 'block';
+
+                if (cropper) {
+                    cropper.destroy();
+                }
+
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    cropImageButton.addEventListener('click', function () {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 300,
+                height: 300,
+            });
+
+            canvas.toBlob(function (blob) {
+                const formData = new FormData();
+                formData.append('profile_image', blob, 'profile_image.png');
+
+                fetch("{{ route('dashboard.profile.image.update') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('profileImagePreview').src = data.profile_image_url;
+                        $('#profileImageModal').modal('hide');
+                    } else {
+                        alert('Failed to update profile image.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the profile image.');
+                });
+            });
+        }
+    });
+</script>
 <script>
     // ─── DOM References ───────────────────────────────────────────────────────────
 

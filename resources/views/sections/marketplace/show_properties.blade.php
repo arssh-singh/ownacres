@@ -1,4 +1,3 @@
-
 @php $properties = $properties ?? collect(); @endphp
 <div class="container-fluid px-lg-5 ">
     <!-- Header -->
@@ -15,12 +14,12 @@
     <!-- Cards -->
     <div class="row g-4">
         @foreach ($properties as $property)
-            <div class="col-lg-3" onclick="window.location.href='{{ route('properties.prop_details', $property->id) }}'" style="cursor:pointer;">
+            <div class="col-lg-3 property-card" onclick="window.location.href='{{ route('properties.prop_details', $property->id) }}'" style="cursor:pointer;">
                 <div class="card border-0 shadow-sm">
                     <div class="position-relative">
                         <img src="{{asset('storage/' . $property->coverImage?->file_path)}}"
                             class="card-img-top hero-image" style="height:250px; object-fit:cover;" >
-                        <span class="badge bg-light text-dark position-absolute top-0 start-0 m-3">FOR SALE</span>
+                        <span class="badge bg-light text-dark position-absolute top-0 start-0 m-3">{{ $property->pricing->listing_type }}</span>
                     </div>
                     <div class="card-body">
                         <h5 class="fw-bold ">₹{{ number_format($property->price, 2) }}</h5>
