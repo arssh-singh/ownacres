@@ -95,7 +95,7 @@
             </span>
             <h1 class="fw-bold display-5 m-0">{{ $title }}</h1>
             <p class="text-muted mt-2 mb-0">
-                <i class="bi bi-geo-alt-fill text-primary"></i> {{ $property->location }}
+                <i class="bi bi-geo-alt-fill text-primary"></i> {{ $property->location->city }}
             </p>
         </div>
 
@@ -182,11 +182,26 @@
             <div class="bg-white rounded-4 p-4 p-lg-5 shadow-sm">
                 <h5 class="fw-bold mb-3"><i class="bi bi-map text-primary"></i> Location</h5>
                 <div class="rounded-3 overflow-hidden" style="height: 320px;">
+                @if($property->location)
+                    @php
+                        $location = $property->location;
+
+                        if ($location->latitude && $location->longitude) {
+                            $mapUrl = "https://maps.google.com/maps?q={$location->latitude},{$location->longitude}&output=embed";
+                        } else {
+                            $query = $location->address
+                                ?: ($location->locality . ', ' . $location->city);
+
+                            $mapUrl = "https://maps.google.com/maps?q=" . urlencode($query) . "&output=embed";
+                        }
+                    @endphp
+
                     <iframe
                         class="w-100 h-100 border-0"
                         loading="lazy"
-                        src="https://maps.google.com/maps?q={{ urlencode($property->location) }}&output=embed">
+                        src="{{ $mapUrl }}">
                     </iframe>
+                @endif
                 </div>
             </div>
 

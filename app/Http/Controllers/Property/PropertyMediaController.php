@@ -13,12 +13,17 @@ class PropertyMediaController extends Controller
 {
     public function store(Request $request, Property $property)
     {
+        // checking if the user has right to do this
         $this->authorize('update', $property);
+
+        // validating received media
         $request->validate([
             'mainImage' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:10240',],
             'gallery' => 'nullable|array|max:10',
             'gallery.*' => 'mimes:jpg,jpeg,png,webp,mp4,mov,webm|max:102400',
         ]);
+
+
         $storedFiles = [];
         try{
             DB::transaction(function () use ($request, $property, &$storedFiles) {
@@ -26,8 +31,12 @@ class PropertyMediaController extends Controller
                 // ==========================
                 // Cover Image
                 // ==========================
+                
+                // getting old cover image incase user returned from next page with back button
                 $oldCover = $property->coverImage;
+                // getting the uploaded image by user
                 $cover = $request->file('mainImage');
+                // storing the uploaded image in folder
                 $coverPath = $cover->store(
                     "property_media/{$property->id}/main",
                     'public'
@@ -41,6 +50,7 @@ class PropertyMediaController extends Controller
                     'is_cover'    => true,
                     'sort_order'  => 0,
                 ]);
+                // deleting the old cover if there was any
                 if ($oldCover) {
                     Storage::disk('public')->delete($oldCover->file_path);
                     $oldCover->delete();

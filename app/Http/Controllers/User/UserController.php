@@ -65,28 +65,32 @@ class UserController extends Controller
     public function updateProfileImage(Request $request)
     {
         $request->validate([
-            'profile_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'profile_image' => ['required', 'image', 'max:2048'],
         ]);
 
         $user = auth()->user();
 
-        // Delete old image if it exists
-        if ($user->profile_image) {
+        if ($user->profile_image &&
+            Storage::disk('public')->exists($user->profile_image)) {
+
             Storage::disk('public')->delete($user->profile_image);
         }
 
-        // Store new image
+        $extension = $request->file('profile_image')->extension();
+
         $path = $request->file('profile_image')->storeAs(
-            'profile_images/' . $user->id,
-            'avatar.' . $request->file('profile_image')->extension(),
+            "profile_images/{$user->id}",
+            "avatar.$extension",
             'public'
         );
 
-        $user->update(['profile_image' => $path]);
+        $user->update([
+            'profile_image' => $path,
+        ]);
 
         return response()->json([
             'success' => true,
-            'profile_image_url' => asset('storage/' . $path),
+            'profile_image_url' => Storage::url($path),
         ]);
     }
 }

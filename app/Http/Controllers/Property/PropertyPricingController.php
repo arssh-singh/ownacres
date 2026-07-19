@@ -22,6 +22,6 @@ class PropertyPricingController extends Controller
             $validated
         );
 
-        return redirect()->route('dashboard.properties');
+        return redirect()->route('properties.location.get', $property);
     }
 }

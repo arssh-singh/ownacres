@@ -6,6 +6,7 @@ use App\Models\Property\PropertyPricing;
 use App\Models\Property\PropertyMedia;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Property\PropertyBasics;
+use App\Models\Property\PropertyLocation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Scout\Searchable;
 class Property extends Model
@@ -76,6 +77,10 @@ class Property extends Model
     public function pricing()
     {
         return $this->hasOne(PropertyPricing::class);
+    }
+    public function location()
+    {
+        return $this->hasOne(PropertyLocation::class);
     }
     public function listing_type()
     {

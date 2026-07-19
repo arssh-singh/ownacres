@@ -9,6 +9,14 @@ $profileViews = $profileViews ?? 0;
 <div class="container-fluid px-lg-5 px-3 mt-5">
 
     <!-- Welcome Header -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {{ session('success') }}
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h2 class="fw-bold mb-1">Welcome back, {{ auth()->user()->name }} 👋</h2>

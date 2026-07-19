@@ -15,6 +15,7 @@ Route::get('/properties/{prop_id}/prop_details', [PropertyController::class, 'pr
 
 // user authentication routes
 require __DIR__.'/user.php';
+require __DIR__.'/dealers.php';
 require __DIR__.'/authenticated/dashboard.php';
 require __DIR__.'/authenticated/properties.php';
 

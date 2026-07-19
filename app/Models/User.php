@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['name', 'email', 'password', 'profile_image'])]
 #[Hidden(['password', 'remember_token'])]
@@ -43,5 +44,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Property::class, 'saved_properties')
                     ->withTimestamps();
+    }
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class);
+    }
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->profile()->create();
+        });
     }
 }

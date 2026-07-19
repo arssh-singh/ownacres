@@ -14,56 +14,41 @@
     <div class="row g-4">
         <!-- Left: Profile Card -->
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100">
-                <div class="position-relative mx-auto mb-3" style="width: 110px;">
-                    <img id="profileImagePreview"
-                        src="{{ auth()->user()->profile_image_url }}"
-                        alt="Profile Image"
-                        class="rounded-circle"
-                        style="width: 110px; height: 110px; object-fit: cover; border: 4px solid #f3f4f6;">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body text-center p-4">
 
-                    <!-- Online status dot -->
-                    <span class="position-absolute top-0 end-0 bg-success rounded-circle border border-3 border-white"
-                        style="width: 18px; height: 18px;"></span>
+                    <div class="position-relative d-inline-block mb-3">
+                        <img
+                            id="profileImagePreview"
+                            src="{{ auth()->user()->profile_image_url }}"
+                            alt="{{ auth()->user()->name }}"
+                            width="120"
+                            height="120"
+                            class="rounded-circle img-thumbnail">
 
-                    <!-- Edit image button -->
-                    <a href="#" class="position-absolute bottom-0 end-0 bg-light rounded-circle border d-flex align-items-center justify-content-center shadow-sm"
-                    style="width: 32px; height: 32px; transform: translate(10%, 10%);"
-                    data-bs-toggle="modal" data-bs-target="#profileImageModal">
-                        <i class="bi bi-camera-fill text-dark" style="font-size: 0.9rem;"></i>
-                    </a>
-                </div>
+                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-success border border-2 border-white rounded-circle"></span>
 
-                <h5 class="fw-bold mb-1">{{ auth()->user()->name }}</h5>
-                <p class="text-muted small mb-3">{{ auth()->user()->email }}</p>
-
-                @if(auth()->user()->email_verified_at)
-                    <span class="badge rounded-pill px-3 py-2 fw-normal mx-auto mb-4" style="background: #ecfdf5; color: #059669; width: fit-content;">
-                        <i class="bi bi-patch-check-fill me-1"></i> Verified
-                    </span>
-                @else
-                    <span class="badge rounded-pill px-3 py-2 fw-normal mx-auto mb-4" style="background: #fff7ed; color: #ea580c; width: fit-content;">
-                        <i class="bi bi-exclamation-circle-fill me-1"></i> Not Verified
-                    </span>
-                @endif
-
-                <div class="d-grid gap-2">
-                    <a href="#" class="btn btn-light border rounded-3 py-2">
-                        <i class="bi bi-key me-2"></i>Change Password
-                    </a>
-                </div>
-
-                <hr class="my-4">
-
-                <div class="row text-center g-2">
-                    <div class="col-6 border-end">
-                        <h6 class="fw-bold mb-0">{{ auth()->user()->created_at->format('M Y') }}</h6>
-                        <small class="text-muted">Joined</small>
+                        <button
+                            type="button"
+                            class="btn btn-light btn-sm rounded-circle position-absolute bottom-0 end-0 shadow"
+                            data-bs-toggle="modal"
+                            data-bs-target="#profileImageModal">
+                            <i class="bi bi-camera-fill"></i>
+                        </button>
                     </div>
-                    <div class="col-6">
-                        <h6 class="fw-bold mb-0">{{ ucfirst(auth()->user()->role ?? 'User') }}</h6>
-                        <small class="text-muted">Role</small>
-                    </div>
+
+                    <h4 class="fw-bold mb-1">{{ auth()->user()->name }}</h4>
+                    <p class="text-muted mb-3">{{ auth()->user()->email }}</p>
+
+                    <a href="{{ route('dealer.profile', ['id' => auth()->user()->id]) }}" class="btn text-info">Preview Profile</a>
+                    <br/>
+
+                </div>
+                <div class="card-footer text-center bg-light border-0">
+                    <small class="text-muted mt-auto d-block">
+                        Member since {{ auth()->user()->created_at->format('F Y') }}
+                    </small>
+
                 </div>
             </div>
         </div>
@@ -77,7 +62,7 @@
                     <button
                         class="btn btn-sm btn-primary"
                         id="edit-profile-btn">
-                        Edit Profile
+                        Edit
                     </button>
                 </div>
 
@@ -90,46 +75,30 @@
                         <small class="text-muted d-block mb-1">Email Address</small>
                         <p class="fw-semibold mb-0">{{ auth()->user()->email }}</p>
                     </div>
-                    <div class="col-sm-6">
-                        <small class="text-muted d-block mb-1">Phone Number</small>
-                        <p class="fw-semibold mb-0">{{ auth()->user()->phone ?? '—' }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <small class="text-muted d-block mb-1">Location</small>
-                        <p class="fw-semibold mb-0">{{ auth()->user()->location ?? '—' }}</p>
-                    </div>
                 </div>
                 @include('auth.dashboard.profile.editprofilemodal')
                 @include('auth.dashboard.profile.otpmodal')
             </div>
 
             <!-- Security -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                <h6 class="fw-bold mb-4">Security</h6>
-
-                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                    <div>
-                        <p class="fw-semibold mb-0">Password</p>
-                        <small class="text-muted">Last changed recently</small>
-                    </div>
-                    <a href="#" class="btn btn-sm btn-light border rounded-pill px-3">Update</a>
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" id="headline-bio-container">
+                <div class="d-flex justify-content-between align-items-center ">
+                    <h6 class="fw-bold mb-0">Headline</h6>
+                    <button
+                        class="btn btn-sm btn-primary"
+                        id="edit-headline-bio-btn">
+                        Edit
+                    </button>
                 </div>
-
-                <div class="d-flex justify-content-between align-items-center py-2 border-bottom mt-2">
-                    <div>
-                        <p class="fw-semibold mb-0">Two-Factor Authentication</p>
-                        <small class="text-muted">Add an extra layer of security</small>
-                    </div>
-                    <a href="#" class="btn btn-sm btn-light border rounded-pill px-3">Enable</a>
+                <p class="mb-3">
+                    {{ auth()->user()->profile->headline ?? 'No Headline available.' }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0">Bio</h6>
                 </div>
-
-                <div class="d-flex justify-content-between align-items-center py-2 mt-2">
-                    <div>
-                        <p class="fw-semibold mb-0">Active Sessions</p>
-                        <small class="text-muted">Manage devices logged into your account</small>
-                    </div>
-                    <a href="#" class="btn btn-sm btn-light border rounded-pill px-3">View</a>
-                </div>
+                <p>
+                    {{ auth()->user()->profile->bio ?? 'No bio available.' }}
+                </p>
             </div>
         </div>
     </div>
@@ -175,28 +144,33 @@
             });
 
             canvas.toBlob(function (blob) {
+
                 const formData = new FormData();
-                formData.append('profile_image', blob, 'profile_image.png');
+                formData.append('profile_image', blob, 'avatar.png');
 
                 fetch("{{ route('dashboard.profile.image.update') }}", {
                     method: 'POST',
-                    body: formData,
-                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
                 })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('profileImagePreview').src = data.profile_image_url;
-                        $('#profileImageModal').modal('hide');
-                    } else {
-                        alert('Failed to update profile image.');
+                        document.getElementById('profileImagePreview').src =
+                            data.profile_image_url + '?' + Date.now(); // prevent cache
+
+                        const modalElement = document.getElementById('profileImageModal');
+                        const modal = bootstrap.Modal.getInstance(modalElement);
+
+                        if (modal) {
+                            modal.hide();
+                        }
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while updating the profile image.');
                 });
-            });
+
+            }, 'image/png');
         }
     });
 </script>
@@ -268,5 +242,42 @@
 
         setLoading(verifyBtn, verifySpinner, false);
     });
+</script>
+<script>
+    editHeadlineAndBioBtn = document.getElementById('edit-headline-bio-btn');
+    headlineBioContainer = document.getElementById('headline-bio-container');
+
+    editHeadlineAndBioBtn.addEventListener('click', function() {
+        headlineBioContainer.innerHTML = `
+            <form id="headlineBioForm">
+                <div class="mb-3">
+                    <label for="headline" class="form-label">Headline</label>
+                    <input type="text" class="form-control" id="headline" name="headline" value="{{ auth()->user()->profile->headline ?? '' }}">
+                </div>
+                <div class="mb-3">
+                    <label for="bio" class="form-label">Bio</label>
+                    <textarea class="form-control" id="bio" name="bio" rows="3">{{ auth()->user()->profile->bio ?? '' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        `;
+        const headlineBioForm = document.getElementById('headlineBioForm');
+        headlineBioForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch("{{ route('dashboard.editHeadlineBio') }}", {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            });
+            const data = await response.json();
+            if (data.success) {
+                headlineBioContainer.innerHTML = "Done! Headline and Bio updated successfully.";
+            } else {
+                headlineBioContainer.innerHTML = "Error updating Headline and Bio.";
+            }
+        });
+    });
+
 </script>
 @endpush

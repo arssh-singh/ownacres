@@ -3,6 +3,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\Property\PropertyMediaController;
 use App\Http\Controllers\Property\PropertyBasicsController;
 use App\Http\Controllers\Property\PropertyPricingController;
+use App\Http\Controllers\Property\PropertyLocationController;
 use App\Http\Controllers\SavedPropertyController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Property;
@@ -22,7 +23,10 @@ Route::middleware('auth')->group(function () {
         return view('auth.dashboard.properties.get_pricing', compact('property'));
     })->name('properties.pricing.get');
     Route::post('/properties/{property}/store/pricing', [PropertyPricingController::class, 'store'])->name('properties.pricing.store');
-
+    Route::get('/properties/{property}/get/location', function(Property $property){
+        return view('auth.dashboard.properties.get_location', compact('property'));
+    })->name('properties.location.get');
+    Route::post('/properties/{property}/store/location', [PropertyLocationController::class, 'store'])->name('properties.location.store');
 
     Route::patch('/properties/{property}/status', [PropertyController::class, 'updateStatus'])
     ->name('properties.updateStatus');

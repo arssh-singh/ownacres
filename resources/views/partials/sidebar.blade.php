@@ -75,8 +75,7 @@
                 ['route' => 'dashboard.profile',       'icon' => 'bi-person',   'label' => 'Profile'],
                 ['route' => 'dashboard.chat',       'icon' => 'bi-chat',   'label' => 'Messages'],
                 ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
-                ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties'],
-                ['route' => 'dashboard.empty','icon' => 'bi-box', 'label' => 'Empty'],
+                ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties']
             ];
         @endphp
 
