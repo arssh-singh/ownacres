@@ -4,19 +4,29 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Property\PropertyBasicsController;
 use App\Models\Property\PropertyBasics;
 use App\Models\Property\PropertyPricing;
+use App\Models\Property\PropertyLocation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use Illuminate\Support\Str;
 use App\Models\Property\PropertyMedia;
+use App\Services\ImageService;
 
+use App\Services\Search\PropertyIndexService;
+use App\Services\Search\QdrantService;
 
 class PropertyController extends Controller
 {
+    public function __construct(
+        private PropertyIndexService $propertyIndexService,
+        private ImageService $imageService,
+        private QdrantService $qdrantService
+    ) {}
     public function index()
     {
-        $properties = Property::with(['media', 'coverImage', 'basics'])->latest()->take(4)->get();
+        $properties = Property::with(['media', 'coverImage', 'basics'])->where('status', 'published')->latest()->take(4)->get();
         return view('index', compact('properties'));
     }
     public function create(){
@@ -70,7 +80,7 @@ class PropertyController extends Controller
         return view('auth.dashboard.properties.edit', compact('property'));
     }
     public function update(Request $request, $prop_id){
-        if (!$request->boolean('changed.basics') && !$request->boolean('changed.price') && !$request->boolean('changed.media') && !$request->boolean('changed.cover_image')) {
+        if (!$request->boolean('changed.basics') && !$request->boolean('changed.pricing') && !$request->boolean('changed.location') && !$request->boolean('changed.media') && !$request->boolean('changed.cover_image')) {
             return response()->json([
                 'Done' => 'no changes',
             ]);
@@ -84,16 +94,22 @@ class PropertyController extends Controller
             $this->updatePricing($request, $prop_id);
             array_push($done_a, 'Done Pricing');
         }
+        if ($request->boolean('changed.location')) {
+            $this->updateLocation($request, $prop_id);
+            array_push($done_a, 'Done Location');
+        }
         if ($request->boolean('changed.cover_image')) {
-            if(!str_starts_with($request->input('cover_image'), 'http')){
-                $this->updateCoverImage($request, $prop_id);
-                array_push($done_a, 'Done CoverImage');
-            }
+            $this->updateCoverImage($request, $prop_id);
+            array_push($done_a, 'Done CoverImage');
         }
         if($request->boolean('changed.media')){
             $this->updateMedia($request, $prop_id);
             array_push($done_a, 'Done media');
         }
+        $property = Property::findOrFail($prop_id);
+
+        $this->propertyIndexService->index($property);
+
         return redirect()->route('dashboard.properties');
     }
     public function delete($prop_id){        
@@ -101,12 +117,10 @@ class PropertyController extends Controller
         Storage::disk('public')->deleteDirectory("property_media/{$prop->id}");
 
         $prop->delete(); // Assuming media records are cascade deleted
+        // Delete from Qdrant
+        $this->qdrantService->deletePoint($prop->id);
         return redirect(route('dashboard.properties'));
     }
-
-
-
-
 
     private function updateBasics(Request $request, $prop_id) {
         $validated = $request->validate([
@@ -132,77 +146,136 @@ class PropertyController extends Controller
 
         $pricing->update($validated);
     }
-    private function updateCoverImage(Request $request, $prop_id){
-        $newFilename = Str::after($request->input('cover_image'), 'tmp/');
-        $newPath = "property_media/{$prop_id}/main/{$newFilename}";
-        Storage::disk('public')->move($request->input('cover_image'), $newPath);
+    private function updateCoverImage(Request $request, $prop_id)
+    {
         $property = Property::findOrFail($prop_id);
-        // Delete old file
+
+        // Convert temp image to WebP and store it
+        $image = $this->imageService->processStoredImageToWebp(
+            $request->input('cover_image'),
+            "property_media/{$prop_id}/main"
+        );
+
+        // Delete old cover image if it exists
         if ($property->coverImage) {
+
             Storage::disk('public')->delete($property->coverImage->file_path);
 
             $property->coverImage->update([
-                'file_path' => $newPath,
+                'file_path' => $image['path'],
+                'mime_type' => $image['mime_type'],
+                'file_size' => $image['file_size'],
+                'width'     => $image['width'],
+                'height'    => $image['height'],
             ]);
-        }
-        else {
+
+        } else {
+
             $property->media()->create([
-                'file_path' => $newPath,
-                'is_cover' => true,
+                'file_path' => $image['path'],
+                'mime_type' => $image['mime_type'],
+                'file_size' => $image['file_size'],
+                'width'     => $image['width'],
+                'height'    => $image['height'],
+                'is_cover'  => true,
             ]);
+
         }
     }
-    private function updateMedia($request, $prop_id){
+    private function updateMedia(Request $request, $prop_id)
+    {
         $keep = [];
         $media = [];
-        foreach($request->media as $i => $filepath){
+
+        foreach ($request->input('media', []) as $i => $filepath) {
+
             $new = false;
-            if(str_starts_with($filepath, '[')){
+
+            if (str_starts_with($filepath, '[')) {
                 $new = true;
                 $filepath = json_decode($filepath, true)[0];
             }
-            $media[] = [
-                'new' => $new,
-                'sort' => $i,
-                'file_path' => $filepath
-                ];
-        }
-        foreach($media as $file){
-            if($file['new']==true){
-                $newFilename = Str::after($file['file_path'], 'tmp/');
-                $newPath = "property_media/{$prop_id}/gallery/{$newFilename}";
 
-                Storage::disk('public')->move($file['file_path'], $newPath);
+            $media[] = [
+                'new'       => $new,
+                'sort'      => $i,
+                'file_path' => $filepath,
+            ];
+        }
+
+        foreach ($media as $file) {
+
+            if ($file['new']) {
+
+                $image = $this->imageService->processStoredImageToWebp(
+                    $file['file_path'],
+                    "property_media/{$prop_id}/gallery"
+                );
 
                 PropertyMedia::create([
                     'property_id' => $prop_id,
-                    'file_path'   => $newPath,
+                    'file_path'   => $image['path'],
+                    'mime_type'   => $image['mime_type'],
+                    'file_size'   => $image['file_size'],
+                    'width'       => $image['width'],
+                    'height'      => $image['height'],
                     'is_cover'    => false,
                     'sort_order'  => $file['sort'],
                 ]);
-                $keep[] = $newPath;
-            }
-            else{
+
+                $keep[] = $image['path'];
+
+            } else {
+
                 PropertyMedia::where('property_id', $prop_id)
-                ->where('file_path', $file['file_path'])
-                ->update([
-                    'sort_order' => $file['sort'],
-                ]);
+                    ->where('file_path', $file['file_path'])
+                    ->update([
+                        'sort_order' => $file['sort'],
+                    ]);
+
                 $keep[] = $file['file_path'];
             }
         }
-        $toDelete = PropertyMedia::where('property_id', $prop_id)
-                    ->where('is_cover', false)
-                    ->whereNotIn('file_path', $keep)
-                    ->get();
+
+        $query = PropertyMedia::where('property_id', $prop_id)
+            ->where('is_cover', false);
+
+        if (!empty($keep)) {
+            $query->whereNotIn('file_path', $keep);
+        }
+
+        $toDelete = $query->get();
+
         foreach ($toDelete as $media) {
             Storage::disk('public')->delete($media->file_path);
         }
-        PropertyMedia::where('property_id', $prop_id)
-                        ->where('is_cover', false)
-                        ->whereNotIn('file_path', $keep)
-                        ->delete();
+
+        $query->delete();
     }
+    private function updateLocation($request, $prop_id){
+        $validator = Validator::make($request->all(), [
+            'city' => ['required', 'string', 'max:100'],
+            'locality' => ['nullable', 'string', 'max:150'],
+            'postal_code' => ['nullable', 'digits:6'],
+            'address' => ['required', 'string', 'max:500'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+        ]);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'location')
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
+
+        $location = PropertyLocation::where('property_id', $prop_id)
+            ->whereHas('property', fn ($q) => $q->where('user_id', auth()->id()))
+            ->firstOrFail();
+
+        $location->update($validated);
+    }
+
     public function updateStatus(Request $request, Property $property)
     {
         $request->validate([

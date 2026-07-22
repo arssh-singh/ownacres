@@ -27,7 +27,7 @@
         const formData = new FormData(this);
 
         const response = await fetch(
-            '{{ route('marketplace.properties.search') }}',
+            '{{ route('search') }}',
             {
                 method: "POST",
                 body: formData,
@@ -38,7 +38,8 @@
         );
 
         const properties = await response.json();
-        console.log(properties.query);
+        // console.log(properties);
+        console.log(properties.Results);
         // document.getElementById('propertiesContainer').innerHTML = `<pre>${JSON.stringify(properties.html, null, 2)}</pre>`;
         document.getElementById('propertiesContainer').innerHTML = properties.html;
         

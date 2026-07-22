@@ -8,10 +8,11 @@ use App\Models\Property;
 use App\Models\Property\PropertyMedia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Services\ImageService;
 
 class PropertyMediaController extends Controller
 {
-    public function store(Request $request, Property $property)
+    public function store(Request $request, Property $property, ImageService $imageService)
     {
         // checking if the user has right to do this
         $this->authorize('update', $property);
@@ -26,7 +27,7 @@ class PropertyMediaController extends Controller
 
         $storedFiles = [];
         try{
-            DB::transaction(function () use ($request, $property, &$storedFiles) {
+            DB::transaction(function () use ($request, $property, &$storedFiles, $imageService) {
                 
                 // ==========================
                 // Cover Image
@@ -35,18 +36,16 @@ class PropertyMediaController extends Controller
                 // getting old cover image incase user returned from next page with back button
                 $oldCover = $property->coverImage;
                 // getting the uploaded image by user
-                $cover = $request->file('mainImage');
-                // storing the uploaded image in folder
-                $coverPath = $cover->store(
-                    "property_media/{$property->id}/main",
-                    'public'
-                );
-                $storedFiles[] = $coverPath;
+                $cover = $imageService->processToWebp(
+                            $request->file('mainImage'),
+                            "property_media/{$property->id}/main"
+                        );
+                $storedFiles[] = $cover['path'];
                 PropertyMedia::create([
                     'property_id' => $property->id,
-                    'file_path'   => $coverPath,
-                    'mime_type'   => $cover->getMimeType(),
-                    'file_size'   => $cover->getSize(),
+                    'file_path'   => $cover['path'],
+                    'mime_type'   => $cover['mime_type'],
+                    'file_size'   => $cover['file_size'],
                     'is_cover'    => true,
                     'sort_order'  => 0,
                 ]);
@@ -60,20 +59,21 @@ class PropertyMediaController extends Controller
                 // ==========================
                 if ($request->hasFile('gallery')) {
                     $sortOrder = 1;
+
                     foreach ($request->file('gallery') as $file) {
 
-                        $path = $file->store(
-                            "property_media/{$property->id}/gallery",
-                            'public'
+                        $image = $imageService->processToWebp(
+                            $file,
+                            "property_media/{$property->id}/gallery"
                         );
 
-                        $storedFiles[] = $path;
+                        $storedFiles[] = $image['path'];
 
                         PropertyMedia::create([
                             'property_id' => $property->id,
-                            'file_path'   => $path,
-                            'mime_type'   => $file->getMimeType(),
-                            'file_size'   => $file->getSize(),
+                            'file_path'   => $image['path'],
+                            'mime_type'   => $image['mime_type'],
+                            'file_size'   => $image['file_size'],
                             'is_cover'    => false,
                             'sort_order'  => $sortOrder++,
                         ]);

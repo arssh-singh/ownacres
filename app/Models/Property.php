@@ -34,6 +34,13 @@ class Property extends Model
 
             'price' => $this->pricing?->price,
             'listing_type' => $this->pricing?->listing_type,
+
+            'city' => $this->location?->city,
+            'locality' => $this->location?->locality,
+            'postal_code' => $this->location?->postal_code,
+            'address'=>$this->location?->address,
+            'latitude'=>$this->location?->latitude,
+            'longitude'=>$this->location?->longitude,
         ];
     }
     public function makeAllSearchableUsing($query)

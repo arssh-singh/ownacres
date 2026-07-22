@@ -96,7 +96,7 @@
         </div>
     </div>
 @endsection
-
+{{-- for map --}}
 @push('scripts')
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 

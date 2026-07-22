@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Property;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Property\PropertyLocation;
+use App\Services\Search\PropertyIndexService;
+use Illuminate\Http\Request;
 
 class PropertyLocationController extends Controller
 {
-    public function store(Request $request, Property $property){
+    public function __construct(
+        private PropertyIndexService $propertyIndexService
+    ) {}
+
+    public function store(Request $request, Property $property)
+    {
         $this->authorize('update', $property);
 
         $validated = $request->validate([
@@ -27,6 +33,8 @@ class PropertyLocationController extends Controller
             ],
             $validated
         );
+
+        $this->propertyIndexService->index($property);
 
         return redirect()->route('dashboard.properties');
     }
