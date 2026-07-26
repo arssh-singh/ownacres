@@ -6,6 +6,7 @@
             <div class="col-xl-9">
 
                 <div id="propertiesContainer">
+                    @include('partials.alerts')
                     @include("sections.marketplace.show_properties", ['properties' => $properties])
                 </div>
             </div>
@@ -16,35 +17,87 @@
 @push('scripts')
 {{-- filters --}}
 <script>
-    // Search Logic
-    const prop_container = document.getElementById('propertiesContainer')
-    // document.addEventListener("DOMContentLoaded", animateCards(prop_container));
+    let searchIds = @json($ids ?? []);
+</script>
+<script>
+    const propertiesContainer = document.getElementById('propertiesContainer');
+    const searchForm = document.getElementById('searchForm');
+    const jsAlert = document.getElementById('jsAlert');
+    const jsAlertMessage = document.getElementById('jsAlertMessage');
 
-    const searchForm = document.getElementById('searchForm')
-    searchForm.addEventListener('submit', async function(e) {
+
+    searchForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const formData = new FormData(this);
 
-        const response = await fetch(
-            '{{ route('search') }}',
-            {
-                method: "POST",
+        try {
+            const response = await fetch('{{ route('search') }}', {
+                method: 'POST',
                 body: formData,
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                jsAlertMessage.textContent = data.error;
+                jsAlert.classList.remove('d-none');
+                jsAlert.classList.add('show');
+                return;
             }
-        );
 
-        const properties = await response.json();
-        // console.log(properties);
-        console.log(properties.Results);
-        // document.getElementById('propertiesContainer').innerHTML = `<pre>${JSON.stringify(properties.html, null, 2)}</pre>`;
-        document.getElementById('propertiesContainer').innerHTML = properties.html;
-        
-        // animateCards(prop_container);
+            // Hide any previous error
+            jsAlert.classList.add('d-none');
+            jsAlert.classList.remove('show');
 
+            // Save vector search IDs
+            searchIds = data.ids;
+
+            console.log(searchIds);
+
+            // Update properties
+            propertiesContainer.innerHTML = data.html;
+
+            // animateCards(propertiesContainer);
+
+        } catch (error) {
+            jsAlertMessage.textContent = 'Something went wrong. Please try again.';
+            jsAlert.classList.remove('d-none');
+            jsAlert.classList.add('show');
+
+            console.error(error);
+        }
     });
+</script>
+{{-- filters --}}
+<script>
+async function applyFilters() {
+
+    const formData = new FormData(filterForm);
+
+    searchIds.forEach(id => formData.append('ids[]', id));
+
+    const response = await fetch('{{ route("search.filter") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    });
+
+    const data = await response.json();
+
+    propertiesContainer.innerHTML = data.html;
+}
+const filterForm = document.getElementById('filterForm');
+
+filterForm.addEventListener('change', applyFilters);
+filterForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    applyFilters();
+});
 </script>
 @endpush

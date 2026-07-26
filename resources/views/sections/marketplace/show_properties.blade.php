@@ -30,9 +30,9 @@
                         <p class="text-muted mb-0">
                             {{ \Illuminate\Support\Str::limit($property->display_description, 15, '...') }}
                         </p>
-                        <div class="d-flex justify-content-between small text-muted">
+                        {{-- <div class="d-flex justify-content-between small text-muted">
                             <span>🛏️{{$property->bedrooms}}</span><span>🚻{{$property->bathrooms}}</span><span>7200 sqft</span>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

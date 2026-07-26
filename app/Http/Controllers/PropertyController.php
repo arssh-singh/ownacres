@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use Illuminate\Support\Str;
 use App\Models\Property\PropertyMedia;
+use App\Models\User;
 use App\Services\ImageService;
 
 use App\Services\Search\PropertyIndexService;
 use App\Services\Search\QdrantService;
+
 
 class PropertyController extends Controller
 {
@@ -41,42 +43,74 @@ class PropertyController extends Controller
 
         return view('prop_details', compact('property'));
     }
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+    //         'description' => 'required|string',
+    //         'price' => 'required|numeric',
 
-            'bedrooms' => 'required|integer|min:0',
-            'bathrooms' => 'required|integer|min:0',
-            'area' => 'required|integer|min:1',
+    //         'bedrooms' => 'required|integer|min:0',
+    //         'bathrooms' => 'required|integer|min:0',
+    //         'area' => 'required|integer|min:1',
 
-            'location' => 'required|string',
-            'is_furnished' => 'nullable',
+    //         'location' => 'required|string',
+    //         'is_furnished' => 'nullable',
 
-        ]);
+    //     ]);
 
-        // Handle checkbox
-        $validated['is_furnished'] = $request->has('is_furnished');
+    //     // Handle checkbox
+    //     $validated['is_furnished'] = $request->has('is_furnished');
 
-        // Attach logged-in user
-        $validated['user_id'] = auth()->id();
+    //     // Attach logged-in user
+    //     $validated['user_id'] = auth()->id();
 
-        //Storing image in folder
-        $path = $request->file('image')->store('prop_images', 'public');
-        $validated['image'] = $path;
+    //     //Storing image in folder
+    //     $path = $request->file('image')->store('prop_images', 'public');
+    //     $validated['image'] = $path;
 
 
-        Property::create($validated);
+    //     Property::create($validated);
 
-        return redirect(route('dashboard.properties'))->with('success', 'Property added!');
-    }
-    public function get_prop($prop_id){
-        $property = Property::with(['media', 'coverImage', 'pricing'])
-            ->where('user_id', auth()->id())
-            ->findOrFail($prop_id);
+    //     return redirect(route('dashboard.properties'))->with('success', 'Property added!');
+    // }
+    public function edit(Property $property){
+        $this->authorize('update', $property);
+
+        if (! $property->coverImage()->exists()) {
+            $property->delete();
+            return redirect()->route('dashboard.properties');
+        }
+
+        PropertyBasics::firstOrCreate(
+            ['property_id' => $property->id],
+            [
+                'title' => 'No title available',
+                'description' => 'No description available',
+            ]
+        );
+
+        PropertyPricing::firstOrCreate(
+            ['property_id' => $property->id],
+            [
+                'listing_type' => 'sale',
+                'price' => 0,
+            ]
+        );
+
+        PropertyLocation::firstOrCreate(
+            ['property_id' => $property->id],
+            [
+                'city' => 'Unknown',
+                'locality' => 'Unknown',
+                'postal_code' => '000000',
+                'address' => 'Unknown',
+                'latitude' => 0,
+                'longitude' => 0,
+            ]
+        );
+
         return view('auth.dashboard.properties.edit', compact('property'));
     }
     public function update(Request $request, $prop_id){

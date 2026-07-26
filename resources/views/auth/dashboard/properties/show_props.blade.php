@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('content')
 <div class="container-fluid px-lg-5 px-3 mt-5">
-
+    @include('partials.alerts')
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4">
         <div>

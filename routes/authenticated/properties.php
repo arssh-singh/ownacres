@@ -14,6 +14,7 @@ Route::middleware('auth')->group(function () {
         return view('auth.dashboard.properties.get_media', compact('property'));
     })->name('properties.media.get');
     Route::post('/properties/{property}/store/media', [PropertyMediaController::class, 'store'])->name('properties.media.store');
+    
     Route::get('/properties/{property}/get/basics', function(Property $property){
         return view('auth.dashboard.properties.get_basics', compact('property'));
     })->name('properties.basics.get');
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
         return view('auth.dashboard.properties.get_pricing', compact('property'));
     })->name('properties.pricing.get');
     Route::post('/properties/{property}/store/pricing', [PropertyPricingController::class, 'store'])->name('properties.pricing.store');
+    
     Route::get('/properties/{property}/get/location', function(Property $property){
         return view('auth.dashboard.properties.get_location', compact('property'));
     })->name('properties.location.get');
@@ -32,7 +34,7 @@ Route::middleware('auth')->group(function () {
     ->name('properties.updateStatus');
 
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
-    Route::get('/properties/{prop_id}/edit', [PropertyController::class, 'get_prop'])->name('properties.edit');
+    Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
     Route::put('/properties/{prop_id}', [PropertyController::class, 'update'])->name('properties.update');
     Route::delete('/properties/{prop_id}/delete', [PropertyController::class, 'delete'])->name('properties.delete');
     Route::post('/properties/{property}/save', [SavedPropertyController::class, 'toggle'])->name('properties.save');

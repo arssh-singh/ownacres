@@ -29,6 +29,7 @@
             @php
                 $coverImage = $property->cover_image_url;
                 $title = $property->display_title;
+                $description = \Illuminate\Support\Str::limit($property->basics->description ?? '', 50);
                 $price = $property->price;
             @endphp
             <div class="col-xl-3 col-lg-4 col-md-6">
@@ -43,10 +44,9 @@
                         <p class="text-secondary mb-2">
                             {{ $title }}
                         </p>
-
-                        <div class="d-flex justify-content-between small text-muted">
-                            <span>🛏️{{$property->bedrooms}}</span><span>🚻{{$property->bathrooms}}</span><span>7200 sqft</span>
-                        </div>
+                        <p class="text-secondary mb-2">
+                            {{ $description }}
+                        </p>
                     </div>
                 </div>
             </div>

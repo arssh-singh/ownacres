@@ -17,12 +17,9 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $query = trim($request->search);
-
         $words = preg_split('/\s+/', $query);
-
         $meaningful = collect($words)
             ->contains(fn ($word) => mb_strlen($word) >= 3);
-
         if (! $meaningful) {
             return response()->json([
                 'error' => 'Please enter a more specific search.'
@@ -42,12 +39,95 @@ class SearchController extends Controller
             'location'
         ])
         ->whereIn('id', $ids)
-        ->get()
-        ->sortBy(fn ($property) => array_search($property->id, $ids))
-        ->values();
+        ->orderByRaw('FIELD(id,' . implode(',', $ids) . ')')
+        ->paginate(12);
 
         return response()->json(['html'=>view('sections.marketplace.show_properties', compact('properties'))->render(),
-        'Results' => $results,
+        'ids' => $ids,
+        ]);
+    }
+    public function home(Request $request){
+        $query = trim($request->search);
+        $words = preg_split('/\s+/', $query);
+        $meaningful = collect($words)
+            ->contains(fn ($word) => mb_strlen($word) >= 3);
+        if (! $meaningful) {
+            return redirect('/')
+                ->with('error', 'Please enter a more specific search.');
+        }
+        $embedding = $this->embeddingService->embed($query);
+        $results = $this->qdrantService->search($embedding);
+        $ids = collect($results['points'])
+            ->filter(fn ($point) => $point['score'] > 0.35)
+            ->pluck('id')
+            ->all();
+
+        // filters
+        $query = Property::with([
+                'basics',
+                'pricing',
+                'location'
+            ])
+            ->whereIn('id', $ids);
+
+        if ($request->filled('listing_type')) {
+            $query->whereHas('pricing', function ($q) use ($request) {
+                $q->where('listing_type', $request->listing_type);
+            });
+        }
+
+        if ($request->filled('price_range')) {
+            [$min, $max] = explode('-', $request->price_range);
+
+            $query->whereHas('pricing', function ($q) use ($min, $max) {
+                $q->whereBetween('price', [(int) $min, (int) $max]);
+            });
+        }
+
+        $properties = $query
+            ->orderByRaw('FIELD(id,' . implode(',', $ids) . ')')
+            ->paginate(12);
+
+        return view('marketplace', compact('properties', 'ids'));
+    }
+    public function filter(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer'],
+
+            'listing_type' => ['nullable', 'in:sale,rent'],
+            'max_price' => ['nullable', 'numeric'],
+        ]);
+
+        $query = Property::with([
+            'media',
+            'coverImage',
+            'basics',
+            'pricing',
+            'location',
+        ])->whereIn('id', $validated['ids']);
+
+        if (!empty($validated['listing_type'])) {
+            $query->whereHas('pricing', function ($q) use ($validated) {
+                $q->where('listing_type', $validated['listing_type']);
+            });
+        }
+
+        if (!empty($validated['max_price'])) {
+            $query->whereHas('pricing', function ($q) use ($validated) {
+                $q->where('price', '<=', $validated['max_price']);
+            });
+        }
+
+        $query->orderByRaw(
+            'FIELD(id,' . implode(',', $validated['ids']) . ')'
+        );
+
+        $properties = $query->paginate(12);
+
+        return response()->json([
+            'html' => view('sections.marketplace.show_properties', compact('properties'))->render(),
         ]);
     }
 }

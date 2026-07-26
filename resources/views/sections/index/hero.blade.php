@@ -10,10 +10,9 @@
         background-position: 0% 35%;
     }
 </style>
-<div class="container-fluid px-lg-5 px-md-5 px-xl-5 px-sm-0 py-5 position-relative hero-banner">
-
-    <div class="row" style="height:55vh;">
-        <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12 mt-lg-5 mt-sm-0 ">
+<div class="container-fluid px-lg-5 px-md-5 px-xl-5 px-sm-2 py-5 position-relative hero-banner">
+    <div class="row mt-5" style="height:55vh;">
+        <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 mt-lg-5 mt-sm-0 ">
             <p style="color: white" class="fade-anim">DISCOVER. CHOOSE. OWN</p>
             <hr style="width: 5%; color:white" class="fade-anim"/>
             <h1 class="display-3 fw-bold text-white m-0 fade-anim"
@@ -27,19 +26,22 @@
                 Your dream home is just a few clicks away.
             </p>
             <!-- action buttons -->
-            <div class="mt-4">
-                <a href="#"
-                    class="btn btn-primary rounded-pill py-3 px-5 me-3 fade-anim">
-                    Get Started
-                </a>
-                <a href="#"
-                    class="btn btn-outline-light rounded-pill py-3 px-5 fade-anim">
-                    Learn More
-                </a>
+            <div class="row mt-4 g-2">
+                <div class="col-lg-6 col-sm-12">
+                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 w-100">
+                        Get Started
+                    </a>
+                </div>
+
+                <div class="col-lg-6 col-sm-12">
+                    <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-5 w-100">
+                        Learn More
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="col-xl-6 col-lg-4 col-md-4 d-none d-lg-flex d-md-flex align-items-center justify-content-end fade-anim">
-            <div class="p-4 rounded-4 h-auto" style="
+        <div class="col-xl-6 col-lg-4 col-md-4 d-none d-lg-flex align-items-center justify-content-end fade-anim">
+            {{-- <div class="p-4 rounded-4 h-auto" style="
                 background: rgba(255,255,255,0.12);
                 backdrop-filter: blur(1px);
                 -webkit-backdrop-filter: blur(1px);
@@ -85,7 +87,7 @@
                 <a href="{{ route('marketplace.properties.search') }}" class="btn btn-light w-100 rounded-3 mt-3 fw-medium">
                     Browse properties
                 </a>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -98,21 +100,19 @@
 
             <!-- Search Card -->
             <div class="bg-white shadow-sm rounded-5 p-4 fade-anim">
-                <form action="{{ route('marketplace.properties.search') }}" method="GET">
+                @include('partials.alerts')
+                <form action="{{ route('search.home') }}" method="POST">
                     <div class="row g-3 align-items-center">
                         <!-- Location -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
-                            <label class="form-label fw-semibold small mb-1 d-block">Location</label>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 fade-anim">
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
-                                <i class="bi bi-geo-alt text-muted me-2"></i>
-                                <input type="text" class="form-control border-0 p-0 shadow-none" name="location" placeholder="Enter city or area">
-                                <i class="bi bi-geo text-muted ms-2"></i>
+                                <i class="bi bi-search text-muted me-2"></i>
+                                <input type="text" class="form-control border-0 p-0 shadow-none" name="search" placeholder="Search">
                             </div>
                         </div>
 
                         <!-- Property Type -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
-                            <label class="form-label fw-semibold small mb-1 d-block">Property Type</label>
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-sm-12 fade-anim">
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-house text-muted me-2"></i>
                                 <select class="form-select border-0 p-0 shadow-none text-muted" name="property_type">
@@ -126,13 +126,12 @@
                         </div>
 
                         <!-- Price Range -->
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 fade-anim">
-                            <label class="form-label fw-semibold small mb-1 d-block">Price Range</label>
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-sm-12 fade-anim">                            
                             <div class="d-flex align-items-center border rounded-3 px-3 py-2">
                                 <i class="bi bi-tag text-muted me-2"></i>
                                 <select class="form-select border-0 p-0 shadow-none text-muted" name="price_range">
-                                    <option value="">Any Price</option>
-                                    <option value="Under 50 Lac">Under 50 Lac</option>
+                                    <option value="">Any</option>
+                                    <option value="0 Lac - 50 Lac">Under 50 Lac</option>
                                     <option value="50 Lac - 1 Crore">50 Lac - 1 Crore</option>
                                     <option value="1 Crore - 2 Crore">1 Crore - 2 Crore</option>
                                     <option value="Over 2 Crore">Over 2 Crore</option>
@@ -140,24 +139,9 @@
                             </div>
                         </div>
 
-                        <!-- Beds & Baths -->
-                        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 fade-anim">
-                            <label class="form-label fw-semibold small mb-1 d-block">Beds &amp; Baths</label>
-                            <div class="d-flex align-items-center border rounded-3 px-3 py-2">
-                                <i class="bi bi-door-closed text-muted me-2"></i>
-                                <select class="form-select border-0 p-0 shadow-none text-muted" name="bedrooms">
-                                    <option>Any</option>
-                                    <option>1+</option>
-                                    <option>2+</option>
-                                    <option>3+</option>
-                                    <option>4+</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <!-- Search Button -->
-                        <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12">
-                            <button class="btn btn-dark rounded-3 w-100 py-2 fw-semibold mt-4 fade-anim">
+                        <div class="col-xl-2 col-lg-12 col-md-12 col-sm-12">
+                            <button class="btn btn-dark rounded-3 w-100 py-2 fw-semibold fade-anim">
                                 <i class="bi bi-search me-1"></i>
                             </button>
                         </div>
@@ -177,9 +161,9 @@ gsap.from('.fade-anim', {
     y: 60,
     filter: "blur(20px)",
     // scale: .01,
-    duration: 2,
+    duration: .1,
     ease: "back.out(1)",
-    stagger: 0.15
+    stagger: 0.015
 });
 });
 </script>

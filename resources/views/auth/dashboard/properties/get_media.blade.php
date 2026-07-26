@@ -7,81 +7,73 @@
 @endpush
 @section('content')
 
+<div class="mt-5 mb-4">
+    <p class="text-muted text-uppercase small fw-semibold mb-1">Step 4 of 4</p>
+    <h1 class="fw-light">Add photos & videos</h1>
+    <p class="text-muted">A great cover photo and a few gallery shots help your listing stand out.</p>
+</div>
 
-<div class="container-lg py-5">
+<form action="{{ route('properties.media.store', $property) }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+    <!-- Main Image -->
+    <div class="mb-5">
+        <label class="form-label text-muted small text-uppercase fw-semibold">
+            Main Image <span class="text-danger">*</span>
+        </label>
+        <p class="text-muted small mb-3">
+            This will appear as the cover photo for your listing.
+        </p>
 
-            <form action="{{ route('properties.media.store', $property) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <!-- Main Image -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        @error('mainImage')
-                            <div class="text-danger mt-2">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <h5 class="card-title">
-                            Main Image
-                            <span class="text-danger">*</span>
-                        </h5>
-
-                        <p class="text-muted mb-3">
-                            This image will appear as the cover photo.
-                        </p>
-
-                        <input
-                            type="file"
-                            name="mainImage"
-                            id="mainImage"
-                            accept="image/*"
-                            required>
-                        <div id="mainPreview" class="mt-3"></div>
-
-                    </div>
-                </div>
-
-                <!-- Gallery -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        @error('gallery')
-                            <div class="text-danger mt-2">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        <h5 class="card-title">
-                            Gallery
-                        </h5>
-
-                        <p class="text-muted mb-3">
-                            Upload up to 10 photos or videos. (optional).
-                        </p>
-
-                        <input
-                            type="file"
-                            class="form-control"
-                            name="gallery[]"
-                            id="gallery"
-                            accept="image/*,video/*"
-                            multiple>
-                        <div id="galleryPreview" class="row g-3 mt-2"></div>
-
-                    </div>
-                </div>
-
-                <button class="btn btn-primary px-4">
-                    Save & Continue
-                </button>
-
-            </form>
-
+        <div class="border rounded-3 bg-light bg-opacity-50 p-3">
+            <input
+                type="file"
+                name="mainImage"
+                id="mainImage"
+                accept="image/*"
+                required>
+            <div id="mainPreview" class="mt-3"></div>
         </div>
+
+        @error('mainImage')
+            <div class="text-danger small mt-2">
+                {{ $message }}
+            </div>
+        @enderror
     </div>
 
-</div>
+    <!-- Gallery -->
+    <div class="mb-5">
+        <label class="form-label text-muted small text-uppercase fw-semibold">Gallery</label>
+        <p class="text-muted small mb-3">
+            Upload up to 10 additional photos or videos (optional).
+        </p>
+
+        <div class="border rounded-3 bg-light bg-opacity-50 p-3">
+            <input
+                type="file"
+                name="gallery[]"
+                id="gallery"
+                accept="image/*,video/*"
+                multiple>
+            <div id="galleryPreview" class="row g-3 mt-2"></div>
+        </div>
+
+        @error('gallery')
+            <div class="text-danger small mt-2">
+                {{ $message }}
+            </div>
+        @enderror
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between">
+        <span class="text-muted small">You can add or change photos later from your dashboard.</span>
+        <button type="submit" class="btn btn-dark px-4 py-2">
+            Save & Continue →
+        </button>
+    </div>
+
+</form>
 
 @endsection
 

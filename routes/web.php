@@ -12,6 +12,7 @@ Route::match(['get', 'post'], '/marketplace/search', [MarketplaceController::cla
 Route::match(['get', 'post'], '/marketplace/search/Query', [MarketplaceController::class, 'marketplace_search_by_query'])->name('marketplace.properties.searchByQ');
 Route::get('/properties/{prop_id}/prop_details', [PropertyController::class, 'prop_details'])->name('properties.prop_details');
 
+Route::view('/TermsAndConditions', 'terms.termsandconditions')->name('terms');
 
 // user authentication routes
 require __DIR__.'/user.php';

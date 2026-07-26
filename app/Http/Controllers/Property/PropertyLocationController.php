@@ -36,6 +36,14 @@ class PropertyLocationController extends Controller
 
         $this->propertyIndexService->index($property);
 
-        return redirect()->route('dashboard.properties');
+        $property->update([
+            'status' => 'published',
+        ]);
+
+        return redirect()->route('dashboard.properties')
+            ->with('success', 'Property published successfully.');
+    }
+    public function update(){
+        
     }
 }

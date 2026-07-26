@@ -38,19 +38,11 @@
                 {{-- Image --}}
                 <div class="sp-card-img-wrap">
                     <img
-                        src="{{ asset('storage/' . $property->image) }}"
-                        alt="{{ $property->title }}"
+                        src="{{ asset('storage/' . $property->coverImage->file_path) }}"
+                        alt="{{ $property->basics->title }}"
                         class="sp-card-img"
                         loading="lazy"
                     >
-                    {{-- Badge --}}
-                    <div class="sp-badges">
-                        @if($property->is_furnished)
-                        <span class="sp-badge sp-badge-furnished">Furnished</span>
-                        @else
-                        <span class="sp-badge sp-badge-unfurnished">Unfurnished</span>
-                        @endif
-                    </div>
                     {{-- Remove --}}
                     <form action="{{ route('properties.save', $property->id) }}" method="POST" style="display: inline;">
                         @csrf
@@ -67,30 +59,9 @@
 
                 {{-- Body --}}
                 <div class="sp-card-body">
-                    <h2 class="sp-card-title">{{ $property->title }}</h2>
-                    <p class="sp-card-desc text-muted">{{ Str::limit($property->description, 90) }}</p>
+                    <h2 class="sp-card-title">{{ $property->basics->title }}</h2>
+                    <p class="sp-card-desc text-muted">{{ Str::limit($property->basics->description, 90) }}</p>
 
-                    {{-- Meta --}}
-                    <div class="sp-meta mt-auto pt-3">
-                        <span class="sp-meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                            </svg>
-                            {{ $property->bedrooms }} Bed
-                        </span>
-                        <span class="sp-meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            {{ $property->bathrooms }} Bath
-                        </span>
-                        <span class="sp-meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-                            </svg>
-                            {{ number_format($property->area) }} ft²
-                        </span>
-                    </div>
                 </div>
 
                 {{-- Footer --}}

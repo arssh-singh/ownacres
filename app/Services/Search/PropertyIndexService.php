@@ -38,8 +38,6 @@ class PropertyIndexService
                 'price' => $property->pricing?->price,
             ]
         );
-
-        dd($result);
         
     }
 }

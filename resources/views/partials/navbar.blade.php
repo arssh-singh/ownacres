@@ -24,7 +24,7 @@
     }
 </style>
 @if(request()->routeIs('home'))
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1 " id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1 " id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
 @else
 <nav class="navbar navbar-expand-lg navbar-light fixed-top p-1" id="bar" style="background-color: #ffff" style="view-transition-name: navbar;">
 @endif

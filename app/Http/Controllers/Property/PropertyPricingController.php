@@ -24,4 +24,7 @@ class PropertyPricingController extends Controller
 
         return redirect()->route('properties.location.get', $property);
     }
+    public function update(){
+        
+    }
 }

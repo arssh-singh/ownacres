@@ -36,4 +36,7 @@ class PropertyBasicsController extends Controller
 
         return redirect()->route('properties.pricing.get', $property);
     }
+    public function update(){
+        
+    }
 }

@@ -6,6 +6,7 @@
 @endpush
 @section('content')
 <div class="container-fluid px-lg-5 px-3 mt-5 mb-5">
+    @include('partials.alerts')
     <div class="mb-4">
         <h3 class="fw-bold mb-1">Account Settings</h3>
         <p class="text-muted mb-0">View and manage your profile details</p>

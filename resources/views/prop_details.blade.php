@@ -131,7 +131,7 @@
 
                 <hr class="my-4">
 
-                <h5 class="fw-bold mb-3">Overview</h5>
+                {{-- <h5 class="fw-bold mb-3">Overview</h5>
                 <div class="row g-3">
                     <div class="col-6 col-md-3">
                         <div class="border rounded-3 p-3 text-center h-100">
@@ -161,7 +161,7 @@
                             <p class="fw-semibold mb-0">{{ $property->created_at->format('M Y') }}</p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 @if (!empty($property->amenities))
                     <hr class="my-4">
@@ -249,21 +249,14 @@
                             <i class="bi bi-send-fill me-2"></i> Send Inquiry
                         </button>
                     </form>
-                    <button class="btn btn-outline-primary w-100 py-3 fw-semibold">
+                    {{-- <button class="btn btn-outline-primary w-100 py-3 fw-semibold">
                         <i class="bi bi-telephone-fill me-2"></i> Request a Call Back
-                    </button>
+                    </button> --}}
                 @else
                     <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}" class="btn btn-primary w-100 py-3 fw-semibold">
                         <i class="bi bi-box-arrow-in-right me-2"></i> Sign in to Send Inquiry
                     </a>
                 @endauth
-
-                <hr class="my-4">
-
-                <div class="d-flex align-items-center gap-2 text-muted small">
-                    <i class="bi bi-shield-check text-primary fs-5"></i>
-                    Verified listing • Response within 24 hours
-                </div>
             </div>
         </div>
 

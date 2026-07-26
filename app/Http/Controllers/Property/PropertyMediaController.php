@@ -91,6 +91,9 @@ class PropertyMediaController extends Controller
                 ->route('properties.basics.get', $property)
                 ->with('success', 'Media uploaded successfully.');
     }
+    public function update(){
+
+    }
     public function upload(Request $request)
     {
         if ($request->hasFile('cover_image')) {

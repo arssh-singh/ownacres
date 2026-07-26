@@ -5,96 +5,109 @@
 @endpush
 
 @section('content')
-    <div class="container-fluid">
-        <div class="card border-0 rounded-4 bg-transparent">
-            <div class="card-body p-3 p-md-4 p-lg-5">
 
-                {{-- Header --}}
-                <div class="d-flex align-items-center mb-4">
-                    <div class="bg-danger bg-opacity-10 rounded-circle px-4 p-3 me-3">
-                        <i class="bi bi-geo-alt-fill text-danger fs-4"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold mb-1">Property Location</h3>
-                        <p class="text-muted mb-0">
-                            Add the property's address and pinpoint its exact location on the map.
-                        </p>
-                    </div>
-                </div>
+<div class="mt-5 mb-4">
+    <p class="text-muted text-uppercase small fw-semibold mb-1">Step 4 of 4</p>
+    <h1 class="fw-light">Where is it located?</h1>
+    <p class="text-muted">Add the address and drop a pin so buyers can find it on the map.</p>
+</div>
 
-                {{-- TODO: point this at your actual route name/model binding --}}
-                <form method="POST" action="{{ route('properties.location.store', $property ?? null) }}">
-                    @csrf
+{{-- TODO: point this at your actual route name/model binding --}}
+<form method="POST" action="{{ route('properties.location.store', $property ?? null) }}">
+    @csrf
 
-                    {{-- Address fields --}}
-                    <div class="row g-4">
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label class="form-label fw-semibold">City</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-buildings"></i>
-                                </span>
-                                <input type="text" class="form-control" name="city" placeholder="Ludhiana" value="{{ old('city') }}" required>
-                            </div>
-                        </div>
+    {{-- Address fields --}}
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <label class="form-label text-muted small text-uppercase fw-semibold" for="city">City</label>
+            <input
+                type="text"
+                id="city"
+                name="city"
+                value="{{ old('city') }}"
+                placeholder="Ludhiana"
+                class="form-control border-0 border-bottom rounded-2 px-2 py-2 fs-5 @error('city') is-invalid @enderror"
+                required
+            >
+            @error('city')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label class="form-label fw-semibold">Locality / Area</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-pin-map"></i>
-                                </span>
-                                <input type="text" class="form-control" name="locality" placeholder="Model Town" value="{{ old('locality') }}">
-                            </div>
-                        </div>
+        <div class="col-md-4">
+            <label class="form-label text-muted small text-uppercase fw-semibold" for="locality">Locality / Area</label>
+            <input
+                type="text"
+                id="locality"
+                name="locality"
+                value="{{ old('locality') }}"
+                placeholder="Model Town"
+                class="form-control border-0 border-bottom rounded-2 px-2 py-2 fs-5 @error('locality') is-invalid @enderror"
+            >
+            @error('locality')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <label class="form-label fw-semibold">Postal Code</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-mailbox"></i>
-                                </span>
-                                <input type="text" class="form-control" name="postal_code" placeholder="141001" value="{{ old('postal_code') }}">
-                            </div>
-                        </div>
+        <div class="col-md-4">
+            <label class="form-label text-muted small text-uppercase fw-semibold" for="postal_code">Postal Code</label>
+            <input
+                type="text"
+                id="postal_code"
+                name="postal_code"
+                value="{{ old('postal_code') }}"
+                placeholder="141001"
+                class="form-control border-0 border-bottom rounded-2 px-2 py-2 fs-5 @error('postal_code') is-invalid @enderror"
+            >
+            @error('postal_code')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-                        <div class="col-12">
-                            <label class="form-label fw-semibold">Full Address</label>
-                            <textarea rows="3" class="form-control" name="address" placeholder="House No, Street, Landmark" required>{{ old('address') }}</textarea>
-                        </div>
-                    </div>
-
-                    {{-- Map section --}}
-                    <div class="d-flex justify-content-between align-items-center mt-5 mb-3 flex-wrap">
-                        <div>
-                            <h5 class="fw-bold mb-1">Select Property on Map</h5>
-                            <small class="text-muted">
-                                Click anywhere or drag the marker to set the exact location.
-                            </small>
-                        </div>
-
-                        <button class="btn btn-outline-primary mt-3 mt-md-0" type="button" id="use-current-location">
-                            <i class="bi bi-crosshair me-2"></i>
-                            Use Current Location
-                        </button>
-                    </div>
-
-                    <div id="map" class="rounded-4 border shadow-sm overflow-hidden" style="height:500px;"></div>
-
-                    {{-- Marker coordinates, kept in sync by the map script below --}}
-                    <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', 30.900965) }}">
-                    <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', 75.857276) }}">
-
-                    <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn btn-primary px-4">
-                            Save &amp; Continue
-                        </button>
-                    </div>
-                </form>
-
-            </div>
+        <div class="col-12">
+            <label class="form-label text-muted small text-uppercase fw-semibold" for="address">Full Address</label>
+            <textarea
+                id="address"
+                name="address"
+                rows="3"
+                placeholder="House No, Street, Landmark"
+                class="form-control border-0 border-bottom rounded-2 px-2 py-2 @error('address') is-invalid @enderror"
+                style="resize: none"
+                required
+            >{{ old('address') }}</textarea>
+            @error('address')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
     </div>
+
+    {{-- Map section --}}
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-3 flex-wrap">
+        <div>
+            <p class="text-muted text-uppercase small fw-semibold mb-1">Pin the location</p>
+            <p class="text-muted mb-0 small">Click anywhere or drag the marker to set the exact spot.</p>
+        </div>
+
+        <button class="btn btn-outline-dark btn-sm mt-2 mt-md-0" type="button" id="use-current-location">
+            <i class="bi bi-crosshair me-1"></i>
+            Use Current Location
+        </button>
+    </div>
+
+    <div id="map" class="rounded-2 border overflow-hidden" style="height:450px;"></div>
+
+    {{-- Marker coordinates, kept in sync by the map script below --}}
+    <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', 30.900965) }}">
+    <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', 75.857276) }}">
+
+    <div class="d-flex align-items-center justify-content-between mt-4">
+        <span class="text-muted small">You can edit this later from your dashboard.</span>
+        <button type="submit" class="btn btn-dark px-4 py-2">
+            Save & Continue →
+        </button>
+    </div>
+</form>
+
 @endsection
 {{-- for map --}}
 @push('scripts')

@@ -8,7 +8,6 @@ Route::get('/dashboard/chat', [ChatController::class, 'index'])
 
 // creating conversation
 Route::post('/dashboard/chat/start/coversation/{prop_id}', [ChatController::class, 'start'])->name('dashboard.chat.start');
-
 Route::get('/dashboard/chat/{conversation}', [ChatController::class, 'conversation'])
     ->name('dashboard.chat.conversation');
 

@@ -1,4 +1,17 @@
 @extends("layouts.user")
+@push('styles')
+    
+        <style>
+        .saved-property-item {
+            transition: background-color .15s ease;
+            border-radius: .5rem;
+        }
+        .saved-property-item:hover {
+            background-color: #f8f9fa;
+        }
+        .min-w-0 { min-width: 0; }
+        </style>
+@endpush
 @section("content")
 <?php
 $savedCount = $savedCount ?? 0;
@@ -9,14 +22,7 @@ $profileViews = $profileViews ?? 0;
 <div class="container-fluid px-lg-5 px-3 mt-5">
 
     <!-- Welcome Header -->
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            {{ session('success') }}
-
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    @include('partials.alerts')
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
         <div>
             <h2 class="fw-bold mb-1">Welcome back, {{ auth()->user()->name }} 👋</h2>
@@ -53,18 +59,11 @@ $profileViews = $profileViews ?? 0;
                     'bg' => 'bg-warning-subtle',
                     'color' => 'text-warning',
                 ],
-                [
-                    'title' => 'Profile Views',
-                    'value' => $profileViews ?? 0,
-                    'icon' => 'bi-eye-fill',
-                    'bg' => 'bg-info-subtle',
-                    'color' => 'text-info',
-                ],
             ];
         @endphp
 
         @foreach($stats as $stat)
-            <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
                     <div class="d-flex align-items-center gap-3">
                         <div class="{{ $stat['bg'] }} rounded-circle d-flex align-items-center justify-content-center"
@@ -87,21 +86,28 @@ $profileViews = $profileViews ?? 0;
 
         <!-- Saved Properties -->
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Saved Properties</h5>
-                    <a href="{{ route('dashboard.savedProperties')}}" class="small text-decoration-none">View All</a>
+                    <a href="{{ route('dashboard.savedProperties') }}" class="small text-decoration-none fw-medium">View All</a>
                 </div>
 
                 @forelse ($savedProperties ?? [] as $property)
-                    <div class="d-flex align-items-center gap-3 py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
-                        <img src="{{ asset('storage/' . $property->coverImage?->file_path) }}" class="rounded-3 object-fit-cover" style="width:70px; height:70px;" alt="">
-                        <div class="flex-grow-1">
-                            <p class="fw-semibold mb-0">{{ $property->title }}</p>
-                            <p class="text-muted small mb-0"><i class="bi bi-geo-alt"></i> {{ $property->location }}</p>
+                    <div class="d-flex align-items-center gap-3 py-3 px-2 saved-property-item {{ !$loop->last ? 'border-bottom' : '' }}">
+                        <img src="{{ $property->coverImage?->file_path ? asset('storage/' . $property->coverImage->file_path) : asset('images/placeholder.jpg') }}"
+                            class="rounded-3 object-fit-cover flex-shrink-0"
+                            style="width:64px; height:64px;"
+                            alt="{{ $property->basics?->title }}">
+
+                        <div class="flex-grow-1 min-w-0">
+                            <p class="fw-semibold mb-0 text-truncate">{{ $property->basics?->title }}</p>
+                            <p class="text-muted small mb-0 text-truncate">
+                                <i class="bi bi-geo-alt"></i> {{ $property->location->city }}
+                            </p>
                         </div>
-                        <div class="text-end">
-                            <p class="fw-bold text-primary mb-0">₹{{ number_format($property->price, 2) }}</p>
+
+                        <div class="text-end flex-shrink-0">
+                            <p class="fw-bold text-primary mb-0 text-nowrap">₹{{ number_format($property->price, 2) }}</p>
                             <a href="{{ route('properties.prop_details', $property->id) }}" class="small text-decoration-none">View</a>
                         </div>
                     </div>
@@ -109,36 +115,12 @@ $profileViews = $profileViews ?? 0;
                     <div class="text-center py-5">
                         <i class="bi bi-heart fs-1 text-muted"></i>
                         <p class="text-muted mt-2 mb-0">You haven't saved any properties yet.</p>
-                        <a href="{{ route('marketplace') }}" class="btn btn-sm btn-primary mt-3">Browse Properties</a>
-                    </div>
-                @endforelse
-            </div>
-
-            <!-- Recent Inquiries -->
-            <div class="card border-0 shadow-sm rounded-4 p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0">Recent Inquiries</h5>
-                    <a href="{{ route('dashboard.messages') ?? '#' }}" class="small text-decoration-none">View All</a>
-                </div>
-
-                @forelse ($recentInquiries ?? [] as $inquiry)
-                    <div class="d-flex justify-content-between align-items-center py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
-                        <div>
-                            <p class="fw-semibold mb-0">{{ $inquiry->property->title ?? 'Property' }}</p>
-                            <p class="text-muted small mb-0">{{ $inquiry->created_at->diffForHumans() }}</p>
-                        </div>
-                        <span class="badge rounded-pill bg-{{ $inquiry->status === 'replied' ? 'success' : 'secondary' }}-subtle text-{{ $inquiry->status === 'replied' ? 'success' : 'secondary' }} px-3 py-2">
-                            {{ ucfirst($inquiry->status ?? 'pending') }}
-                        </span>
-                    </div>
-                @empty
-                    <div class="text-center py-5">
-                        <i class="bi bi-chat-dots fs-1 text-muted"></i>
-                        <p class="text-muted mt-2 mb-0">No inquiries sent yet.</p>
+                        <a href="{{ route('marketplace') }}" class="btn btn-sm btn-primary mt-3 rounded-pill px-4">Browse Properties</a>
                     </div>
                 @endforelse
             </div>
         </div>
+
 
         <!-- Sidebar -->
         <div class="col-lg-4">

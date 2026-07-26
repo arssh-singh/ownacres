@@ -7,12 +7,12 @@
             <div class="col-lg-8">
                 @include('sections.index.properties', ['properties' => $properties])
                 @include('sections.index.browse')
-                @include('sections.index.aboutus')
+                {{-- @include('sections.index.aboutus') --}}
             </div>
             <div class="col-lg-4 mt-5">
                 @include('sections.index.new_user_form')
             </div>
         </div>
     </div>
-    @include('sections.index.dealers')
+    {{-- @include('sections.index.dealers') --}}
 @endsection
