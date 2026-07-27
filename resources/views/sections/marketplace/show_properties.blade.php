@@ -36,7 +36,16 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <h4 class="fw-bold">No properties found</h4>
+                    <p class="text-muted mb-0">
+                        Try changing your search or filters.
+                    </p>
+                </div>
+            </div>
+        @endforelse
     </div>
     {{-- <div class="mt-4 d-flex justify-content-center">
         {{ $properties }}
