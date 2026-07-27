@@ -1,10 +1,10 @@
 <?php
     use Illuminate\Support\Facades\Route;
-    use App\Http\Controllers\auth\ForgotPasswordController;
-    use App\Http\Controllers\auth\VerifyOtpController;
+    use App\Http\Controllers\Auth\ForgotPasswordController;
+    use App\Http\Controllers\Auth\VerifyOtpController;
     use App\Http\Controllers\Auth\ResetPasswordController;
-    use App\Http\Controllers\auth\LoginController;
-    use App\Http\Controllers\auth\RegisterController;
+    use App\Http\Controllers\Auth\LoginController;
+    use App\Http\Controllers\Auth\RegisterController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use App\Models\User;
