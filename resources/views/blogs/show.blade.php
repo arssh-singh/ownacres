@@ -117,20 +117,6 @@
                     fetchpriority="high"
                     itemprop="image">
 
-                {{-- Tags --}}
-                @if($blog->tags)
-                    <div class="mb-3">
-
-                        @foreach(explode(',', $blog->tags) as $tag)
-
-                            <span class="badge bg-primary-subtle text-primary border me-2">
-                                {{ trim(str_replace('#', '', $tag)) }}
-                            </span>
-
-                        @endforeach
-
-                    </div>
-                @endif
 
                 {{-- Meta --}}
                 <div class="d-flex align-items-center text-muted border-top border-bottom py-3 mb-5">
