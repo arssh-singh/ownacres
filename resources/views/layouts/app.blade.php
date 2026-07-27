@@ -79,7 +79,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
         {{-- <link href="{{ asset('/resources/css/style.css')  }}" rel="stylesheet"> --}}
 
-        @vite(['resources/css/style.css'])
+        {{-- @vite(['resources/css/style.css']) --}}
         @stack('styles')
     </head>
 
