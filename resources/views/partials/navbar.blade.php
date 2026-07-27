@@ -22,6 +22,19 @@
             transform .7s cubic-bezier(0.22,1,0.36,1),
             border-radius .7s cubic-bezier(0.22,1,0.36,1);
     }
+    .navbar-expanded {
+    background: #fff !important;
+    backdrop-filter: none !important;
+}
+
+.navbar-expanded .navbar-brand,
+.navbar-expanded .nav-link {
+    color: #212529 !important;
+}
+.navbar-expanded{
+    background:#fff !important;
+    backdrop-filter:none !important;
+}
 </style>
 @if(request()->routeIs('home'))
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-1 " id="bar" style="background-color: #ffffff00; " style="view-transition-name: navbar;">
@@ -110,6 +123,45 @@ window.addEventListener('scroll', function () {
             bar.classList.remove('navbar-dark');
             bar.classList.add('navbar-light');
         @endif
+    }
+});
+const navbarCollapse = document.getElementById('navbarSupportedContent');
+
+navbarCollapse.addEventListener('show.bs.collapse', function () {
+    bar.classList.add('navbar-expanded');
+    bar.classList.remove('bar-transparent');
+
+    @if(request()->routeIs('home'))
+        bar.classList.remove('navbar-dark');
+        bar.classList.add('navbar-light');
+
+        if(btnlog) btnlog.classList.replace('text-light', 'text-dark');
+        if(btnsign) btnsign.classList.replace('text-light', 'text-dark');
+        if(btndash) btndash.classList.replace('text-light', 'text-dark');
+        if(btnlogout) btnlogout.classList.replace('text-light', 'text-dark');
+    @endif
+});
+
+navbarCollapse.addEventListener('hidden.bs.collapse', function () {
+
+    bar.classList.remove('navbar-expanded');
+
+    if (window.scrollY === 0) {
+        @if(request()->routeIs('home'))
+            bar.classList.remove('navbar-light');
+            bar.classList.add('navbar-dark');
+
+            if(btnlog) btnlog.classList.replace('text-dark', 'text-light');
+            if(btnsign) btnsign.classList.replace('text-dark', 'text-light');
+            if(btndash) btndash.classList.replace('text-dark', 'text-light');
+            if(btnlogout) btnlogout.classList.replace('text-dark', 'text-light');
+
+            // Return to transparent at the top
+            bar.classList.remove('bar-down', 'shadow-lg', 'bar-transparent');
+        @endif
+    } else {
+        // Keep the scrolled style if we're not at the top
+        bar.classList.add('bar-transparent');
     }
 });
 </script>
