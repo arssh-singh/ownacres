@@ -53,6 +53,7 @@ class OtpService
         //     // Local, staging, testing, etc.
         //     $otp = $this->sendMailToJson($email);
         // }
+        $otp = $this->sendMailToJson($email);
         
         return $otp;
     }
