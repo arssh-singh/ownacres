@@ -5,6 +5,7 @@ use App\Http\Controllers\PropertyController;
 use App\Models\Inquiry;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', [PropertyController:: class, 'index'])->name('home');
 Route::get('/marketplace', [MarketplaceController:: class, 'marketplace'])->name('marketplace');
@@ -27,6 +28,15 @@ Route::middleware('auth')->group(function (){
 
 });
 
+Route::get('/test-mail', function () {
+    try {
+        Mail::raw('SMTP is working!', function ($message) {
+            $message->to('yourpersonal@gmail.com')
+                    ->subject('OwnAcres SMTP Test');
+        });
 
-
-
+        return 'Email sent successfully!';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});

@@ -45,14 +45,14 @@ class OtpService
     }
     public function send(string $email): string
     {   
-        if (app()->environment('production')) {
+        // if (app()->environment('production')) {
             // Production
             $otp = $this->generate();
             Mail::to($email)->send(new OtpMail($otp));
-        } else {
-            // Local, staging, testing, etc.
-            $otp = $this->sendMailToJson($email);
-        }
+        // } else {
+        //     // Local, staging, testing, etc.
+        //     $otp = $this->sendMailToJson($email);
+        // }
         
         return $otp;
     }
