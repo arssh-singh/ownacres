@@ -28,13 +28,13 @@
             <!-- action buttons -->
             <div class="row mt-4 g-2">
                 <div class="col-lg-4 col-md-6 col-sm-12">
-                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 w-100">
+                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 w-100 fade-anim">
                         Get Started
                     </a>
                 </div>
 
                 <div class="col-lg-4 col-md-6 col-sm-12">
-                    <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-5 w-100">
+                    <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-5 w-100 fade-anim">
                         Learn More
                     </a>
                 </div>
@@ -161,9 +161,9 @@ gsap.from('.fade-anim', {
     y: 60,
     filter: "blur(20px)",
     // scale: .01,
-    duration: .1,
+    duration: .5,
     ease: "back.out(1)",
-    stagger: 0.015
+    stagger: 0.1
 });
 });
 </script>
