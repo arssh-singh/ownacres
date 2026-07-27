@@ -13,7 +13,7 @@
 
     <!-- Cards -->
     <div class="row g-2">
-        @foreach ($properties as $property)
+        @forelse  ($properties as $property)
             <div class="col-lg-3 property-card" onclick="window.location.href='{{ route('properties.prop_details', $property->id) }}'" style="cursor:pointer;">
                 <div class="card border-0 shadow-sm">
                     <div class="position-relative">
