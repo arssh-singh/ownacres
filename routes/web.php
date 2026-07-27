@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function (){
 Route::get('/test-mail', function () {
     try {
         Mail::raw('SMTP is working!', function ($message) {
-            $message->to('yourpersonal@gmail.com')
+            $message->to('youngbrothersdev@gmail.com')
                     ->subject('OwnAcres SMTP Test');
         });
 
