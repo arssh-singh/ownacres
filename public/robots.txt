@@ -1,2 +1,19 @@
 User-agent: *
-Disallow:
+
+# Public pages
+Allow: /
+
+# Private areas
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /password
+Disallow: /profile
+Disallow: /messages
+
+# Search results (optional)
+Disallow: /search
+
+# Sitemap
+Sitemap: https://ownacres.com/sitemap.xml

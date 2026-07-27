@@ -1,11 +1,74 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light">
     <head>
-        <title>Ownacres</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <!-- SEO -->
+        <title>@yield('title', 'OwnAcres | Buy, Sell & Rent Properties')</title>
+        <meta
+            name="description"
+            content="@yield('description', 'Find properties for sale and rent across India with OwnAcres.')"
+        >
 
+        <meta
+            name="keywords"
+            content="@yield('keywords', 'real estate, properties, buy property, sell property, rent property, OwnAcres')"
+        >
+
+        <meta
+            name="robots"
+            content="@yield('robots', 'index,follow')"
+        >
+
+        <link
+            rel="canonical"
+            href="@yield('canonical', url()->current())"
+        >
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="@yield('og_type', 'website')">
+
+        <meta
+            property="og:title"
+            content="@yield('og_title', View::yieldContent('title', 'OwnAcres | Buy, Sell & Rent Properties'))"
+        >
+
+        <meta
+            property="og:description"
+            content="@yield('og_description', View::yieldContent('description', 'Find properties for sale and rent across India with OwnAcres.'))"
+        >
+
+        <meta
+            property="og:url"
+            content="@yield('og_url', url()->current())"
+        >
+
+        <meta
+            property="og:image"
+            content="@yield('og_image', asset('images/og-default.jpg'))"
+        >
+
+        <meta property="og:site_name" content="OwnAcres">
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image">
+
+        <meta
+            name="twitter:title"
+            content="@yield('twitter_title', View::yieldContent('title', 'OwnAcres | Buy, Sell & Rent Properties'))"
+        >
+
+        <meta
+            name="twitter:description"
+            content="@yield('twitter_description', View::yieldContent('description', 'Find properties for sale and rent across India with OwnAcres.'))"
+        >
+
+        <meta
+            name="twitter:image"
+            content="@yield('twitter_image', asset('images/og-default.jpg'))"
+        >
         <!-- Bootstrap CSS v5.3.8 -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -27,60 +90,7 @@
         <main>
             @yield('content')
         </main>
-        <footer class="bg-light pt-5 pb-4">
-            <div class="container-fluid px-lg-5 pt-5">
-
-                <div class="row gy-4">
-
-                    <!-- Brand -->
-                    <div class="col-lg-4">
-                        <h5 class="fw-bold">OWNACRES</h5>
-                        <p class="text-muted mt-3">
-                            Redefining the premium real estate journey through absolute clarity and design-led curation.
-                        </p>
-                    </div>
-
-                    <!-- Company -->
-                    <div class="col-lg-2">
-                        <h6 class="fw-semibold mb-3">Company</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="footer-link">ABOUT US</a></li>
-                            <li><a href="#" class="footer-link">CAREERS</a></li>
-                            <li><a href="#" class="footer-link">CONTACT</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Legal -->
-                    <div class="col-lg-3">
-                        <h6 class="fw-semibold mb-3">Legal</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="footer-link">PRIVACY POLICY</a></li>
-                            <li><a href="#" class="footer-link">TERMS OF SERVICE</a></li>
-                            <li><a href="#" class="footer-link">COOKIE POLICY</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Social -->
-                    <div class="col-lg-3">
-                        <h6 class="fw-semibold mb-3">Follow Us</h6>
-                        <div class="d-flex gap-3">
-                            <a href="#" class="footer-link">Instagram</a>
-                            <a href="#" class="footer-link">LinkedIn</a>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Divider -->
-                <hr class="my-4">
-
-                <!-- Bottom -->
-                <div class="text-center text-muted small">
-                    © 2024 LUXE ARCHIVE. ALL RIGHTS RESERVED.
-                </div>
-
-            </div>
-        </footer>
+        @include('partials.footer')
         <!-- Bootstrap JavaScript Bundle (includes Popper) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 

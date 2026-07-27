@@ -1,4 +1,28 @@
 @extends('layouts.app')
+@section(
+    'description',
+    'Browse verified properties for sale and rent across India. Search houses, apartments, plots, villas, and commercial properties on OwnAcres.'
+)
+
+@section(
+    'keywords',
+    'properties for sale, properties for rent, real estate India, houses, apartments, plots, OwnAcres'
+)
+
+@section('canonical', route('marketplace'))
+
+@section('og_type', 'website')
+
+@section('og_title', 'Properties for Sale & Rent | OwnAcres')
+
+@section(
+    'og_description',
+    'Browse verified properties for sale and rent across India.'
+)
+
+@section('og_image', asset('images/marketplace-og.jpg'))
+
+@section('twitter_image', asset('images/marketplace-og.jpg'))
 @section("content")
     <div class="container-fluid mt-5 pt-5 px-lg-5 px-sm-0" style="background-color: #f8f9fa; ">
         <div class="row">

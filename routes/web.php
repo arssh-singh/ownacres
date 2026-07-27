@@ -18,6 +18,7 @@ Route::view('/TermsAndConditions', 'terms.termsandconditions')->name('terms');
 require __DIR__.'/user.php';
 require __DIR__.'/dealers.php';
 require __DIR__.'/search.php';
+require __DIR__.'/blogs.php';
 require __DIR__.'/authenticated/dashboard.php';
 require __DIR__.'/authenticated/properties.php';
 

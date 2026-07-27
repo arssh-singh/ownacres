@@ -10,7 +10,7 @@
 
             <div class="col-lg-4">
                 <div class="position-relative overflow-hidden rounded-4">
-                    <img src="{{ asset('storage/images/house.jpg') }}"
+                    <img src="{{ asset('storage/images/properties/1.png') }}"
                          class="w-100"
                          style="height:350px;object-fit:cover;">
 
@@ -25,7 +25,7 @@
 
             <div class="col-lg-4">
                 <div class="position-relative overflow-hidden rounded-4">
-                    <img src="{{ asset('storage/images/background.jpg') }}"
+                    <img src="{{ asset('storage/images/properties/2.png') }}"
                          class="w-100"
                          style="height:350px;object-fit:cover;">
 
@@ -40,7 +40,7 @@
 
             <div class="col-lg-4">
                 <div class="position-relative overflow-hidden rounded-4">
-                    <img src="{{ asset('storage/images/house_white.png') }}"
+                    <img src="{{ asset('storage/images/properties/3.png') }}"
                          class="w-100"
                          style="height:350px;object-fit:cover;">
 

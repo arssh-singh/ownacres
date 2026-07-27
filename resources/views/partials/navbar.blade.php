@@ -45,7 +45,7 @@
                 <a class="nav-link fade-anim" aria-current="page" href="{{ route('dealers') }}">Dealers</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link fade-anim" href="#">About Us</a>
+                <a class="nav-link fade-anim" href="{{ route('blogs') }}">Education</a>
             </li>
         </ul>
         <div class="d-flex">

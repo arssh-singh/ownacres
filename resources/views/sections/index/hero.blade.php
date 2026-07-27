@@ -27,13 +27,13 @@
             </p>
             <!-- action buttons -->
             <div class="row mt-4 g-2">
-                <div class="col-lg-6 col-sm-12">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 w-100">
                         Get Started
                     </a>
                 </div>
 
-                <div class="col-lg-6 col-sm-12">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <a href="#" class="btn btn-outline-light btn-lg rounded-pill px-5 w-100">
                         Learn More
                     </a>

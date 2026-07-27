@@ -20,26 +20,12 @@
         </div>
     </form>
 
-  {{-- Trust card --}}
-  <div class="border rounded-4 p-4 bg-white">
-    <p class="text-uppercase text-secondary small fw-semibold mb-3" style="letter-spacing:.07em">Why choose us</p>
+{{-- About card --}}
+<div class="border rounded-4 p-5 bg-white">
+  <p class="text-uppercase text-secondary fw-semibold mb-3" style="letter-spacing:.07em; font-size:13px;">About OWNACRES</p>
 
-    @foreach([
-      ['ti-shield-check', 'Verified listings',    'Every property is reviewed for accuracy before going live.'],
-      ['ti-users',        'Trusted advisors',      'Expert guidance from search to handover.'],
-      ['ti-trending-down','Best market prices',    'Homes matched to your budget, no hidden markups.'],
-      ['ti-star',         '500+ happy clients',    'Families finding their perfect home, every day.'],
-    ] as [$icon, $title, $desc])
-    <div class="d-flex align-items-start gap-3 mb-3">
-      <div class="border rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:36px;height:36px">
-        <i class="ti {{ $icon }} text-secondary"></i>
-      </div>
-      <div>
-        <p class="fw-medium mb-0 small">{{ $title }}</p>
-        <p class="text-secondary mb-0" style="font-size:12px">{{ $desc }}</p>
-      </div>
-    </div>
-    @endforeach
-  </div>
-
+  <p class="text-secondary mb-0" style="font-size:16px; line-height:1.8;">
+    OWNACRES is a real estate platform built to make finding and managing property simple. We connect buyers, sellers, and dealers on one trusted space, bringing clarity to a process that's often confusing. Our goal is to remove the guesswork from real estate — giving people the tools and confidence they need to make one of the biggest decisions of their lives.
+  </p>
+</div>
 </div>
