@@ -12,7 +12,7 @@
             <div class="d-flex align-items-center">
 
                 <img
-                    src="{{ asset('storage/' . $conversation->buyer->profile_image) }}"
+                    src="{{ $conversation->buyer->profile_image_url }}"
                     class="rounded-circle me-3"
                     width="55"
                     height="55"
@@ -25,7 +25,7 @@
                         {{ $conversation->buyer->name }}
                     </h6>
 
-                    <small class="text-muted">
+                    <small>
                         Conversation #{{ $conversation->id }}
                     </small>
 

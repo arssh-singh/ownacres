@@ -9,12 +9,18 @@
 <div class="d-flex flex-column h-100">
 
     {{-- Header --}}
+    @php
+        $otherUser = $conversation->buyer_id == auth()->id()
+            ? $conversation->seller
+            : $conversation->buyer;
+    @endphp
+
     <div class="border-bottom p-3">
 
         <div class="d-flex align-items-center">
 
             <img
-                src="{{ asset('storage/'.$conversation->buyer->profile_image) }}"
+                src="{{ $otherUser->profile_image_url }}"
                 class="rounded-circle me-3"
                 width="45"
                 height="45"
@@ -22,7 +28,7 @@
             >
 
             <h5 class="mb-0">
-                {{ $conversation->buyer->name }}
+                {{ $otherUser->name }}
             </h5>
 
         </div>

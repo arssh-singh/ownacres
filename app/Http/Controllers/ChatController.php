@@ -6,7 +6,7 @@ use App\Models\Chat\ChatConversation;
 use App\Models\Chat\ChatMessage;
 use Illuminate\Http\Request;
 use App\Models\Property;
-
+use App\Events\MessageSent;
 class ChatController extends Controller
 {
     /**
@@ -68,15 +68,18 @@ class ChatController extends Controller
             'message' => ['required', 'string'],
         ]);
 
-        ChatMessage::create([
+        $message = ChatMessage::create([
             'chat_conversation_id' => $request->conversation_id,
             'sender_id' => auth()->id(),
             'message' => $request->message,
             'is_read' => false,
         ]);
 
+        broadcast(new MessageSent($message))->toOthers();
+
         return response()->json([
-            'success' => true
+            'success' => true,
+            'message' => $message->load('sender'),
         ]);
     }
 
@@ -97,12 +100,14 @@ class ChatController extends Controller
         $validated = $request->validate([
             'message' => ['required', 'string', 'max:5000'],
         ]);
-        ChatMessage::create([
+        $message = ChatMessage::create([
             'chat_conversation_id' => $conversation->id,
             'sender_id'            => auth()->id(),
             'message'              => $validated['message'],
             'is_read'              => false,
         ]);
+
+        broadcast(new MessageSent($message))->toOthers();
 
         return redirect()->route('dashboard.chat');
     }

@@ -1,5 +1,5 @@
 @extends('layouts.user')
-
+@vite(['resources/js/app.js'])
 @section('content')
 
 <div class="container-fluid mt-4" style="height:75vh;">
@@ -7,14 +7,21 @@
     <div class="row h-100">
 
         {{-- Conversations --}}
-        <div class="col-md-4 border-end h-100 overflow-auto">
+        <div class="col-md-4 border-end h-100 overflow-auto" id="conversations-pane">
 
             @include('auth.dashboard.messages.conversations')
 
         </div>
 
         {{-- Chat --}}
-        <div class="col-md-8 h-100">
+        <div class="col-md-8 h-100 d-none d-md-block" id="chat-pane">
+
+            {{-- Mobile back bar --}}
+            <div class="d-md-none d-flex align-items-center border-bottom py-2 px-2">
+                <button type="button" class="btn btn-sm btn-link text-decoration-none ps-0" id="back-to-conversations">
+                    &larr; Back
+                </button>
+            </div>
 
             <div id="message-box" class="h-100">
 
@@ -32,12 +39,101 @@
 
 
 @push('scripts')
-
 <script>
 
 let currentConversation = {{ $conversation ? $conversation->id : 'null' }};
+let currentChannel = null;
+
+const MOBILE_BREAKPOINT = 768;
+function isMobile(){
+    return window.innerWidth < MOBILE_BREAKPOINT;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mobile Pane Switching
+|--------------------------------------------------------------------------
+*/
+
+function showChatPane(){
+
+    if(!isMobile()) return;
+
+    document.getElementById('conversations-pane').classList.add('d-none');
+
+    const chatPane = document.getElementById('chat-pane');
+    chatPane.classList.remove('d-none');
+    chatPane.classList.add('d-block');
+
+}
+
+function showConversationsPane(){
+
+    if(!isMobile()) return;
+
+    document.getElementById('conversations-pane').classList.remove('d-none');
+
+    const chatPane = document.getElementById('chat-pane');
+    chatPane.classList.add('d-none');
+    chatPane.classList.remove('d-block');
+
+}
+
+function resetPanesForViewport(){
+
+    const conversationsPane = document.getElementById('conversations-pane');
+    const chatPane = document.getElementById('chat-pane');
+
+    if(isMobile()){
+
+        // Mobile: show chat only if a conversation is already open
+        if(currentConversation){
+            conversationsPane.classList.add('d-none');
+            chatPane.classList.remove('d-none');
+            chatPane.classList.add('d-block');
+        } else {
+            conversationsPane.classList.remove('d-none');
+            chatPane.classList.add('d-none');
+            chatPane.classList.remove('d-block');
+        }
+
+    } else {
+
+        // Desktop: always show both
+        conversationsPane.classList.remove('d-none');
+        chatPane.classList.remove('d-none');
+        chatPane.classList.add('d-block');
+
+    }
+
+}
+
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resetPanesForViewport, 150);
+});
 
 
+function joinConversation(conversationId){
+    // Leave previous channel
+    if(currentChannel){
+        window.Echo.leave(currentChannel);
+    }
+
+    currentChannel = `conversation.${conversationId}`;
+
+    window.Echo.private(currentChannel)
+        .listen('.message.sent', (e) => {
+
+            console.log('New message:', e);
+
+            // Reload current conversation
+            loadConversation(conversationId);
+
+        });
+
+}
 /*
 |--------------------------------------------------------------------------
 | Open Conversation
@@ -61,7 +157,11 @@ async function loadConversation(id){
 
     attachSendEvent();
 
+    attachBackEvent();
+
     scrollBottom();
+
+    showChatPane();
 
 }
 
@@ -80,13 +180,51 @@ function highlightConversation(id){
 
         if(item.dataset.id == id){
 
-            item.classList.add('active');
+            item.classList.add('active', 'text-light');
 
         }
 
     });
 
 }
+
+function waitForEcho(callback) {
+    if (window.Echo) {
+        callback();
+    } else {
+        setTimeout(() => waitForEcho(callback), 100);
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Back Button (mobile)
+|--------------------------------------------------------------------------
+*/
+
+function attachBackEvent(){
+
+    const backBtn = document.getElementById('back-to-conversations');
+
+    if(!backBtn) return;
+
+    backBtn.addEventListener('click', showConversationsPane);
+
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    highlightConversation(currentConversation);
+    attachSendEvent();
+    attachBackEvent();
+    scrollBottom();
+    resetPanesForViewport();
+
+    if (currentConversation) {
+        waitForEcho(() => {
+            joinConversation(currentConversation);
+        });
+    }
+});
 
 
 /*
@@ -167,17 +305,6 @@ function scrollBottom(){
     }
 
 }
-
-
-document.addEventListener('DOMContentLoaded', ()=>{
-
-    highlightConversation(currentConversation);
-
-    attachSendEvent();
-
-    scrollBottom();
-
-});
 
 </script>
 
