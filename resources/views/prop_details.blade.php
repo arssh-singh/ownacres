@@ -95,7 +95,7 @@
             </span>
             <h1 class="fw-bold display-5 m-0">{{ $title }}</h1>
             <p class="text-muted mt-2 mb-0">
-                <i class="bi bi-geo-alt-fill text-primary"></i> {{ $property->location->city }}
+                <i class="bi bi-geo-alt-fill text-primary"></i> {{ $property->location?->city }}
             </p>
         </div>
 
@@ -130,38 +130,6 @@
                 <p class="text-muted lh-lg">{{ $description }}</p>
 
                 <hr class="my-4">
-
-                {{-- <h5 class="fw-bold mb-3">Overview</h5>
-                <div class="row g-3">
-                    <div class="col-6 col-md-3">
-                        <div class="border rounded-3 p-3 text-center h-100">
-                            <i class="bi bi-textarea fs-3 text-primary"></i>
-                            <p class="mb-0 mt-2 small text-muted">Area</p>
-                            <p class="fw-semibold mb-0">{{ $property->area }} sqft</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="border rounded-3 p-3 text-center h-100">
-                            <i class="bi bi-door-open-fill fs-3 text-primary"></i>
-                            <p class="mb-0 mt-2 small text-muted">Bedrooms</p>
-                            <p class="fw-semibold mb-0">{{ $property->bedrooms }}</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="border rounded-3 p-3 text-center h-100">
-                            <i class="bi bi-droplet-fill fs-3 text-primary"></i>
-                            <p class="mb-0 mt-2 small text-muted">Bathrooms</p>
-                            <p class="fw-semibold mb-0">{{ $property->bathrooms }}</p>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="border rounded-3 p-3 text-center h-100">
-                            <i class="bi bi-calendar-event fs-3 text-primary"></i>
-                            <p class="mb-0 mt-2 small text-muted">Listed</p>
-                            <p class="fw-semibold mb-0">{{ $property->created_at->format('M Y') }}</p>
-                        </div>
-                    </div>
-                </div> --}}
 
                 @if (!empty($property->amenities))
                     <hr class="my-4">

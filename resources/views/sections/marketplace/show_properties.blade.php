@@ -19,7 +19,7 @@
                     <div class="position-relative">
                         <img src="{{asset('storage/' . $property->coverImage?->file_path)}}"
                             class="card-img-top hero-image" style="height:250px; object-fit:cover;" >
-                        <span class="badge bg-light text-dark position-absolute top-0 start-0 m-3">{{ $property->pricing->listing_type }}</span>
+                        <span class="badge bg-light text-dark position-absolute top-0 start-0 m-3">{{ $property->pricing?->listing_type }}</span>
                     </div>
                     <div class="card-body">
                         <h5 class="fw-bold ">₹{{ number_format($property->price, 2) }}</h5>
