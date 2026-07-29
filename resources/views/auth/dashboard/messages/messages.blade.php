@@ -125,9 +125,6 @@ function joinConversation(conversationId){
 
     window.Echo.private(currentChannel)
         .listen('.message.sent', (e) => {
-
-            console.log('New message:', e);
-
             // Reload current conversation
             loadConversation(conversationId);
 
