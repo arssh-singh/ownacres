@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
 <style>
     .blog-heading { font-family: 'Fraunces', serif; letter-spacing: -0.01em; }
     .blog-eyebrow {
