@@ -77,6 +77,8 @@
             crossorigin="anonymous"
         />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="icon" type="image/png" href="{{ asset("storage/images/logo.png") }}">
+
         {{-- <link href="{{ asset('/resources/css/style.css')  }}" rel="stylesheet"> --}}
 
         {{-- @vite(['resources/css/style.css']) --}}
