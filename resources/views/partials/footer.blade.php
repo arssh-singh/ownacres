@@ -34,14 +34,28 @@
         border-color: #000000;
         background-color: #00000008;
     }
+    .footer-logo-text {
+        font-size: clamp(4rem, 12vw, 10rem);
+        font-family: 'Fraunces', serif;
+        font-weight: 900;
+        letter-spacing: -4px;
+        line-height: 0.9;
+        text-align: center;
+        color: #335ec240; /* Very light gray */
+        margin: 60px 0 0;
+        user-select: none;
+        text-transform: uppercase;
+    }
 </style>
 
-<footer class="footer-ownacres pt-5 pb-4">
+<footer class="footer-ownacres pt-5 pb-0 mb-0">
     <div class="container-fluid px-lg-5">
         <div class="row gy-4">
             <!-- Brand -->
             <div class="col-lg-4 col-md-6">
-                <a href="{{ route('home') }}" class="navbar-brand fw-bold footer-brand text-dark fs-4 d-inline-block mb-3">OWNACRES</a>
+                <a href="{{ route('home') }}" class="navbar-brand fw-bold footer-brand text-dark fs-4 d-inline-block mb-3">
+                    <img src="{{ asset('storage/images/logo.png') }}" alt="OwnAcres" height="45">
+                </a>
                 <p class="mb-4" style="max-width: 320px;">
                     Find, list, and manage properties with ease. Your trusted partner in real estate — from first search to final sale.
                 </p>
@@ -104,5 +118,8 @@
                 <a href="#">Cookies</a>
             </div>
         </div>
+    </div>
+    <div class="footer-logo-text pb-0 mb-0">
+        OWNACRES
     </div>
 </footer>
