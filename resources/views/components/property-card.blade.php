@@ -76,6 +76,8 @@
 
     <div class="card-body">
         <h5 class="card-title mb-1">{{ $title }}</h5>
-        <p class="card-text text-muted small mb-0">{{ $description }}</p>
+        <p class="card-text text-muted small mb-0">
+            {{ Str::limit($description, 80) }}
+        </p>
     </div>
 </div>
