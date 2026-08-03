@@ -12,9 +12,9 @@ class QdrantService
 
     public function __construct()
     {
-        $this->url = rtrim(env('QDRANT_URL'), '/');
-        $this->apiKey = env('QDRANT_API_KEY');
-        $this->collection = env('QDRANT_COLLECTION');
+        $this->url = rtrim(config('services.qdrant.url'), '/');
+        $this->apiKey = config('services.qdrant.api_key');
+        $this->collection = config('services.qdrant.collection');
     }
 
     public function upsert(int $id, array $vector, array $payload = []): array
@@ -41,7 +41,7 @@ class QdrantService
     public function search(array $vector, int $limit = 2)
     {
         $response =  Http::withHeaders([
-                        'api-key' => env('QDRANT_API_KEY'),
+                        'api-key' => $this->apiKey,
                     ])->post(
                         "{$this->url}/collections/properties/points/query",
                         [
