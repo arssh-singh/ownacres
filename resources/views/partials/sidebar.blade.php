@@ -97,5 +97,15 @@
                 <i class="bi bi-plus" aria-hidden="true"></i> List New Property
             </a>
         </li>
+        @auth
+            @if(auth()->user()?->role === "admin")
+                <li class="nav-item mt-auto ">
+                    <hr class="nav-divider">
+                    <a href="{{ route('blog.create') }}" class="nav-link nav-link--cta">
+                        <i class="bi bi-card-heading" aria-hidden="true"></i> Create Blog
+                    </a>
+                </li>
+            @endif
+        @endauth
     </ul>
 </div>

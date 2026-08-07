@@ -4,7 +4,7 @@ use App\Models\Property;
 use App\Models\Chat\ChatConversation;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+
 
 
 Route::middleware('auth')->group(function () {
@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard.savedProperties');
     // dashboard messages
     require __DIR__.'/chat.php';
+    require __DIR__.'/blogs.php';
 
     Route::view('/dashboard/empty/', 'auth.dashboard.empty.empty')->name('dashboard.empty');
 });
