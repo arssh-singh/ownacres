@@ -57,6 +57,10 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
+        \Log::info('BLOG UPDATE REACHED', [
+            'blog_id' => $blog->id,
+            'user_id' => auth()->id(),
+        ]);
         $this->authorize('update', $blog);
 
         $validated = $request->validate([
