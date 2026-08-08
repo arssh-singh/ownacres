@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use app\Policies\BlogPolicy;
 
 class Blog extends Model
 {
     protected $fillable = [
+                            'status',
                             'title',
                             'subtitle',
                             'content',
@@ -16,5 +18,8 @@ class Blog extends Model
                             'image_url',
                             'date_published',
                             'date_modified',
-                        ];
+                       ];
+    protected $policies = [
+        Blog::class => BlogPolicy::class,
+    ];
 }

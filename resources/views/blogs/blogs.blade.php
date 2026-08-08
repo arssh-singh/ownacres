@@ -113,10 +113,6 @@
                                 </p>
                             @endif
 
-                            <p class="text-secondary" style="font-size: .9rem;">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($blog->content), 130) }}
-                            </p>
-
                             <div class="mt-auto pt-2">
                                 <span class="read-link">
                                     Read article <span class="arrow">→</span>

@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->enum('status', ['draft', 'published', 'archived'])
-                  ->default('published')
-                  ->after('id'); // Change 'content' to the column after which you want it
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft')->nullable(false)->change();
         });
     }
 
@@ -25,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('blogs', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->enum('status', ['draft', 'published', 'archived'])->default('published');
         });
     }
 };

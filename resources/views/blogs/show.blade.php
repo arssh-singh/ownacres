@@ -1,168 +1,193 @@
 @extends('layouts.app')
-{{-- ========================= --}}
-{{-- SEO --}}
-{{-- ========================= --}}
-
-@php
-    use Illuminate\Support\Str;
-
-    $seoTitle = $blog->seo_title ?: $blog->title . ' | OwnAcres';
-
-    $seoDescription = $blog->meta_description
-        ?: Str::limit(strip_tags($blog->subtitle ?: $blog->content), 155);
-
-    $seoImage = asset('storage/' . $blog->image_url);
-
-    $seoCanonical = route('blogs.show', $blog->id);
-@endphp
-
-@section('title', $seoTitle)
-
-@section('description', $seoDescription)
-
-@section('canonical', $seoCanonical)
-
-@section('og_type', 'article')
-
-@section('og_title', $seoTitle)
-
-@section('og_description', $seoDescription)
-
-@section('og_image', $seoImage)
-
-@section('twitter_image', $seoImage)
-
-{{-- ========================= --}}
-{{-- Content --}}
-{{-- ========================= --}}
 
 @section('content')
-
-{{-- JSON-LD Article Schema --}}
-<script type="application/ld+json">
-{
-    "@@context":"https://schema.org",
-    "@@type":"Article",
-    "headline":"{{ e($blog->title) }}",
-    "description":"{{ e($blog->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($blog->subtitle ?: $blog->content),155)) }}",
-    "keywords":"{{ $blog->tags }}",
-    "articleSection":"Blog",
-    "url":"{{ route('blogs.show',$blog->id) }}",
-    "image":"{{ asset('storage/'.$blog->image_url) }}",
-    "datePublished":"{{ \Carbon\Carbon::parse($blog->date_published)->toIso8601String() }}",
-    "dateModified":"{{ $blog->updated_at->toIso8601String() }}",
-    "author":{
-        "@@type":"Person",
-        "name":"{{ $blog->author->name ?? 'OwnAcres' }}"
-    },
-    "publisher":{
-        "@type":"Organization",
-        "name":"OwnAcres",
-        "logo":{
-            "@@type":"ImageObject",
-            "url":"{{ asset('images/logo.png') }}"
-        }
-    },
-    "mainEntityOfPage":{
-        "@@type":"WebPage",
-        "@@id":"{{ route('blogs.show',$blog->id) }}"
-    }
-}
-</script>
-
-<main class="container py-5 mt-5">
-
-    <article itemscope itemtype="https://schema.org/Article">
-        <div class="row justify-content-center">
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('home') }}">Home</a>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('blogs') }}">Blog</a>
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        {{ $blog->title }}
-                    </li>
-
-                </ol>
-            </nav>
-            <div class="col-lg-9">
-                {{-- Title --}}
-                <h1 class="display-4 fw-bold mb-3" itemprop="headline">
-                    {{ $blog->title }}
-                </h1>
-
-                {{-- Subtitle --}}
-                @if($blog->subtitle)
-                    <p
-                            class="lead text-secondary mb-4"
-                            itemprop="description"
-                        >
-                        {{ $blog->subtitle }}
-                    </p>
+<div class="container pt-5 mt-5">
+    <div class="col-12 col-md-8 mx-auto">
+        <article>
+            <header class="mb-4">
+                <h1 class="mb-1">{{ $blog?->title }}</h1>
+                @if($blog?->subtitle)
+                    <h6 class="text-muted fw-normal">{{ $blog->subtitle }}</h6>
                 @endif
-                {{-- Hero Image --}}
-                <img src="{{ asset('storage/' . $blog->image_url) }}"
+            </header>
+
+            @if($blog?->image_url)
+                <img
+                    class="img-fluid rounded mb-4"
+                    src="{{ asset('storage/'.$blog->image_url) }}"
                     alt="{{ $blog->title }}"
-                    title="{{ $blog->title }}"
-                    width="1200"
-                    height="630"
-                    class="img-fluid rounded-4 shadow-sm mb-5 w-100"
-                    style="max-height:500px; object-fit:cover;" loading="eager"
-                    fetchpriority="high"
-                    itemprop="image">
+                />
+            @endif
 
-
-                {{-- Meta --}}
-                <div class="d-flex align-items-center text-muted border-top border-bottom py-3 mb-5">
-
-                    <span
-                        itemprop="author"
-                        itemscope
-                        itemtype="https://schema.org/Person"
-                    >
-                        <strong itemprop="name">
-                            {{ $blog->author->name ?? 'OwnAcres' }}
-                        </strong>
-                    </span>
-
-                    <span class="mx-3">•</span>
-                    <span>
-
-                    {{ max(1, ceil(str_word_count(strip_tags($blog->content)) / 200)) }} min read
-
-                    </span>
-
-                    <span class="mx-3">•</span>
-
-                    <time
-                        datetime="{{ \Carbon\Carbon::parse($blog->date_published)->toDateString() }}"
-                        itemprop="datePublished"
-                    >
-                        {{ \Carbon\Carbon::parse($blog->date_published)->format('F d, Y') }}
-                    </time>
-
-                </div>
-
-                {{-- Content --}}
-                <section
-                    class="blog-content fs-5 lh-lg"
-                    itemprop="articleBody"
-                >
-
-                    {!! $blog->content !!}
-
-                </section>
-
-            </div>
-
-        </div>
-    </article>
-</main>
-
+            <div id="blog-content"></div>
+        </article>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const data = @json(json_decode($blog->content, true));
+    const container = document.getElementById("blog-content");
+
+    const renderers = {
+
+        header(block) {
+            // clamp heading level between 2-6 for sane blog hierarchy, add responsive fluid type
+            const level = Math.min(Math.max(block.data.level, 2), 6);
+            return `
+                <h${level} class="fw-bold mb-3 mb-md-4 lh-sm">
+                    ${block.data.text}
+                </h${level}>
+            `;
+        },
+
+        paragraph(block) {
+            return `
+                <p class="mb-3 mb-md-4 fs-6 fs-md-5 lh-lg text-body">
+                    ${block.data.text}
+                </p>
+            `;
+        },
+
+        list(block) {
+            const tag = block.data.style === "ordered" ? "ol" : "ul";
+
+            const items = block.data.items
+                .map(item => `<li class="mb-2">${item.content}</li>`)
+                .join("");
+
+            return `
+                <${tag} class="mb-3 mb-md-4 ps-4 fs-6 fs-md-5 lh-lg">
+                    ${items}
+                </${tag}>
+            `;
+        },
+
+        table(block) {
+            if (!block.data?.content?.length) return "";
+
+            const [headRow, ...bodyRows] = block.data.content;
+            const withHeadings = block.data.withHeadings;
+
+            const theadHtml = withHeadings
+                ? `
+                    <thead class="table-light">
+                        <tr>
+                            ${headRow.map(cell => `<th scope="col">${cell}</th>`).join("")}
+                        </tr>
+                    </thead>
+                `
+                : "";
+
+            const bodySource = withHeadings ? bodyRows : block.data.content;
+
+            const tbodyHtml = bodySource
+                .map(row => `
+                    <tr>
+                        ${row.map(cell => `<td>${cell}</td>`).join("")}
+                    </tr>
+                `)
+                .join("");
+
+            return `
+                <div class="table-responsive my-4 rounded border">
+                    <table class="table table-bordered table-striped table-hover align-middle mb-0 small small-md-normal">
+                        ${theadHtml}
+                        <tbody>
+                            ${tbodyHtml}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        },
+
+        quote(block) {
+            return `
+                <figure class="border-start border-4 border-primary ps-3 ps-md-4 py-1 my-4 my-md-5 bg-light bg-opacity-50 rounded-end">
+                    <blockquote class="blockquote mb-2 fs-6 fs-md-5 fst-italic">
+                        <p class="mb-0">${block.data.text}</p>
+                    </blockquote>
+                    ${
+                        block.data.caption
+                            ? `<figcaption class="blockquote-footer mt-2 mb-0">
+                                ${block.data.caption}
+                            </figcaption>`
+                            : ""
+                    }
+                </figure>
+            `;
+        },
+
+        delimiter() {
+            return `
+                <div class="text-center my-4 my-md-5">
+                    <span class="fs-4 text-muted">⁂</span>
+                </div>
+            `;
+        },
+        image(block) {
+            const data = block.data || {};
+            const file = data.file || {};
+            const url = file.url;
+
+            if (!url) {
+                return "";
+            }
+
+            const caption = data.caption
+                ? `
+                    <figcaption class="figure-caption mt-2 text-center">
+                        ${data.caption}
+                    </figcaption>
+                `
+                : "";
+
+            const imageClasses = [
+                "img-fluid",
+                "rounded",
+                data.withBorder ? "border" : "",
+                data.withBackground ? "p-3 bg-light" : "",
+            ]
+                .filter(Boolean)
+                .join(" ");
+
+            const imageStyle = data.stretched
+                ? "width: 100%;"
+                : "";
+
+            return `
+                <figure class="my-4 my-md-5 ${data.stretched ? "w-100" : ""}">
+                    <img
+                        src="${url}"
+                        alt="${data.caption || ""}"
+                        class="${imageClasses}"
+                        style="${imageStyle}"
+                        loading="lazy"
+                    >
+                    ${caption}
+                </figure>
+            `;
+        },
+
+    };
+
+    let html = "";
+
+    data.blocks.forEach(block => {
+
+        if (renderers[block.type]) {
+            html += renderers[block.type](block);
+        } else {
+            console.warn("Unsupported block:", block.type);
+        }
+
+    });
+
+    container.innerHTML = html;
+
+});
+</script>
+@endpush

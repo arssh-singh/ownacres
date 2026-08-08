@@ -1,5 +1,5 @@
 <style>
-    .sidebar-nav {
+.sidebar-nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -71,12 +71,20 @@
     <ul class="sidebar-nav">
         @php
             $links = [
-                ['route' => 'dashboard',              'icon' => 'bi-columns',  'label' => 'Home'],
+                ['route' => 'dashboard',               'icon' => 'bi-columns',  'label' => 'Home'],
                 ['route' => 'dashboard.profile',       'icon' => 'bi-person',   'label' => 'Profile'],
-                ['route' => 'dashboard.chat',       'icon' => 'bi-chat',   'label' => 'Messages'],
+                ['route' => 'dashboard.chat',          'icon' => 'bi-chat',     'label' => 'Messages'],
                 ['route' => 'dashboard.properties',    'icon' => 'bi-houses',   'label' => 'Properties'],
-                ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark', 'label' => 'Saved Properties']
+                ['route' => 'dashboard.savedProperties','icon' => 'bi-bookmark','label' => 'Saved Properties'],
             ];
+
+            if (auth()->user()?->role === "admin") {
+                $links[] = [
+                    'route' => 'blog.index',
+                    'icon'  => 'bi-card-heading',
+                    'label' => 'Blogs',
+                ];
+            }
         @endphp
 
         @foreach ($links as $link)
@@ -99,11 +107,17 @@
         </li>
         @auth
             @if(auth()->user()?->role === "admin")
-                <li class="nav-item mt-auto ">
+                <li class="nav-item mt-auto">
                     <hr class="nav-divider">
-                    <a href="{{ route('blog.create') }}" class="nav-link nav-link--cta">
-                        <i class="bi bi-card-heading" aria-hidden="true"></i> Create Blog
-                    </a>
+
+                    <form action="{{ route('blog.store') }}" method="POST">
+                        @csrf
+
+                        <button type="submit" class="nav-link nav-link--cta border-0 bg-transparent w-100 text-start">
+                            <i class="bi bi-card-heading" aria-hidden="true"></i>
+                            Create Blog
+                        </button>
+                    </form>
                 </li>
             @endif
         @endauth
