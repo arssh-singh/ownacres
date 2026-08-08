@@ -1,5 +1,21 @@
 @extends('layouts.app')
+@section('title', $blog->meta_title ?: $blog->title)
+@section('description', $blog->meta_description ?: $blog->subtitle)
+@section('canonical', route('blogs.show', ['blog' => $blog->id]))
+@push('styles')
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap" rel="stylesheet">
+<style>
+.blog-paragraph {
+    font-family: "Lora", Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    letter-spacing: 0.005em;
+}
+</style>    
+@endpush
 @section('content')
 <div class="container pt-5 mt-5">
     <div class="col-12 col-md-8 mx-auto">
@@ -7,7 +23,7 @@
             <header class="mb-4">
                 <h1 class="mb-1">{{ $blog?->title }}</h1>
                 @if($blog?->subtitle)
-                    <h6 class="text-muted fw-normal">{{ $blog->subtitle }}</h6>
+                    <h6 class="text-muted fw-normal fst-italic">{{ $blog->subtitle }}</h6>
                 @endif
             </header>
 
@@ -43,10 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </h${level}>
             `;
         },
-
         paragraph(block) {
             return `
-                <p class="mb-3 mb-md-4 fs-6 fs-md-5 lh-lg text-body">
+                <p class="mb-3 mb-md-4 fs-6 fs-md-5 lh-lg text-body blog-paragraph">
                     ${block.data.text}
                 </p>
             `;
