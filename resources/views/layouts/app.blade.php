@@ -4,40 +4,58 @@
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
-        <!-- SEO -->
-        <title>@yield('title', 'OwnAcres | Buy, Sell & Rent Properties')</title>
+
+        <!-- SEO Title -->
+        <title>
+            @yield('title', 'OwnAcres | Buy, Sell & Rent Properties')
+        </title>
+
+        <!-- SEO Description -->
         <meta
             name="description"
-            content="@yield('description', 'Find properties for sale and rent across India with OwnAcres.')"
+            content="@yield(
+                'description',
+                'Find properties for sale and rent across India with OwnAcres.'
+            )"
         >
 
-        <meta
-            name="keywords"
-            content="@yield('keywords', 'real estate, properties, buy property, sell property, rent property, OwnAcres')"
-        >
-
+        <!-- Robots -->
         <meta
             name="robots"
             content="@yield('robots', 'index,follow')"
         >
 
+        <!-- Canonical -->
         <link
             rel="canonical"
             href="@yield('canonical', url()->current())"
         >
-
         <!-- Open Graph -->
-        <meta property="og:type" content="@yield('og_type', 'website')">
+        <meta
+            property="og:type"
+            content="@yield('og_type', 'website')"
+        >
 
         <meta
             property="og:title"
-            content="@yield('og_title', View::yieldContent('title', 'OwnAcres | Buy, Sell & Rent Properties'))"
+            content="@yield(
+                'og_title',
+                View::yieldContent(
+                    'title',
+                    'OwnAcres | Buy, Sell & Rent Properties'
+                )
+            )"
         >
 
         <meta
             property="og:description"
-            content="@yield('og_description', View::yieldContent('description', 'Find properties for sale and rent across India with OwnAcres.'))"
+            content="@yield(
+                'og_description',
+                View::yieldContent(
+                    'description',
+                    'Find properties for sale and rent across India with OwnAcres.'
+                )
+            )"
         >
 
         <meta
@@ -47,28 +65,67 @@
 
         <meta
             property="og:image"
-            content="@yield('og_image', asset('images/og-default.jpg'))"
+            content="@yield(
+                'og_image',
+                asset('storage/images/seo/og_default.png')
+            )"
         >
 
-        <meta property="og:site_name" content="OwnAcres">
+        <meta
+            property="og:site_name"
+            content="ownacres"
+        >
+
+        <meta
+            property="og:locale"
+            content="en_IN"
+        >
 
         <!-- Twitter -->
-        <meta name="twitter:card" content="summary_large_image">
+        <meta
+            name="twitter:card"
+            content="summary_large_image"
+        >
 
         <meta
             name="twitter:title"
-            content="@yield('twitter_title', View::yieldContent('title', 'OwnAcres | Buy, Sell & Rent Properties'))"
+            content="@yield(
+                'twitter_title',
+                View::yieldContent(
+                    'title',
+                    'OwnAcres | Buy, Sell & Rent Properties'
+                )
+            )"
         >
 
         <meta
             name="twitter:description"
-            content="@yield('twitter_description', View::yieldContent('description', 'Find properties for sale and rent across India with OwnAcres.'))"
+            content="@yield(
+                'twitter_description',
+                View::yieldContent(
+                    'description',
+                    'Find properties for sale and rent across India with OwnAcres.'
+                )
+            )"
         >
 
         <meta
             name="twitter:image"
-            content="@yield('twitter_image', asset('images/og-default.jpg'))"
+            content="@yield(
+                'twitter_image',
+                asset('images/og-default.jpg')
+            )"
         >
+
+        <!-- Favicon -->
+        <link
+            rel="icon"
+            type="image/png"
+            href="{{ asset('storage/images/logo.png') }}"
+        >
+        @stack('seo')
+        @stack('structured-data')
+
         <!-- Bootstrap CSS v5.3.8 -->
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"

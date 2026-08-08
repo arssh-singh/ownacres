@@ -1,18 +1,18 @@
 User-agent: *
 
-# Public pages
+# Allow public pages
 Allow: /
 
 # Private areas
-Disallow: /admin
-Disallow: /dashboard
+Disallow: /admin/
+Disallow: /dashboard/
 Disallow: /login
 Disallow: /register
 Disallow: /password
-Disallow: /profile
-Disallow: /messages
+Disallow: /profile/
+Disallow: /messages/
 
-# Search results (optional)
+# Search results
 Disallow: /search
 
 # Sitemap

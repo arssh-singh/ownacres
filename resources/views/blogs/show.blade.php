@@ -1,7 +1,135 @@
 @extends('layouts.app')
-@section('title', $blog->meta_title ?: $blog->title)
-@section('description', $blog->meta_description ?: $blog->subtitle)
-@section('canonical', route('blogs.show', ['blog' => $blog->id]))
+{{-- =========================
+    Basic SEO
+========================= --}}
+
+@section(
+    'title',
+    $blog->meta_title ?: $blog->title
+)
+
+@section(
+    'description',
+    $blog->meta_description ?: $blog->subtitle
+)
+
+@section(
+    'robots',
+    'index,follow'
+)
+{{-- =========================
+    Canonical
+========================= --}}
+
+@section(
+    'canonical',
+    url()->current()
+)
+
+{{-- =========================
+    Open Graph
+========================= --}}
+
+@section('og_type', 'article')
+
+@section(
+    'og_title',
+    $blog->meta_title ?: $blog->title
+)
+
+@section(
+    'og_description',
+    $blog->meta_description ?: $blog->subtitle
+)
+
+@section(
+    'og_url',
+    url()->current()
+)
+{{-- =========================
+    Twitter
+========================= --}}
+
+@section(
+    'twitter_title',
+    $blog->meta_title ?: $blog->title
+)
+
+@section(
+    'twitter_description',
+    $blog->meta_description ?: $blog->subtitle
+)
+
+@section(
+    'twitter_image',
+    $blog->image_url
+        ? asset('storage/' . $blog->image_url)
+        : asset('storage/images/seo/og_default.png')
+)
+
+
+{{-- =========================
+    Page Content
+========================= --}}
+@section(
+    'og_image',
+    $blog->image_url
+        ? asset('storage/' . $blog->image_url)
+        : asset('storage/images/seo/og_default.png')
+)
+@php
+    $seoTitle = $blog->meta_title ?: $blog->title;
+
+    $seoDescription = $blog->meta_description ?: $blog->subtitle;
+
+    $seoImage = $blog->image_url
+        ? asset('storage/' . $blog->image_url)
+        : asset('storage/images/seo/og_default.png');
+
+    $canonical = url()->current();
+
+    $structuredData = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BlogPosting',
+
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => $canonical,
+        ],
+
+        'headline' => $seoTitle,
+        'description' => $seoDescription,
+
+        'image' => [
+            $seoImage,
+        ],
+
+        'datePublished' => $blog->created_at?->toIso8601String(),
+        'dateModified' => $blog->updated_at?->toIso8601String(),
+
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'OwnAcres',
+            'url' => url('/'),
+        ],
+
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'OwnAcres',
+            'url' => url('/'),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('storage/images/seo/og_default.png'),
+            ],
+        ],
+    ];
+@endphp
+
+@push('structured-data')
+<script type="application/ld+json">
+{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
 @push('styles')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +147,21 @@
 @section('content')
 <div class="container pt-5 mt-5">
     <div class="col-12 col-md-8 mx-auto">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}">Home</a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a href="{{ route('blogs') }}">Blog</a>
+                </li>
+
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{ $blog->title }}
+                </li>
+            </ol>
+        </nav>
         <article>
             <header class="mb-4">
                 <h1 class="mb-1">{{ $blog?->title }}</h1>
